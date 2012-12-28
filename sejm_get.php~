@@ -9,11 +9,12 @@
 
 	$options = getopt("d:f:h:s:");
 
-	$dataset_name 			= $options["d"];
-	$output_file  			= $options["f"];
-	$attach_header			= ($options["h"]=="false")? 0: 1;
-	$requested_page_size  	= 100;	
-	$csv_separator			= $options["s"];
+	$dataset_name 				= $options["d"];
+	$output_file  				= $options["f"];
+	$attach_header				= ($options["h"]=="false")? 0: 1;
+	$requested_page_size  		= 100;	
+	$csv_separator				= $options["s"];
+
 
 	if (empty($dataset_name)) {
 		echo "[ERROR] dataset_name cannot be empty. Use -d option!\n";
@@ -27,8 +28,19 @@
 
 	if (empty($csv_separator)) {
 		echo "[WARNING] Separator is empty. Using default!\n";
-		$csv_separator = " ; ";
+		$csv_separator = ";";
 	}
+
+	function str_replace_all_non_whs($str, $replacement_char) { #replace all non-whitespace characters with replacement character
+		for ($i=0; $i<strlen($str); $i++) {
+			if ($str[$i]!=' ' && $str[$i]!='\n' && $str[$i]!='\t') {
+				$str[$i]=$replacement_char;
+			}
+		}
+		return $str;
+	}
+
+	$csv_separator_replacement  =  str_replace_all_non_whs($csv_separator, ',');
 
 	function csv_array_reduce($arr, $keys) { #takes array and reduces into single string (CSV-separated)
 		global $csv_separator;
@@ -36,20 +48,20 @@
 		for($i=0; $i<count($keys)-1; $i++) {
 			$key = $keys[$i];
 			$str .= $arr[$key];
-			$str .= $csv_separator;
+			$str .= " ".$csv_separator." ";
 		}
 		$last_key = $keys[count($keys)-1];
 		$str 	 .= $arr[$last_key];
 		return $str;
 	}
 
-	function csv_header_reduce($keys) { #takes array of keys reduces into single string (CSV-separated)
+	function csv_header_reduce($keys) { #takes array of keys and reduces into single string (CSV-separated)
 		global $csv_separator;
 		$str = "";
 		for($i=0; $i<count($keys)-1; $i++) {
 			$key = $keys[$i];
 			$str .= $key;
-			$str .= $csv_separator;
+			$str .= " ".$csv_separator." ";
 		}
 		$last_key = $keys[count($keys)-1];
 		$str 	 .= $last_key;
@@ -58,7 +70,8 @@
 	
 	echo "####################################################\n";
 	echo "Running with dataset_name=$dataset_name output_file=$output_file attach_header=$attach_header ";
-	echo "requested_page_size=$requested_page_size csv_separator=$csv_separator\n";
+	echo "requested_page_size=$requested_page_size csv_separator=$csv_separator ";
+	echo "csv_separator_replacement=$csv_separator_replacement\n";
 	echo "####################################################\n";
 
 	$fh = fopen($output_file, 'w') or die("[ERROR] Can't open file:".$output_file);
