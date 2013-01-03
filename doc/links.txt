@@ -1,0 +1,9 @@
+Index:
+
+1. Sentiment / Text Analysis
+
+
+
+-------------------------
+Ad1.
+http://www.alchemyapi.com/api/sentiment/?ga=1021 - service providing sentiment analysis
