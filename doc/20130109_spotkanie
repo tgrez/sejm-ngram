@@ -1,0 +1,103 @@
+Index Pliku:
+Część I - agenda
+Część II - ustelenia ze spotkania (wg punktów agendy)
+Część III - Lista nowych Tasków
+
+
+
+
+-------------------- CZĘŚĆ I -----------------------------
+Agenda spotkania pierwszego:
+
+1. Podsumowanie wstępnych podejść do Sejm-API
+2. Podjęcie decyzji dot technologii: 
+   a) bazy danych do trzymania .. danych
+   a-b) user case (od Tomka G inizjatywa)
+   b) ściągnięcia wystąpień sejmowych
+   c) technologii back-endowej i front-endowej 
+   d) organizacji pracy (repozytorium, strona projektu?, zarządzanie taskami)
+3. Rozdzielenie nowych zadań,
+4. ustalenie kolejnego terminu
+5. Ustalenie charakteru / wymiaru pracy przez każdego z nas
+
+--------------------   CZĘSĆ II  ----------------------
+
+AD 1.
+- nie ma możliwości ściągnięcia wszystkich wystąpień
+- nie ma możliwości uzyskania linku do video\
+- 3000 zapytan / dobe na 1 klucz
+- łatwo wejść na stronkę i podążać za hierarchą: http://sejmometr.pl/sejm_posiedzenia -> nr posiedzenia (http://sejmometr.pl/sejm_posiedzenia/13) -> dni powsieedzenia (http://sejmometr.pl/sejm_posiedzenia_dni/35419) -> wystąpienia (dni wystąpienia) (http://sejmometr.pl/sejm_posiedzenia/1/wystapienia)
+
+
+AD 2. (Podjęcie decyzji dot technologii:) 
+
+AD 2a) (bazy danych do trzymania .. danych)
+	Amazon - TAK!; 
+	Działanie Lokalne: tzn lokalnie pracujemy commity do github'a, potem ściągamy  niego
+
+AD 2X (user-case, na wniosek Tomka Guza) 
+	Wyświetlanie prostej wersji : stronka na której można podać słowo i dostać jego ilość wystąpień.
+
+
+AD  2b) ściągnięcia wystąpień sejmowych
+- Nie chcemy się tym zbytnio kłopotać, po prostu niech ktoś je zassie przy pomocy skryptów Tomka K
+- Inna rzecz, że jednym z tasków będzie rozkmina, czy da się to z tym API zrobić
+
+
+AD 2c) technologii back-endowej i front-endowej 
+
+Backend:
+- jaki backend? Po prostu dane w bazie
+- Wg tomka K to  mamy u nas a) Faza Ładowania Danych b) Faza Zwracania Wyników i prezentowania ich użytkownikowi
+- Oganizacja danych: 
+	Tabeli kolumny
+	ngram wystapien : 1-1 ,  osoba (posel), daty, partia (PO,PIS), wystapienia,
+- Siemion zaproponował dodatkowe tabele (np. Poseł / Partia), ale zostało to na razie odrzucone, jako ze i tak bedzeimy ta tabela sami ladowac
+
+FrontEnd
+- wg Siemiona: JavaScript po prostu + D3 (ktore umozliwia jako taka manipulacje danymi, sciaganie ich z bazy / csv itp)
+- ale obczajmy tez cos nowego: Python Django (TASK taki bedzie)
+ 
+	
+
+
+AD 2 d) organizacji pracy (repozytorium, strona projektu?, zarządzanie taskami)
+
+
+AD 3. Rozdzielenie nowych zadań,
+- po prostu to trello beda wrzucone, kazdy wybierze:
+
+AD 4. ustalenie kolejnego terminu
+- nie ma sensu
+
+AD 5. Ustalenie charakteru / wymiaru pracy przez każdego z nas
+- nie ma sensu
+
+-----------------------   CZĘŚĆ III    --------------------------------
+
+Task1 - ściągnięcia danych (wystąpień) przez skrypt Tomka
+	-> to co jest na stronie - nie mamy gwarancji, żę to się nie zmieni
+
+Task2 - Popatrzenie na to, co można ściągnąć za pomocą tego API, a co nie
+	->
+
+Task3 -> rozszerzenie skryptu żeby więcej ściągał danych
+	-> dopisanie do niego funkcjonalności zapisu do bazy danych
+
+Task4 -> TOmek G skonfiguruje maszynkę na Amazownie
+
+
+Task5   -> Jak się ma Python do rysowania tych danych?
+	-> HTML 5?
+	-> Sprawdzić jak się to ma do nas?
+	-> Obczajenie
+
+Task6 Postawienia Prostej stronki + wizualizacja na wykresie + pytanie Mysqlowe	
+
+Task7 Obczaić stenogramy historyczne, zastanowić się z kim się skontaktować w tej sprawie, zrobić to!
+	
+Task8: Obczaić kondycje sejmometru - kto rozwija, (Tomek wspomniał że badziewne dane), czy będzie się rozwijał, skąd bierze danych ten ktoś i czy ma ich więcej?
+
+
+Task9: Napisać w JavaScripcie i D3 prostą wizualizację, która może być użyta do N-gramów
+
