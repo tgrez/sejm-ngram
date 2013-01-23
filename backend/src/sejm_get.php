@@ -5,7 +5,7 @@
 	echo " -h true/false - whether header should be attached or not\n";
 	echo "Example: php sejm_get.php -d poslowie -f /tmp/tmp.txt\n";
 
-	require_once('eP_API/ep_API.php');
+	require_once('../../lib/eP_API/ep_API.php');
 
 	$options = getopt("d:f:h:s:");
 
