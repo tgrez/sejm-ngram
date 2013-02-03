@@ -2,3 +2,4 @@
 
 # temporary files created by text editor
 *~
+*.sublime-*
