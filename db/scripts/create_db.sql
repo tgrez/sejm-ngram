@@ -1,8 +1,10 @@
-DROP DATABASE IF EXISTS `wystapienia_test`;
+DROP DATABASE IF EXISTS `wystapienia`;
 
-CREATE DATABASE `wystapienia_test`;
+CREATE DATABASE `wystapienia`;
 
-USE `wystapienia_test`;
+USE `wystapienia`;
+
+GRANT ALL ON wystapienia.* TO 'testuser'@'localhost';
 
 CREATE TABLE `ngram` (
 	`id`			INT(10) NOT NULL AUTO_INCREMENT,
