@@ -4,6 +4,7 @@
 from HTMLParser import HTMLParser
 from datetime import date
 import sys
+import string
 import MySQLdb as mdb
 
 class WystapienieHTMLParser(HTMLParser):
@@ -73,19 +74,21 @@ class WystapienieHTMLParser(HTMLParser):
         }[month]
 
     
-    def insert_ngrams(self):
-        #TODO extract posel name
-        self.db_insert(self.text.split())
+    def insert_ngrams(self, posel, stanowisko, wystapienie_id, tekst):
+        for c in string.punctuation:
+            tekst = tekst.replace(c, " ")
+        for ngram in tekst.split():
+            self.db_insert(ngram, posel, stanowisko, self.dateparsed, wystapienie_id)
 
-    def db_insert(self, ngram):
-        print "ngram: " + ", ".join(ngram)
+    def db_insert(self, ngram, posel, stanowisko, data, wystapienie_id):
+        print posel, stanowisko, wystapienie_id, data, ngram
         con = None
         try:
             con = mdb.connect("localhost", "testuser", "", "wystapienia");
             cur = con.cursor()
             con.query("SELECT VERSION()")
             result = con.use_result()
-            print "MySQL version: %s" % result.fetch_row()[0]
+            ## print "MySQL version: %s" % result.fetch_row()[0]
 
             #cur.execute("INSERT INTO wystapienia VALUES (%s,%s)", (ngram, datefound))
             #con.commit()
@@ -101,9 +104,62 @@ class WystapienieHTMLParser(HTMLParser):
 
 if __name__=="__main__":
 
+    prefixes = [
+        'Marszałek Senior',
+        'Wicemarszałek',
+        'Poseł',
+        'Marszałek',
+        'Prezydent Rzeczypospolitej Polskiej',
+        'Poseł Sekretarz',
+        'Minister Edukacji Narodowej',
+        'Minister Zdrowia',
+        'Minister Finansów',
+        'Główny Inspektor Sanitarny',
+        'Przedstawiciel Komitetu Inicjatywy Ustawodawczej',
+        'Minister Spraw Zagranicznych',
+        'Minister Środowiska',
+        'Prezes Rady Ministrów',
+        'Rzecznik Praw Obywatelskich',
+        'Minister Skarbu Państwa',
+        'Podsekretarz Stanu w Ministerstwie Finansów',
+        'Sekretarz Stanu w Ministerstwie Pracy i Polityki Społecznej',
+        'Podsekretarz Stanu w Ministerstwie Spraw Wewnętrznych',
+        'Podsekretarz Stanu w Ministerstwie Skarbu Państwa',
+        'Podsekretarz Stanu w Ministerstwie Edukacji Narodowej',
+        'Sekretarz Stanu w Ministerstwie Finansów',
+        'Podsekretarz Stanu w Ministerstwie Rolnictwa i Rozwoju Wsi',
+        'Podsekretarz Stanu w Ministerstwie Spraw Zagranicznych',
+        'Sekretarz Stanu w Ministerstwie Skarbu Państwa',
+        'Sekretarz Stanu w Kancelarii Prezydenta RP',
+        'Podsekretarz Stanu w Ministerstwie Pracy i Polityki Społecznej',
+        'Minister Pracy i Polityki Społecznej',
+        'Sekretarz Stanu w Ministerstwie Zdrowia',
+        'Podsekretarz Stanu w Ministerstwie Transportu, Budownictwa i Gospodarki Morskiej',
+        'Sekretarz Stanu w Ministerstwie Obrony Narodowej',
+        'Podsekretarz Stanu w Ministerstwie Gospodarki',
+        'Wiceprezes Rady Ministrów Minister Gospodarki',
+        'Sekretarz Stanu w Ministerstwie Gospodarki',
+        'Sekretarz Stanu w Ministerstwie Rolnictwa i Rozwoju Wsi',
+        'Sekretarz Stanu w Ministerstwie Administracji i Cyfryzacji',
+        'Podsekretarz Stanu w Ministerstwie Środowiska',
+        'Podsekretarz Stanu w Ministerstwie Nauki i Szkolnictwa Wyższego',
+        'Sekretarz Stanu w Ministerstwie Transportu, Budownictwa i Gospodarki Morskiej',
+        'Sekretarz Stanu w Ministerstwie Sportu i Turystyki',
+        'Sekretarz Stanu w Ministerstwie Spraw Zagranicznych',
+        'Minister Kultury i Dziedzictwa Narodowego',
+        'Podsekretarz Stanu w Ministerstwie Sprawiedliwości',
+        'Sekretarz Stanu w Ministerstwie Spraw Wewnętrznych',
+        'Podsekretarz Stanu w Ministerstwie Administracji i Cyfryzacji',
+        'Sekretarz Stanu w Ministerstwie Sprawiedliwości',
+        'Sekretarz Stanu w Ministerstwie Kultury i Dziedzictwa Narodowego',
+        'Podsekretarz Stanu w Ministerstwie Zdrowia'
+    ]
+
     try:
         # read HTML code
-        htmlcode = sys.stdin.read()   
+        filename = sys.stdin.read()
+        f = open(filename, 'r')
+        htmlcode = f.read()
     
         if len(htmlcode)<5: 
             raise KeyboardInterrupt()
@@ -112,11 +168,19 @@ if __name__=="__main__":
         parser = WystapienieHTMLParser()
         parser.feed(htmlcode)
 
-        # print extracted text
-        txt = parser.text        
-        print txt.replace("\n"," ").strip()
-        print parser.dateparsed
-        parser.insert_ngrams()
+        # parse additional data
+        txt = parser.text
+        wystapienie_id = filename[28:filename.index(".html")]
+        posel, tekst = txt.split(" - ", 1)
+        #reszta = " ".join(reszta.split())
+        stanowisko = ""
+        for prefix in prefixes:
+            if tekst.startswith(prefix):
+                tekst = tekst[len(prefix):]
+                stanowisko = prefix
+
+        # process parsed text
+        parser.insert_ngrams(posel, stanowisko, wystapienie_id, tekst)
 
     except KeyboardInterrupt:
         sys.stderr.write("###############################################################################\n");
