@@ -51,7 +51,7 @@ class WystapienieHTMLParser(HTMLParser):
     def parse_date(self, data):
         # 13 is the index just after "Wystapienie "
         if not " r." in data:
-            print "date not found"
+            # print "date not found"
             return None
         dateparts = data[13:data.index(" r.")].split(" ")
         return date(int(dateparts[2]), self.parse_month(dateparts[1]), int(dateparts[0]))
@@ -77,16 +77,18 @@ class WystapienieHTMLParser(HTMLParser):
     def insert_ngrams(self, posel, stanowisko, wystapienie_id, tekst):
         for c in string.punctuation:
             tekst = tekst.replace(c, " ")
+        if self.dateparsed == None:
+            return
         for ngram in tekst.split():
             self.db_insert(ngram, posel, stanowisko, self.dateparsed, wystapienie_id)
 
     def db_insert(self, ngram, posel, stanowisko, data, wystapienie_id):
-        print posel, stanowisko, int(wystapienie_id), data, ngram
+        # print posel, stanowisko, int(wystapienie_id), data, ngram
         con = None
         try:
             con = mdb.connect("localhost", "testuser", "", "wystapienia", charset="utf8");
             cur = con.cursor()
-            sql =   "INSERT INTO ngram (unigram, posel, data, partia, wystapienie_id) \
+            sql =   "INSERT INTO ngram (unigram, posel, data, stanowisko, wystapienie_id) \
                      VALUES ('%s', '%s', '%s', '%s', '%d')" % \
                      (ngram, posel, data.strftime("%Y-%m-%d %H:%M:%S"), stanowisko, int(wystapienie_id))
             # print "sql: " + sql
