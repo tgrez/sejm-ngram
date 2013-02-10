@@ -81,17 +81,17 @@ class WystapienieHTMLParser(HTMLParser):
             self.db_insert(ngram, posel, stanowisko, self.dateparsed, wystapienie_id)
 
     def db_insert(self, ngram, posel, stanowisko, data, wystapienie_id):
-        print posel, stanowisko, wystapienie_id, data, ngram
+        print posel, stanowisko, int(wystapienie_id), data, ngram
         con = None
         try:
-            con = mdb.connect("localhost", "testuser", "", "wystapienia");
+            con = mdb.connect("localhost", "testuser", "", "wystapienia", charset="utf8");
             cur = con.cursor()
-            con.query("SELECT VERSION()")
-            result = con.use_result()
-            ## print "MySQL version: %s" % result.fetch_row()[0]
-
-            #cur.execute("INSERT INTO wystapienia VALUES (%s,%s)", (ngram, datefound))
-            #con.commit()
+            sql =   "INSERT INTO ngram (unigram, posel, data, partia, wystapienie_id) \
+                     VALUES ('%s', '%s', '%s', '%s', '%d')" % \
+                     (ngram, posel, data.strftime("%Y-%m-%d %H:%M:%S"), stanowisko, int(wystapienie_id))
+            # print "sql: " + sql
+            cur.execute(sql)
+            con.commit()
                             
         except mdb.Error, e:
             print "Error %d: %s" % (e.args[0],e.args[1])
@@ -107,10 +107,10 @@ if __name__=="__main__":
     prefixes = [
         'Marszałek Senior',
         'Wicemarszałek',
-        'Poseł',
+        'Poseł Sekretarz',
         'Marszałek',
         'Prezydent Rzeczypospolitej Polskiej',
-        'Poseł Sekretarz',
+        'Poseł',
         'Minister Edukacji Narodowej',
         'Minister Zdrowia',
         'Minister Finansów',
@@ -172,7 +172,6 @@ if __name__=="__main__":
         txt = parser.text
         wystapienie_id = filename[28:filename.index(".html")]
         posel, tekst = txt.split(" - ", 1)
-        #reszta = " ".join(reszta.split())
         stanowisko = ""
         for prefix in prefixes:
             if tekst.startswith(prefix):
@@ -180,7 +179,7 @@ if __name__=="__main__":
                 stanowisko = prefix
 
         # process parsed text
-        parser.insert_ngrams(posel, stanowisko, wystapienie_id, tekst)
+        parser.insert_ngrams(posel.strip(), stanowisko.strip(), wystapienie_id.strip(), tekst.strip())
 
     except KeyboardInterrupt:
         sys.stderr.write("###############################################################################\n");

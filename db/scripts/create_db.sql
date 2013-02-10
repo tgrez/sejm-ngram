@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS `wystapienia`;
 
-CREATE DATABASE `wystapienia`;
+CREATE DATABASE `wystapienia` DEFAULT CHARACTER SET utf8;
 
 USE `wystapienia`;
 
