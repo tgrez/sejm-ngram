@@ -3,3 +3,6 @@
 # temporary files created by text editor
 *~
 *.sublime-*
+
+# personal directories (too lazy to create branch right now)
+michal/
