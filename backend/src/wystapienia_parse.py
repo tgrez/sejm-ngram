@@ -2,21 +2,29 @@
 # -*- coding: utf-8 -*-
 
 from HTMLParser import HTMLParser
-from datetime import date
 import sys
-import string
-import MySQLdb as mdb
+
+from wystapienia_consts import *
+ 
+from datetime import date
+
+import log
+import utils
+from config import *
+
 
 class WystapienieHTMLParser(HTMLParser):
     """
     Extracts main text out of HTML pages downloaded from http://sejmometr.pl/sejm_wystapienia/#id (#id=some number).
     """
-    divcounter  = 0
-    text        = "NoTextFound!"
-    textfound   = False
-    datefound	= False
-    dateparsed	= date.min
 
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.divcounter  = 0
+        self.text        = "NoTextFound!"
+        self.textfound   = False
+        self.dateparsed	 = date.min
+        self.datefound	 = False
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -58,111 +66,39 @@ class WystapienieHTMLParser(HTMLParser):
 
         
     def parse_month(self, month):
-        return {
-            "stycznia"      :   1,
-            "lutego"        :   2,
-            "marca"         :   3,
-            "kwietnia"      :   4,
-            "maja"          :   5,
-            "czerwca"       :   6,
-            "lipca"         :   7,
-            "sierpnia"      :   8,
-            "września"      :   9,
-            "października"  :   10,
-            "listopada"	    :	11,
-            "grudnia"	    :	12,
-        }[month]
+        return MONTHS[month]
 
-    
-    def insert_ngrams(self, posel, stanowisko, wystapienie_id, tekst):
-        for c in string.punctuation:
-            tekst = tekst.replace(c, " ")
-        if self.dateparsed == None:
-            return
-        for ngram in tekst.split():
-            self.db_insert(ngram, posel, stanowisko, self.dateparsed, wystapienie_id)
+    def extract_fields(self):
+        """Parses additional data and returns triple: member-of-parliament, his-position, what-he-said."""
+        txt = self.text        
+        posel, tekst = txt.split(" - ", 1)
+        stanowisko = ""
 
-    def db_insert(self, ngram, posel, stanowisko, data, wystapienie_id):
-        # print posel, stanowisko, int(wystapienie_id), data, ngram
-        con = None
-        try:
-            con = mdb.connect("localhost", "testuser", "", "wystapienia", charset="utf8");
-            cur = con.cursor()
-            sql =   "INSERT INTO ngram (unigram, posel, data, stanowisko, wystapienie_id) \
-                     VALUES ('%s', '%s', '%s', '%s', '%d')" % \
-                     (ngram, posel, data.strftime("%Y-%m-%d %H:%M:%S"), stanowisko, int(wystapienie_id))
-            # print "sql: " + sql
-            cur.execute(sql)
-            con.commit()
-                            
-        except mdb.Error, e:
-            print "Error %d: %s" % (e.args[0],e.args[1])
-            sys.exit(1)
+        for prefix in POSITION_PREFIXES:
+            if tekst.startswith(prefix):
+                tekst = tekst[len(prefix):]
+                stanowisko = prefix
 
-        finally:    
-            if con:    
-                con.close()
+        return posel.strip(), stanowisko.strip(), tekst.strip()
+
 
 
 if __name__=="__main__":
-
-    prefixes = [
-        'Marszałek Senior',
-        'Wicemarszałek',
-        'Poseł Sekretarz',
-        'Marszałek',
-        'Prezydent Rzeczypospolitej Polskiej',
-        'Poseł',
-        'Minister Edukacji Narodowej',
-        'Minister Zdrowia',
-        'Minister Finansów',
-        'Główny Inspektor Sanitarny',
-        'Przedstawiciel Komitetu Inicjatywy Ustawodawczej',
-        'Minister Spraw Zagranicznych',
-        'Minister Środowiska',
-        'Prezes Rady Ministrów',
-        'Rzecznik Praw Obywatelskich',
-        'Minister Skarbu Państwa',
-        'Podsekretarz Stanu w Ministerstwie Finansów',
-        'Sekretarz Stanu w Ministerstwie Pracy i Polityki Społecznej',
-        'Podsekretarz Stanu w Ministerstwie Spraw Wewnętrznych',
-        'Podsekretarz Stanu w Ministerstwie Skarbu Państwa',
-        'Podsekretarz Stanu w Ministerstwie Edukacji Narodowej',
-        'Sekretarz Stanu w Ministerstwie Finansów',
-        'Podsekretarz Stanu w Ministerstwie Rolnictwa i Rozwoju Wsi',
-        'Podsekretarz Stanu w Ministerstwie Spraw Zagranicznych',
-        'Sekretarz Stanu w Ministerstwie Skarbu Państwa',
-        'Sekretarz Stanu w Kancelarii Prezydenta RP',
-        'Podsekretarz Stanu w Ministerstwie Pracy i Polityki Społecznej',
-        'Minister Pracy i Polityki Społecznej',
-        'Sekretarz Stanu w Ministerstwie Zdrowia',
-        'Podsekretarz Stanu w Ministerstwie Transportu, Budownictwa i Gospodarki Morskiej',
-        'Sekretarz Stanu w Ministerstwie Obrony Narodowej',
-        'Podsekretarz Stanu w Ministerstwie Gospodarki',
-        'Wiceprezes Rady Ministrów Minister Gospodarki',
-        'Sekretarz Stanu w Ministerstwie Gospodarki',
-        'Sekretarz Stanu w Ministerstwie Rolnictwa i Rozwoju Wsi',
-        'Sekretarz Stanu w Ministerstwie Administracji i Cyfryzacji',
-        'Podsekretarz Stanu w Ministerstwie Środowiska',
-        'Podsekretarz Stanu w Ministerstwie Nauki i Szkolnictwa Wyższego',
-        'Sekretarz Stanu w Ministerstwie Transportu, Budownictwa i Gospodarki Morskiej',
-        'Sekretarz Stanu w Ministerstwie Sportu i Turystyki',
-        'Sekretarz Stanu w Ministerstwie Spraw Zagranicznych',
-        'Minister Kultury i Dziedzictwa Narodowego',
-        'Podsekretarz Stanu w Ministerstwie Sprawiedliwości',
-        'Sekretarz Stanu w Ministerstwie Spraw Wewnętrznych',
-        'Podsekretarz Stanu w Ministerstwie Administracji i Cyfryzacji',
-        'Sekretarz Stanu w Ministerstwie Sprawiedliwości',
-        'Sekretarz Stanu w Ministerstwie Kultury i Dziedzictwa Narodowego',
-        'Podsekretarz Stanu w Ministerstwie Zdrowia'
-    ]
+    #setup configuration
+    inputfile   = WYSTAPIENIA_INPUT_FILE
+    outputfile  = WYSTAPIENIA_OUTPUT_FILE
 
     try:
         # read HTML code
-        filename = sys.stdin.read()
-        f = open(filename, 'r')
-        htmlcode = f.read()
-    
+        htmlcode = inputfile.read()   
+    except KeyboardInterrupt:
+        log.err("###############################################################################\n");
+        log.err("The script reads from standard input source HTML-file (wystapienie) to be parsed and\n")    
+        log.err("prints to standard output text extracted out of <div id=main_doc_cont class=_obj_main_div>.\n")
+        log.err("###############################################################################\n");
+        sys.exit(-2)
+
+    try:
         if len(htmlcode)<5: 
             raise KeyboardInterrupt()
 
@@ -170,22 +106,18 @@ if __name__=="__main__":
         parser = WystapienieHTMLParser()
         parser.feed(htmlcode)
 
-        # parse additional data
-        txt = parser.text
-        wystapienie_id = filename[28:filename.index(".html")]
-        posel, tekst = txt.split(" - ", 1)
-        stanowisko = ""
-        for prefix in prefixes:
-            if tekst.startswith(prefix):
-                tekst = tekst[len(prefix):]
-                stanowisko = prefix
+        # print extracted text
+        member, position, text = parser.extract_fields()        
+        text = text.replace(CSV_SEPARATOR.strip(), CSV_REPLACEMENT) #Replace delimieters in source text
+        outputfile.write(str(member)+CSV_SEPARATOR+str(position)+CSV_SEPARATOR+str(text)+"\n")
 
-        # process parsed text
-        parser.insert_ngrams(posel.strip(), stanowisko.strip(), wystapienie_id.strip(), tekst.strip())
+    except Exception as e:
+        log.err("Exception: "+str(e)+" for htmlcode="+utils.text_filter(str(htmlcode)[:200])+"...\n")    
+        sys.exit(-1)
+    except:
+        log.err("Unknown exception for htmlcode="+utils.text_filter(str(htmlcode)[:200])+"...\n")    
+        sys.exit(-1)
+                
 
-    except KeyboardInterrupt:
-        sys.stderr.write("###############################################################################\n");
-        sys.stderr.write("The script reads from standard input source HTML-file (wystapienie) to be parsed and\n")    
-        sys.stderr.write("prints to standard output text extracted out of <div id=main_doc_cont class=_obj_main_div>.\n")
-        sys.stderr.write("###############################################################################\n");
+
 
