@@ -43,7 +43,7 @@ if __name__ == "__main__":
 	outputFileName = "fake_data.csv"
 	sampleFileName = "sample-ngrams.txt"
 	listNgrams = None
-	fakeNGramsNr = 10
+	fakeNGramsNr = 1000
 	startDateFormatted = "1-1-2008 00:00" # follows python "time" format '%d-%m-%Y %H:%M'
 	endDateFormatted = "1-1-2009 00:00"
 
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 	nrParties = len(parties)
 
 	with open(outputFileName, 'wb') as csvfile:
-		outputWriter = csv.writer(csvfile, delimiter=';')
+		outputWriter = csv.writer(csvfile, delimiter=',')
  		
  		# write header row
  		outputWriter.writerow(['Ngram', 'Data', 'Partia'])

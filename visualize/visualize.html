@@ -4,12 +4,109 @@
         <meta charset="utf-8">
         <title>D3 Test</title>
         <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <script type="text/javascript" src="js/getData.js"></script>
+        <script type="text/javascript" src="js/visualize.js"></script>
+        <style>
+            /* tell the SVG path to be a thin blue line without any area fill */
+            .path1 {
+                stroke: steelblue;
+                stroke-width: 1;
+                fill: none;
+            }
+
+            .path2 {
+                stroke: red;
+                stroke-width: 1;
+                fill: none;
+            }
+            .path3 {
+                stroke: green;
+                stroke-width: 1;
+                fill: none;
+            }
+            .path4 {
+                stroke: brown;
+                stroke-width: 1;
+                fill: none;
+            }
+            .path5 {
+                stroke: violet;
+                stroke-width: 1;
+                fill: none;
+            }
+            
+            .axis {
+              shape-rendering: crispEdges;
+            }
+
+            .x.axis line {
+              stroke: lightgrey;
+            }
+
+            .x.axis .minor {
+              stroke-opacity: .5;
+            }
+
+            .x.axis path {
+              display: none;
+            }
+
+            .y.axis line, .y.axis path {
+              fill: none;
+              stroke: #000;
+            }
+        </style>
     </head>
     <body>
         <script type="text/javascript">
         	document.write('<b>Hello World</b>');
             // Your beautiful D3 code will go here
         </script>
+
+        <div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div>
+
+
+    <script>
+        // main loop of our site
+        // csvContent = d3.csv("fake_data.csv");
+
+        // console.log(d3.csv.parse(csvContent));
+
+        d3.csv("fake_data.csv", function(data) {
+
+            // console.log(data[0].Data);
+            
+            // data.forEach(function(d) {
+            //     d.date = formatDate.parse(d.date);
+            //     d.price = +d.price;
+            // });
+        //7/30/2009'
+            // startDate = new Date(2008, 00,01);  //it's so stuping, JavaScript uses month from 0
+            // stopDate = new Date(2009, 00,01);
+            startDate = new Date("01/01/2008");  //it's so stuping, JavaScript uses month from 0
+            stopDate = new Date("01/01/2009");
+            step = 12;
+            party = "PO";
+            dataSetPis = getNGramsList(data, startDate, stopDate, step, "PIS");
+            dataSetPo = getNGramsList(data, startDate, stopDate, step, "PO");
+
+
+            var dataSets = new Array();
+            dataSets["PIS"] = dataSetPis;
+            dataSets["PO"] = dataSetPo;
+            dataSets["RP"] = getNGramsList(data, startDate, stopDate, step, "RP");
+            dataSets["SLD"] = getNGramsList(data, startDate, stopDate, step, "SLD");
+            dataSets["PSL"] = getNGramsList(data, startDate, stopDate, step, "PSL");
+            // console.log(dataSets);
+
+
+            visualize(dataSets, startDate, stopDate, step);
+        });
+       
+
+    </script>
+
+
     </body>
 </html>    
 
