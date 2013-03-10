@@ -21,7 +21,7 @@ class WystapienieHTMLParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.divcounter  = 0
-        self.text        = "NoTextFound!"
+        self.text        = "[WystapienieHTMLParser]NoTextFound!"
         self.textfound   = False
         self.dateparsed	 = date.min
         self.datefound	 = False

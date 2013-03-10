@@ -1,19 +1,22 @@
 <?
 	echo "####################################################\n";
 	echo "The script downloads and prints (CSV) datasets using ep_API (sejmometr.pl).\n";
-	echo "Usage: php sejm_get.php -d dataset_name -f output_file [-h true/false] [-s separator]\n";
+	echo "Usage: php sejm_get.php -d dataset_name -o output_file [-h true/false] [-t separator]\n";
 	echo " -h true/false - whether header should be attached or not\n";
-	echo "Example: php sejm_get.php -d poslowie -f /tmp/tmp.txt\n";
+	echo " -s start id value  -l last id value\n";
+	echo "Example: php sejm_get.php -d sejm_wystapienia -o /tmp/tmp.txt -s 100 -l 150\n";
 
 	require_once('../../lib/eP_API/ep_API.php');
 
-	$options = getopt("d:f:h:s:");
+	$options = getopt("d:o:h:t:s:l:");
 
 	$dataset_name 				= $options["d"];
-	$output_file  				= $options["f"];
+	$output_file  				= $options["o"];
 	$attach_header				= ($options["h"]=="false")? 0: 1;
 	$requested_page_size  		= 100;	
-	$csv_separator				= $options["s"];
+	$csv_separator				= $options["t"];
+    $start_id                   = $options["s"];
+    $last_id                    = $options["l"];
 
 
 	if (empty($dataset_name)) {
@@ -22,13 +25,24 @@
 	}
 
 	if (empty($output_file)) {
-		echo "[ERROR] output_file cannot be empty. Use -f option!\n";
+		echo "[ERROR] output_file cannot be empty. Use -o option!\n";
 		exit(-1);
 	}
 
 	if (empty($csv_separator)) {
 		echo "[WARNING] Separator is empty. Using default!\n";
 		$csv_separator = ";";
+	}
+
+	if (empty($start_id)) {
+		echo "[WARNING] Start id is empty. Using default!\n";
+		$start_id = "0";
+	}
+
+
+	if (empty($last_id)) {
+		echo "[WARNING] Last id is empty. Using default!\n";
+		$last_id = "10000000";
 	}
 
 	function str_replace_all_non_whs($str, $replacement_char) { #replace all non-whitespace characters with replacement character
@@ -70,8 +84,9 @@
 	
 	echo "####################################################\n";
 	echo "Running with dataset_name=$dataset_name output_file=$output_file attach_header=$attach_header ";
-	echo "requested_page_size=$requested_page_size csv_separator=$csv_separator ";
-	echo "csv_separator_replacement=$csv_separator_replacement\n";
+	echo "requested_page_size=$requested_page_size csv_separator=$csv_separator\n ";
+	echo "csv_separator_replacement=$csv_separator_replacement ";
+	echo "start_id=$start_id last_id=$last_id\n";
 	echo "####################################################\n";
 
 	$fh = fopen($output_file, 'w') or die("[ERROR] Can't open file:".$output_file);
@@ -84,7 +99,7 @@
 	$offset = 0;
 	while (True) { #iterate over pages
 		echo " * next request with offset=$offset -> ";
-		$page = $dataset->find_all($requested_page_size, $offset);
+		$page = $dataset->where( 'id', 'BETWEEN', array($start_id, $last_id) )->order_by('id', 'ASC')->find_all($requested_page_size, $offset);
 		$page_size = count($page);
 		echo $page_size." records obtained...\n";
 

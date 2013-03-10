@@ -41,15 +41,13 @@ class DBWrapper():
             cols = reduce(lambda c1,c2: c1+", "+c2, (colname for colname in record) )
             vals = reduce(lambda v1,v2: v1+", "+v2, ("\""+val+"\"" for colname,val in record.iteritems()) )
             sql =  "INSERT INTO "+table_name+" ("+cols+") VALUES ("+vals+")"
-            log.dbg("executing "+sql)
+            log.dbg("executing "+sql[:100]+"...")
             self.cur.execute(sql)
             return True
         except mdb.Error, e:
             log.err("error %d: %s" % (e.args[0],e.args[1]))
             return False
     
-
-
     def begin(self):      
         log.dbg("transaction begin")
         self.con.begin()
@@ -60,7 +58,7 @@ class DBWrapper():
 
 
 if __name__=="__main__":
-    log.info("The script loads from stdin CSV file and inserts it into DB Table (table name given as first argument).")
+    log.info("The script loads from stdin CSV file and inserts it into DB Table (table name is given as the first argument).")
 
     try: table_name = sys.argv[1]
     except: log.err("Argument expected: table_name to be updated."); sys.exit(-1)
@@ -78,6 +76,7 @@ if __name__=="__main__":
     common_columns = set(header).intersection(column_names)
     log.info("Common columns between CSV and DB: " + str( common_columns ) )
     
+    log.info("Loading CSV records into DB table...")
     db.begin()    
     for row in load_csv_rows(inputfile):
         record = filterout_dictionary( combine_dictionary(header, row), common_columns)                    
