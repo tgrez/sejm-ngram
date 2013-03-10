@@ -60,6 +60,7 @@ class DBWrapper():
 
 
 if __name__=="__main__":
+    log.info("The script loads from stdin CSV file and inserts it into DB Table (table name given as first argument).")
 
     try: table_name = sys.argv[1]
     except: log.err("Argument expected: table_name to be updated."); sys.exit(-1)
