@@ -57,12 +57,25 @@ function visualize(dataSets, startDate, stopDate, step){
         var maxVal = maxValueFromDataSetS(dataSets);
         console.log("max val: " + maxVal);
 
-         //console.log(dataSetPis);
-         //console.log(dataSetPo);
         // define dimensions of graph
         var m = [80, 80, 80, 80]; // margins
         var w = 1000 - m[1] - m[3]; // width
         var h = 400 - m[0] - m[2]; // height
+
+
+        var color_hash = {  "PIS": "green",
+                            "PO" :  "orange",
+                            "PSL" : "blue",
+                            "SLD" : "red",
+                            "RP": "brown"
+                      }    
+
+        // var color_hash = {  0 : ["PIS", "green"],
+        //                     1 : ["PO", "orange"],
+        //                     2 : ["PSL", "blue"],
+        //                     3 : ["SLD", "red"],
+        //                     4 : ["RP", "brown"]
+        //               }    
         
         // create a simple data array that we'll plot with a line (this array represents only the Y values, X will just be the index location)
 
@@ -120,15 +133,68 @@ function visualize(dataSets, startDate, stopDate, step){
                   .attr("class", "y axis")
                   .attr("transform", "translate(-25,0)")
                   .call(yAxisLeft);
-            
+
+
+
+
+
+            // add proper data lines
             // Add the line by appending an svg:path element with the data line we created above
             // do this AFTER the axes above so that the line is above the tick-lines
-
             var i = 1
             for(partyLines in dataSets){
                 graph.append("svg:path").attr("d", line(dataSets[partyLines])).attr("class", "path" + i);
                 i++;
             }
+
+            //add title
+            graph.append("svg:text")
+               .attr("class", "title")
+               .attr("x", 20)
+               .attr("y", 20)
+               .text("Our Super N-gram!");
+
+            //add legend
+            var legend = graph.append("g")
+              .attr("class", "legend")
+              .attr("x", w - 65)
+              .attr("y", 25)
+              .attr("height", 100)
+              .attr("width", 100);
+
+            //here we're preparing the datalabels. it's quite nasty
+            //since the legend labels could be made on top of dataSets
+            //but somehow it's now a proper "array" (and .data() needs
+            //such a proper array;
+            console.log(color_hash["PIS"]);
+
+            dataLabels = [];
+            for(a in dataSets)
+                dataLabels.push(a);
+            // leneg rectangles here             
+            legend.selectAll('rect')
+                  .data(dataLabels)
+                  .enter()
+                  .append("rect")
+                  .attr("x", w - 65)
+                  .attr("y", function(d, i){ 
+                    return i *  20;})
+                  .attr("width", 10)
+                  .attr("height", 10)
+                  .style("fill", function(d) { 
+                    // var color = color_hash[dataset.indexOf(d)][1];
+                    return color_hash[d];
+                  });
+
+            legend.selectAll('text')
+              .data(dataLabels)
+              .enter()
+              .append("text")
+              .attr("x", w - 52)
+              .attr("y", function(d, i){ return i *  20 + 9;})
+              .text(function(d) {
+                return d;
+              });
 
             // graph.append("svg:path").attr("d", line(data)).attr("class", "path1");
             // graph.append("svg:path").attr("d", line(data2)).attr("class", "path2");
