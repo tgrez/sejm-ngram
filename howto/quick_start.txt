@@ -1,0 +1,35 @@
+Date: 2013-03-11
+Subject: How to set up DB and fill it with ngrams.
+
+1. Install MySQL
+2. To create DB execute db/scripts/create_db.sql
+   it creates three tables:
+   sejm_wystapienia - for records downloaded through sejmometr API
+   html_wystapienia - for records downloaded through http from http://sejmometr.pl/sejm_wystapienia/id where id=1..
+   ngrams - table with unigrams,bigrams,trigrams,etc. extracted from above tables
+
+   sejm_wystapienia, html_wystapienia contain column status that is initially set up to 0 
+   and after record is processed (ngrams are extracted) should be set up to other value e.g. 1
+   sejm_wystapienia, html_wystapienia ids are equal to sejmometr ids of complement records
+
+   ngrams has column id that is autoincremented and has no specific meaning
+
+2. To load records into sejm_wystapienia and html_wystapienia execute python wystapienia_updatedb.py in directory backend/src/.
+   The script fills in tables by alternately loading records to one and then to the other table.
+   Configuration can be found in config.py file. 
+   The script can be interrupted and rerun in any time. Data in the DB will be consistent anyway. 
+
+3. To generate ngrams into table ngrams execute python ngrams_updatedb.py in directory backend/src/.
+   The script loads consecutive records from sejm_wystapienia and html_wystapienia. 
+   In second step only these columns that are available in table ngrams are kept.
+   Later, ngrams are extracted and inserted into DB.
+   Configuration can be found in config.py file. 
+
+   TODO: script should mark records in sejm_wystapienia and html_wystapienia by changing their status.
+   TODO: probably some unicode problems will occurr.
+   TODO: efficiency to be verified.
+
+
+
+   
+
