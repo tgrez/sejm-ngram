@@ -26,6 +26,7 @@ CREATE TABLE `html_wystapienia` (
 	`posel` 		    VARCHAR(40),
 	`stanowisko`		VARCHAR(50),
     `tekst`             TEXT,
+    `status`            INT(10) default 0,
 	PRIMARY KEY(id)
 );
 
@@ -45,6 +46,7 @@ CREATE TABLE `sejm_wystapienia` (
  `stanowisko_id` INT(10),
  `video` INT(10),
  `tytul` VARCHAR(100),
+ `status`            INT(10) default 0,
  PRIMARY KEY(id)
 )
 
