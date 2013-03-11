@@ -14,7 +14,7 @@ def _get_max_available_id_():
     shellcmd_get_maxid = PHP_SHELL_COMMAND+" "+PHP_SEJM_GETMAXID_FILENAME+" "+DATASETNAME_SEJM_WYSTAPIENIA
     code, out, err = shellcmd(shellcmd_get_maxid)
     if not code == 0:
-        log.error("Failure while running shellcmd_get_maxid="+shellcmd_get_maxid+" error code="+code)
+        log.error("Failure while running shellcmd_get_maxid="+str(shellcmd_get_maxid)+" error code="+str(code))
         sys.exit(-1)        
     maxid_line = list(line for line in out.split("\n") if line.strip().startswith("maxid"))[0]
     maxid = int(maxid_line.split("=")[1])
@@ -57,7 +57,7 @@ def update_sejm_wystapienia(db, start_id, last_id):
     shellcmd_sejm_get = PHP_SHELL_COMMAND+" "+PHP_SEJM_GET_FILENAME+" -s "+str(start_id)+" -l "+str(last_id)
     code, out, err = shellcmd(shellcmd_sejm_get)
     if not code == 0:
-        log.error("Failure while running shellcmd_sejm_get="+shellcmd_sejm_get+" error code="+code)
+        log.error("Failure while running shellcmd_sejm_get="+str(shellcmd_sejm_get)+" error code="+str(code))
         sys.exit(-1)        
     log.dbg("==========<sejm_get.php>==========\n"+out+"\n=========</sejm_get.php>==========")
     csv_insert_db(open(PHP_SEJM_GET_TMPFILE ), DBTABLE_SEJM_WYSTAPIENIA_NAME )
