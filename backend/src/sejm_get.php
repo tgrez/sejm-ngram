@@ -9,7 +9,6 @@
 	require_once('../../lib/eP_API/ep_API.php');
 
 	$options = getopt("d:o:h:t:s:l:");
-
 	$dataset_name 				= $options["d"];
 	$output_file  				= $options["o"];
 	$attach_header				= ($options["h"]=="false")? 0: 1;
@@ -17,7 +16,6 @@
 	$csv_separator				= $options["t"];
     $start_id                   = $options["s"];
     $last_id                    = $options["l"];
-
 
 	if (empty($dataset_name)) {
 		echo "[ERROR] dataset_name cannot be empty. Use -d option!\n";
@@ -45,6 +43,10 @@
 		$last_id = "10000000";
 	}
 
+    $csv_separator_replacement  =  str_replace_all_non_whs($csv_separator, ',');
+
+    ###############################################################################################################
+
 	function str_replace_all_non_whs($str, $replacement_char) { #replace all non-whitespace characters with replacement character
 		for ($i=0; $i<strlen($str); $i++) {
 			if ($str[$i]!=' ' && $str[$i]!='\n' && $str[$i]!='\t') {
@@ -53,9 +55,7 @@
 		}
 		return $str;
 	}
-
-	$csv_separator_replacement  =  str_replace_all_non_whs($csv_separator, ',');
-
+	
 	function csv_array_reduce($arr, $keys) { #takes array and reduces into single string (CSV-separated)
 		global $csv_separator;
 		$str = "";
@@ -81,6 +81,8 @@
 		$str 	 .= $last_key;
 		return $str;
 	}
+
+    ###############################################################################################################
 	
 	echo "####################################################\n";
 	echo "Running with dataset_name=$dataset_name output_file=$output_file attach_header=$attach_header ";

@@ -3,6 +3,7 @@
 
 from config import *
 from itertools import izip
+import log
 
 def text_filter(text, replace_with = ''):
     """Removes specific characters from text."""
@@ -63,4 +64,20 @@ def filterout_dictionary(dct, keyset):
     keyset = set(keyset)
     return dict( (k,v) for k,v in dct.iteritems() if k in keyset)
         
+
+def download_file(URL=None):
+    log.dbg("downloading url="+str(URL))
+    import httplib2
+    h = httplib2.Http(".cache")
+    resp, content = h.request(URL, "GET")
+    return content
+
+def shellcmd(cmd):
+    """Executes shell comands and returns tuple return-code, output, errors."""
+    import subprocess, log
+    log.dbg("shellcmd = "+cmd)
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = process.communicate()
+    return process.returncode, out, err
+
 

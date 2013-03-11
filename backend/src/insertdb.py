@@ -35,6 +35,13 @@ class DBWrapper():
         cols = self.get_columns(table_name)
         return dict( ( col[0], dbtype2castmethod(col[1]) ) for col in cols)
 
+    def get_table_max_id(self, table_name):
+        """Returns maximal value of id column in table of specified name."""
+        sql = "SELECT max(id) FROM "+table_name
+        log.dbg("executing "+sql[:100]+"...")
+        self.cur.execute(sql)
+        return self.cur.fetchall()[0][0]
+
     def insert_record(self, table_name, record):
         """Inserts record (dictionary {column-name: column-value}) into database."""
         try:
@@ -56,14 +63,9 @@ class DBWrapper():
         log.dbg("transaction commit")
         self.con.commit()
 
+def csv_insert_db(inputfile, table_name):
+    """Loads CSV from input file and stores it into table of specified name."""
 
-if __name__=="__main__":
-    log.info("The script loads from stdin CSV file and inserts it into DB Table (table name is given as the first argument).")
-
-    try: table_name = sys.argv[1]
-    except: log.err("Argument expected: table_name to be updated."); sys.exit(-1)
-    inputfile = INSERT_INPUT_FILE
-    
     log.info("Retrieving columns from DB table "+table_name)
     db = DBWrapper()
     column_names = db.get_column_names(table_name)
@@ -83,3 +85,12 @@ if __name__=="__main__":
         db.insert_record(table_name, record)
     db.commit()
 
+
+if __name__=="__main__":
+    log.info("The script loads from stdin CSV file and inserts it into DB Table (table name is given as the first argument).")
+
+    try: table_name = sys.argv[1]
+    except: log.err("Argument expected: table_name to be updated."); sys.exit(-1)
+    inputfile = INSERT_INPUT_FILE
+    
+    csv_insert_db(inputfile, table_name)
