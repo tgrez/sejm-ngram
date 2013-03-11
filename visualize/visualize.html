@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <script type="text/javascript" src="js/getData.js"></script>
+        <script type="text/javascript" src="js/visualize.js"></script>
+        <style>
+            /* tell the SVG path to be a thin blue line without any area fill */
+            .path1 {
+                stroke: steelblue;
+                stroke-width: 1;
+                fill: none;
+            }
+
+            .path2 {
+                stroke: red;
+                stroke-width: 1;
+                fill: none;
+            }
+            .path3 {
+                stroke: green;
+                stroke-width: 1;
+                fill: none;
+            }
+            .path4 {
+                stroke: brown;
+                stroke-width: 1;
+                fill: none;
+            }
+            .path5 {
+                stroke: violet;
+                stroke-width: 1;
+                fill: none;
+            }
+            
+            .axis {
+              shape-rendering: crispEdges;
+            }
+
+            .x.axis line {
+              stroke: lightgrey;
+            }
+
+            .x.axis .minor {
+              stroke-opacity: .5;
+            }
+
+            .x.axis path {
+              display: none;
+            }
+
+            .y.axis line, .y.axis path {
+              fill: none;
+              stroke: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <div id ="upper">
+            <select onChange="startVisualization(this.options[this.selectedIndex].value);">
+                  <option value="Polska jest super">Polska jest super</option>
+                  <option value="Polska jest be">Polska jest be</option>
+                  <option value="Balcerowicz musi odejść">Balcerowicz musi odejść</option>
+                  <option value="Niesioł siad">Niesioł siad</option>
+                  <option value="Żądam sprawiedliwości!">Żądam sprawiedliwości!</option>
+                  <option value="Nie chcę już nic.">Nie chcę już nic.</option>
+                  <option value="Banda matołów">Banda matołów</option>
+                  <option value="Gdzie jest krzyż">Gdzie jest krzyż</option>
+            </select>
+        </div>
+
+        <!-- <div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div> -->
+        <div id="graph" class="aGraph"></div> 
+
+
+    <script>
+        // main loop of our site
+         startVisualization("Polska jest super");
+       
+
+    </script>
+
+
+    </body>
+</html>    
+
+
+<!-- 
+
+Partie:
+pis, po, rp, sld, psl
+
+Ngram, Data, Partia
+Polska jest;1990-05-01 12:34;PIS
+
+-->
