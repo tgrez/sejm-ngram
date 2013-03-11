@@ -1,12 +1,13 @@
-
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import log
 from config import *
-from insertdb import *
+from dbwrapper import *
 import sys
 from utils import *
 from wystapienia_parse import *
-
+from insertdb import *
 
 def _get_max_available_id_():
     """Returns max possible id in wystapienia."""

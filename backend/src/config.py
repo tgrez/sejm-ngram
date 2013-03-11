@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 """Put your configuration and things that should be shared here."""
 
 #used in wystapienia_updatedb
@@ -35,4 +37,11 @@ WYSTAPIENIA_OUTPUT_FILE = sys.stdout
 #general options
 CSV_SEPARATOR = "\t;\t"
 CSV_REPLACEMENT = "," #if CSV_SEPARATOR found in text replace it with CSV_REPLACEMENT
+
+#ngrams_updatedb configuration
+NGRAMS_LENGTHS = [1,2,3]
+DBTABLE_NGRAMS_NAME = "ngrams" #DB table name
+DBTABLE_NGRAMS_COL_NGRAM = "ngram" #DB table column with ngram
+DBTABLE_NGRAMS_COL_ID = "id" #DB table column with id
+DB_STATUS_NOT_PROCESSED_CODE = 0
 

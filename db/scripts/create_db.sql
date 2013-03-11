@@ -8,16 +8,18 @@ GRANT ALL ON wystapienia.* TO 'testuser'@'localhost';
 
 
 
-#CREATE TABLE `ngram` (
-#	`id`			    INT(10) NOT NULL AUTO_INCREMENT,
-#	`unigram`		    VARCHAR(20),
-#	`posel` 		    VARCHAR(40),
-#	`data` 			    DATE,
-#    `partia`            VARCHAR(10),
-#	`stanowisko`		VARCHAR(50),
-#	`wystapienie_id` 	INT(10),
-#	PRIMARY KEY(id)
-#	);
+
+CREATE TABLE `ngrams` (
+    `id`             INT(10) NOT NULL AUTO_INCREMENT,
+	`ngram`		        VARCHAR(100) NOT NULL,
+	`posel` 		    VARCHAR(40),
+	`stanowisko` 		VARCHAR(40),
+	`data` 			    DATE,
+    `czlowiek_id`       INT(10),
+	`klub_id` 	        INT(10),
+	PRIMARY KEY(id)
+);
+
 
 
 #Storage for data downloaded from http://sejmometr.pl/sejm_wystapienia/id where id 1..
