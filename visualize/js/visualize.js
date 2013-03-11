@@ -15,6 +15,34 @@ dataSets - array of arrays containing nrOfNGrams for relevant period for one par
             => .......
             => [10] : 1;
 */
+
+/* 
+Main visualization function
+*/
+function startVisualization(nGramToVisualize){
+
+
+            console.log("startVisuzalition() with param: " + nGramToVisualize);
+
+            // reset the div with graph
+            document.getElementById("graph").innerHTML = "";
+            d3.csv("fake_data.csv", function(data) {
+
+            startDate = new Date("01/01/2008");  //it's so stuping, JavaScript uses month from 0
+            stopDate = new Date("01/01/2009");
+            step = 12;
+
+            var dataSets = new Array();
+                dataSets["PIS"] = getNGramsList(data, startDate, stopDate, step, "PIS", nGramToVisualize);
+                dataSets["PO"] = getNGramsList(data, startDate, stopDate, step, "PO", nGramToVisualize);
+                dataSets["RP"] = getNGramsList(data, startDate, stopDate, step, "RP", nGramToVisualize);
+                dataSets["SLD"] = getNGramsList(data, startDate, stopDate, step, "SLD", nGramToVisualize);
+                dataSets["PSL"] = getNGramsList(data, startDate, stopDate, step, "PSL", nGramToVisualize);
+            visualize(dataSets, startDate, stopDate, step);
+        });
+}
+
+
 function visualize(dataSets, startDate, stopDate, step){
     /* implementation heavily influenced by http://bl.ocks.org/1166403 */
         // data = [];
@@ -26,14 +54,8 @@ function visualize(dataSets, startDate, stopDate, step){
             dataSets[a] =  convertAssArrayToNormal(dataSets[a], step);
         }
 
-        // console.log(dataSets);
-
-
-        // var dataSetPis = convertAssArrayToNormal(dataSets["PIS"], step);
-        // var dataSetPo = convertAssArrayToNormal(dataSets["PO"], step);
-
         var maxVal = maxValueFromDataSetS(dataSets);
-       console.log("max val: " + maxVal);
+        console.log("max val: " + maxVal);
 
          //console.log(dataSetPis);
          //console.log(dataSetPo);
@@ -66,7 +88,7 @@ function visualize(dataSets, startDate, stopDate, step){
                 // verbose logging to show what's actually being done
                 //console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
                 // return the X coordinate where we want to plot this datapoint
-                return x(i); 
+                return x(i + 1); 
             })
             .y(function(d) { 
                 // verbose logging to show what's actually being done

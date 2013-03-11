@@ -6,9 +6,9 @@ function hello(){
 data - rows with data
 ...
 */
-function getNGramsList(data, startDate, stopDate, step, party){
+function getNGramsList(data, startDate, stopDate, step, party, nGramToVisualize){
 
-    ngram = "Polska jest super";
+    // ngram = "Polska jest super";
     // console.log(data);
 
     var nGramNumbers = new Array();
@@ -22,7 +22,7 @@ function getNGramsList(data, startDate, stopDate, step, party){
           // console.log("bierzemy!");
         // console.log(data[i]);
         if(data[i]["Partia"] != party) continue;
-        if(data[i]["Ngram"] != ngram) continue;
+        if(data[i]["Ngram"] != nGramToVisualize) continue;
 
 
 

@@ -58,50 +58,26 @@
         </style>
     </head>
     <body>
-        <script type="text/javascript">
-        	document.write('<b>Hello World</b>');
-            // Your beautiful D3 code will go here
-        </script>
+        <div id ="upper">
+            <select onChange="startVisualization(this.options[this.selectedIndex].value);">
+                  <option value="Polska jest super">Polska jest super</option>
+                  <option value="Polska jest be">Polska jest be</option>
+                  <option value="Balcerowicz musi odejść">Balcerowicz musi odejść</option>
+                  <option value="Niesioł siad">Niesioł siad</option>
+                  <option value="Żądam sprawiedliwości!">Żądam sprawiedliwości!</option>
+                  <option value="Nie chcę już nic.">Nie chcę już nic.</option>
+                  <option value="Banda matołów">Banda matołów</option>
+                  <option value="Gdzie jest krzyż">Gdzie jest krzyż</option>
+            </select>
+        </div>
 
-        <div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div>
+        <!-- <div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div> -->
+        <div id="graph" class="aGraph"></div> 
 
 
     <script>
         // main loop of our site
-        // csvContent = d3.csv("fake_data.csv");
-
-        // console.log(d3.csv.parse(csvContent));
-
-        d3.csv("fake_data.csv", function(data) {
-
-            // console.log(data[0].Data);
-            
-            // data.forEach(function(d) {
-            //     d.date = formatDate.parse(d.date);
-            //     d.price = +d.price;
-            // });
-        //7/30/2009'
-            // startDate = new Date(2008, 00,01);  //it's so stuping, JavaScript uses month from 0
-            // stopDate = new Date(2009, 00,01);
-            startDate = new Date("01/01/2008");  //it's so stuping, JavaScript uses month from 0
-            stopDate = new Date("01/01/2009");
-            step = 12;
-            party = "PO";
-            dataSetPis = getNGramsList(data, startDate, stopDate, step, "PIS");
-            dataSetPo = getNGramsList(data, startDate, stopDate, step, "PO");
-
-
-            var dataSets = new Array();
-            dataSets["PIS"] = dataSetPis;
-            dataSets["PO"] = dataSetPo;
-            dataSets["RP"] = getNGramsList(data, startDate, stopDate, step, "RP");
-            dataSets["SLD"] = getNGramsList(data, startDate, stopDate, step, "SLD");
-            dataSets["PSL"] = getNGramsList(data, startDate, stopDate, step, "PSL");
-            // console.log(dataSets);
-
-
-            visualize(dataSets, startDate, stopDate, step);
-        });
+         startVisualization("Polska jest super");
        
 
     </script>
