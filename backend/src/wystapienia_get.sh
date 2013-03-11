@@ -10,7 +10,6 @@ echo "################################################################"
 
 rm -rf $3
 echo "id\t;\tposel\t;\tstanowisko\t;\ttekst" > $3  #write CSV header
-EXITCODE = 0
 mkdir /tmp/wystapienia
 
 for i in $(seq $1 $2)
@@ -25,7 +24,6 @@ do
             echo "HTML for id=$i parsed properly."
         else
             echo "Failure while parsing HTML for id=$i. Breaking..."
-            EXITCODE = -2
             break
         fi
 
@@ -33,11 +31,9 @@ do
 
     else
         echo "Failure while downloading id=$i. Breaking..."
-        EXITCODE = -1
         break            
     fi
 
 done
 
-exit EXITCODE
 

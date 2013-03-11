@@ -36,15 +36,17 @@ def update_html_wystapienia(db, start_id, last_id, urlbase=URL_SEJM_WYSTAPIENIA)
         parser.feed(htmlcode)
         member, position, text = parser.extract_fields()  
         
-        #pack as a record
-        record = {  DBTABLE_HTML_WYSTAPIENIA_COL_ID: str(idd), 
-                    DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER: str(member),
-                    DBTABLE_HTML_WYSTAPIENIA_COL_POSITION: str(position),
-                    DBTABLE_HTML_WYSTAPIENIA_COL_TEXT: str(text)}
+        if len(text)>0 or len(position)>0 or len(member)>0:
+            #pack as a record
+            record = {  DBTABLE_HTML_WYSTAPIENIA_COL_ID: str(idd), 
+                        DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER: str(member),
+                        DBTABLE_HTML_WYSTAPIENIA_COL_POSITION: str(position),
+                        DBTABLE_HTML_WYSTAPIENIA_COL_TEXT: str(text)}
 
 
-        #insert into db
-        db.insert_record(DBTABLE_HTML_WYSTAPIENIA_NAME, record)
+            #insert into db
+            db.insert_record(DBTABLE_HTML_WYSTAPIENIA_NAME, record)
+        else: log.dbg("empty data extracted. omitting")
     db.commit()
         
 

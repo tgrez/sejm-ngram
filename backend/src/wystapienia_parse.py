@@ -109,7 +109,10 @@ if __name__=="__main__":
         # print extracted text
         member, position, text = parser.extract_fields()        
         text = text.replace(CSV_SEPARATOR.strip(), CSV_REPLACEMENT) #Replace delimieters in source text
-        outputfile.write(str(member)+CSV_SEPARATOR+str(position)+CSV_SEPARATOR+str(text)+"\n")
+
+        if len(text)>0 or len(position)>0 or len(member)>0:
+            outputfile.write(str(member)+CSV_SEPARATOR+str(position)+CSV_SEPARATOR+str(text)+"\n")
+        else: log.dbg("empty data extracted. omitting")
 
     except Exception as e:
         log.err("Exception: "+str(e)+" for htmlcode="+utils.text_filter(str(htmlcode)[:200])+"...\n")    
