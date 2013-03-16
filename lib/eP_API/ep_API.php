@@ -2,8 +2,8 @@
   // TUTAJ WKLEJ SWOJE KLUCZE API. ABY JE UZYSKAĆ, MUSISZ ZAREJETROWAĆ KONTO NA PORTALU http://sejmometr.pl
   // WIĘCEJ INFORMACJI NA http://sejmometr.pl/api
   
-  define('eP_API_KEY', 'd780901f1ddc857fe60763966cc0e7d8');
-  define('eP_API_SECRET', 'c22064c859ba4cbf136ef9d998ccea8a');
+  define('eP_API_KEY', '76b56d34fe1c3a0d7ea478d9634ebbce');
+  define('eP_API_SECRET', '37a8ed18bea732319ae0a2344ff143ae');
 
 
 
