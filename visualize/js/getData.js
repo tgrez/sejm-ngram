@@ -59,7 +59,7 @@ function getNGramsList(data, startDate, stopDate, step, party, nGramToVisualize)
     (since you want to group Ngrams into certain 
     fields, at which point should it be done?)
 */
-function getNGramsDatesList(data, startDate, stopDate, step, party, nGramToVisualize)){
+function getNGramsDatesList(data, startDate, stopDate, step, party, nGramToVisualize){
     var nGramNumbers = new Array();
 
     for (var i=0,len=data.length; i<len; i++){

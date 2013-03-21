@@ -49,6 +49,11 @@ function visualize(dataSets, startDate, stopDate, step){
 
          // console.log(dataSets);
 
+
+        // temp_dataSet = Array();
+        // temp_dataSet.push()
+        console.log(temp_dataSet);
+
         // firstly we are converint associative arrays into "normal" ones
         for(a in dataSets){
             dataSets[a] =  convertAssArrayToNormal(dataSets[a], step);
@@ -56,6 +61,7 @@ function visualize(dataSets, startDate, stopDate, step){
 
         var maxVal = maxValueFromDataSetS(dataSets);
         console.log("max val: " + maxVal);
+        console.log(dataSets);
 
         // define dimensions of graph
         var m = [80, 80, 80, 80]; // margins
@@ -103,14 +109,15 @@ function visualize(dataSets, startDate, stopDate, step){
             // assign the X function to plot our line as we wish
             .x(function(d,i) { 
                 // verbose logging to show what's actually being done
-                // console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+                // console.log(d + ' ' + i);
+                 // console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
                 // return the X coordinate where we want to plot this datapoint
 
                 return x(i + 1); 
             })
             .y(function(d) { 
                 // verbose logging to show what's actually being done
-               // console.log('Plotting Y value for data point: ' + d + ' to be at: ' + y(d) + " using our yScale.");
+                // console.log('Plotting Y value for data point: ' + d + ' to be at: ' + y(d) + " using our yScale.");
                 // return the Y coordinate where we want to plot this datapoint
                 return y(d); 
             }
@@ -140,10 +147,6 @@ function visualize(dataSets, startDate, stopDate, step){
                   .attr("class", "y axis")
                   .attr("transform", "translate(-25,0)")
                   .call(yAxisLeft);
-
-
-
-
 
             // add proper data lines
             // Add the line by appending an svg:path element with the data line we created above
@@ -178,6 +181,7 @@ function visualize(dataSets, startDate, stopDate, step){
             dataLabels = [];
             for(a in dataSets)
                 dataLabels.push(a);
+
             // leneg rectangles here             
             legend.selectAll('rect')
                   .data(dataLabels)
