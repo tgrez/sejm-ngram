@@ -1,0 +1,33 @@
+min data 2011-11-08
+
+max data 2013-02-22
+
+tabela ngrams
+ id     | ngram           | posel      | stanowisko | data       | czlowiek_id | klub_id
+
+ 
+
+Ze strony użytkownika:
+a) Wybiera Zakres dat
+b) wybiera n-gram
+
+Dostaje liste (nr partii, data)
+
+ngrams small
++------------+--------+
+| data       | ilosc  |
++------------+--------+
+| 2011-11-08 |  80454 |
+| 2011-11-17 |  32445 |
+| 2011-11-18 | 205134 |
+| 2011-11-19 |  25614 |
+| 2011-12-01 | 151326 |
+| 2011-12-14 |   5027 |
+-------------------------
+
+
+Pytanie o daty 
+SELECT count(*) from ngrams_small WHERE data > '2011-11-18' AND data < '2011-12-01'
+
+
+SELECT klub_id, data from ngrams_small WHERE data = '2011-11-19'AND ngram LIKE 'o';

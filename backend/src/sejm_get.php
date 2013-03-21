@@ -55,7 +55,7 @@
 		}
 		return $str;
 	}
-	
+
 	function csv_array_reduce($arr, $keys) { #takes array and reduces into single string (CSV-separated)
 		global $csv_separator;
 		$str = "";
@@ -83,7 +83,7 @@
 	}
 
     ###############################################################################################################
-	
+
 	echo "####################################################\n";
 	echo "Running with dataset_name=$dataset_name output_file=$output_file attach_header=$attach_header ";
 	echo "requested_page_size=$requested_page_size csv_separator=$csv_separator\n ";
@@ -95,6 +95,10 @@
 	$dataset = new ep_Dataset($dataset_name);
 
 	$first_page = $dataset->find_all(1, 0);
+    #if ( sizeof($first_page) <= 0 ) {
+    #    echo "[ERROR] The dataset seems to be empty!\n";
+    #    exit(-2);
+    #}
 	$data_keys	= array_keys($first_page[0]->data);
 	if ($attach_header) fwrite($fh, csv_header_reduce($data_keys)."\n");
 

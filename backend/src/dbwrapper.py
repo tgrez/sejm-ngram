@@ -89,3 +89,39 @@ class DBWrapper():
     def commit(self):      
         log.dbg("transaction commit")
         self.con.commit()
+
+
+class DBTableWrapper(DBWrapper):
+    """Controls communication to single table in MySQL database."""
+
+    def __init__(self, table_name):
+        DBWrapper.__init__(self)
+        self.table_name = str(table_name)
+        self.columns = DBWrapper.get_columns(self, table_name)
+        self.column_names = list(c[0] for c in self.columns)
+        self.key2type = dict( ( col[0], dbtype2castmethod(col[1]) ) for col in self.columns)
+        log.dbg("table_name="+self.table_name+" columns="+str(self.columns)+" column_names="+str(self.column_names)+" key2type ="+str(self.key2type))
+
+    def get_table_max_id(self):
+        """Returns maximal value of id column in table of specified name."""
+        return DBWrapper.get_table_max_id(self, self.table_name)
+
+    def insert_record(self, record):
+        """Inserts record (dictionary {column-name: column-value}) into table (casting and columns name matching are done)."""
+        shared_colnames = set(record.keys()).intersection(self.column_names)
+        record = filterout_dictionary(record, shared_colnames) 
+        record = map_values_types(record, self.key2type)
+        DBWrapper.insert_record(self, self.table_name, record)
+
+
+
+
+#if __name__=="__main__":
+#    log.set_output_level(log.LOG_LEVEL.DBG)
+#    table = DBTableWrapper("ngrams")
+#    table.begin()
+#    print "table.get_table_max_id =",table.get_table_max_id()
+#    table.insert_record({"id":100000001, "ngram": "dupa"})
+#    table.commit()
+    
+

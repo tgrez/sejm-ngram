@@ -5,6 +5,7 @@ from config import *
 from itertools import izip
 import log
 
+
 def text_filter(text, replace_with = ''):
     """Removes specific characters from text."""
     #print type(text), text
