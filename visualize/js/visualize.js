@@ -28,17 +28,17 @@ function startVisualization(nGramToVisualize){
             document.getElementById("graph").innerHTML = "";
             d3.csv("fake_data.csv", function(data) {
 
-            startDate = new Date("01/01/2008");  //it's so stuping, JavaScript uses month from 0
-            stopDate = new Date("01/01/2009");
-            step = 12;
+                startDate = new Date("01/01/2008");  //it's so stuping, JavaScript uses month from 0
+                stopDate = new Date("01/01/2009");
+                step = 12;
 
-            var dataSets = new Array();
-                dataSets["PIS"] = getNGramsList(data, startDate, stopDate, step, "PIS", nGramToVisualize);
-                dataSets["PO"] = getNGramsList(data, startDate, stopDate, step, "PO", nGramToVisualize);
-                dataSets["RP"] = getNGramsList(data, startDate, stopDate, step, "RP", nGramToVisualize);
-                dataSets["SLD"] = getNGramsList(data, startDate, stopDate, step, "SLD", nGramToVisualize);
-                dataSets["PSL"] = getNGramsList(data, startDate, stopDate, step, "PSL", nGramToVisualize);
-            visualize(dataSets, startDate, stopDate, step);
+                var dataSets = new Array();
+                    dataSets["PIS"] = getNGramsList(data, startDate, stopDate, step, "PIS", nGramToVisualize);
+                    dataSets["PO"] = getNGramsList(data, startDate, stopDate, step, "PO", nGramToVisualize);
+                    dataSets["RP"] = getNGramsList(data, startDate, stopDate, step, "RP", nGramToVisualize);
+                    dataSets["SLD"] = getNGramsList(data, startDate, stopDate, step, "SLD", nGramToVisualize);
+                    dataSets["PSL"] = getNGramsList(data, startDate, stopDate, step, "PSL", nGramToVisualize);
+                visualize(dataSets, startDate, stopDate, step);
         });
 }
 
@@ -88,7 +88,11 @@ function visualize(dataSets, startDate, stopDate, step){
          // var data2 = [2, 5, 1, 6, 2, 0, 7, 4, 3, 9, 5, 5, 3, 3, 3, 5, 6, 7, 7, 5, 2, 3, 3, 4, 9, 0, 1, 5, 4, 0];
 
         // X scale will fit all values from data[] within pixels 0-w
-        var x = d3.scale.linear().domain([0, 12]).range([0, w]); //12 used to be data.length
+        // var x = d3.scale.linear().domain([0, 12]).range([0, w]); //12 used to be data.length
+        // console.log(dataSets["PIS"]);
+       var x = d3.time.scale().domain([startDate, stopDate]).range([0, w]);
+
+
         // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
         var y = d3.scale.linear().domain([0, maxVal]).range([h, 0]);
             // automatically determining max range can work something like this
@@ -99,8 +103,9 @@ function visualize(dataSets, startDate, stopDate, step){
             // assign the X function to plot our line as we wish
             .x(function(d,i) { 
                 // verbose logging to show what's actually being done
-                //console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+                // console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
                 // return the X coordinate where we want to plot this datapoint
+
                 return x(i + 1); 
             })
             .y(function(d) { 
@@ -119,6 +124,8 @@ function visualize(dataSets, startDate, stopDate, step){
 
             // create yAxis
             var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
+
+
             // Add the x-axis.
             graph.append("svg:g")
                   .attr("class", "x axis")

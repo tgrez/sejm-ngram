@@ -3,8 +3,11 @@ function hello(){
 }
 
 /* 
+Deprecated.
 data - rows with data
-...
+But it was trying to transform all of the points into "sectors"
+on the graph.. Which is so stupid and naive and not-using D3 features
+check out the getNGramsDatesList() function
 */
 function getNGramsList(data, startDate, stopDate, step, party, nGramToVisualize){
 
@@ -49,14 +52,26 @@ function getNGramsList(data, startDate, stopDate, step, party, nGramToVisualize)
          // console.log(nrSegment  + " " + nGramDate);
     }
 
-//     var numeric_array = [];
-//     for ( var item in nGramNumbers ){
-//         numeric_array.push( nGramNumbers[ item ] );
-// }
-
-
     return nGramNumbers;
 }
+
+/** Not really finished, you have to think it over...
+    (since you want to group Ngrams into certain 
+    fields, at which point should it be done?)
+*/
+function getNGramsDatesList(data, startDate, stopDate, step, party, nGramToVisualize)){
+    var nGramNumbers = new Array();
+
+    for (var i=0,len=data.length; i<len; i++){
+        //we want to use only particular Partia and Ngram ...
+        if(data[i]["Partia"] != party) continue;
+        if(data[i]["Ngram"] != nGramToVisualize) continue;
+
+        nGramDate = parseDate(data[i]["Data"]);
+
+    }
+}
+
 
 /**      It's parsing String in this format 18-06-2008 22:51 
 and creating a JS Date object.
