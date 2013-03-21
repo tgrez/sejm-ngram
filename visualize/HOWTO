@@ -1,0 +1,7 @@
+To have my visualization.html run properly, 
+please start local HTTP container (D3 is causing troubles, you cannot just run it from the browser)
+
+If you have python, just type this:
+python -m SimpleHTTPServer 8000
+
+.. in the visualization directory.
