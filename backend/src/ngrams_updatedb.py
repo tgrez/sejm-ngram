@@ -44,6 +44,8 @@ def build_many_ngrams(text, lengths = [1,2,3]):
         ngrams.extend( build_ngrams(text, length) )
     return ngrams
 
+
+
 if __name__=="__main__":
 
     db = DBWrapper()
