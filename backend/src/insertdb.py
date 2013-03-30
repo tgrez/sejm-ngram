@@ -1,4 +1,3 @@
-
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -11,24 +10,14 @@ from dbwrapper import *
 
 def csv_insert_db(inputfile, table_name):
     """Loads CSV from input file and stores it into table of specified name."""
-
-    log.info("Retrieving columns from DB table "+table_name)
-    db = DBWrapper()
-    column_names = db.get_column_names(table_name)
-    log.info("DB table columns="+str(column_names))
-
-    log.info("Retrieving columns from CSV file "+str(inputfile))
+    db = DBTableWrapper(table_name)
     header = load_csv_header(inputfile)
-    log.info("CSV file columns="+str(header))
-    
-    common_columns = set(header).intersection(column_names)
-    log.info("Common columns between CSV and DB: " + str( common_columns ) )
-    
-    log.info("Loading CSV records into DB table...")
+        
+    log.info("inserting records ("+str(header)+") from '"+str(inputfile)+"' into DB table '"+str(table_name)+"'...")
     db.begin()    
     for row in load_csv_rows(inputfile):
-        record = filterout_dictionary( combine_dictionary(header, row), common_columns)                    
-        db.insert_record(table_name, record)
+        record = combine_dictionary(header, row)
+        db.insert_record(record)
     db.commit()
 
 
