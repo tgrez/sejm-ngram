@@ -14,6 +14,7 @@ def dbtype2castmethod(dbtype):
     if dbtype.startswith("varchar"):    return unicode
     if dbtype.startswith("text"):       return unicode
     if dbtype.startswith("int"):        return int
+    if dbtype.startswith("float"):      return float
     if dbtype.startswith("date"):       return str #datetime.datetime
     raise Exception('[dbtype2castmethod] unknown db type name:'+dbtype)
 

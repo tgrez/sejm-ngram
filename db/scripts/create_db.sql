@@ -38,6 +38,24 @@ CREATE TABLE `sejm_wystapienia` (
  PRIMARY KEY(id)
 );
 
+/*--Storage for table from http://sejmometr.pl/api/docs/ep_Sejm_Wystapienie (dataset sejm_kluby)*/
+CREATE TABLE `sejm_kluby` (
+    `id` INT NOT NULL, 
+    `liczba_kobiet` INT, 
+    `liczba_mezczyzn` INT, 
+    `liczba_poslow` INT, 
+    `nazwa` VARCHAR(100), 
+    `skrot` VARCHAR(20), 
+    `srednia_frekfencja` FLOAT, 
+    `srednia_liczba_projektow_uchwal` FLOAT,
+    `srednia_liczba_projektow_ustaw` FLOAT, 
+    `srednia_liczba_wnioskow` FLOAT, 
+    `srednia_liczba_wystapien` FLOAT, 
+    `srednia_poparcie_w_okregu` FLOAT, 
+    `srednia_udzial_w_obradach` FLOAT, 
+    `srednia_zbuntowanie` FLOAT,
+     PRIMARY KEY(id)
+);
 
 /*-----------------------------------------------------------------------------------*/
 
