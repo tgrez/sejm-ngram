@@ -88,15 +88,6 @@ if __name__=="__main__":
     log.info("The script loads 'wystapienia' from tables "+DBTABLE_SEJM_WYSTAPIENIA_NAME+
              " & "+DBTABLE_HTML_WYSTAPIENIA_NAME+" and updates table "+DBTABLE_NGRAMS_NAME)
 
-    if NGRAMS_DBACCESS_AUTOSYNCH: 
-        log.info("WARNING: Internal dictionaries will be synchronized continously with DB."+
-                 " It may slow down processing."+
-                 " For off-line mode see NGRAMS_DBACCESS_AUTOSYNCH in config.py")
-    else:
-        log.info("WARNING: Internal dictionaries are synchronized with DB only at the end of the script."+
-                 " It may cause incoherence in data when executed in parallel manner."+
-                 " For continuos synchronization see NGRAMS_DBACCESS_AUTOSYNCH in config.py")
-
     #######################################################################################################
 
     #Prepare tables
@@ -125,7 +116,7 @@ if __name__=="__main__":
             if wystapienie[STATUS_COL_NAME] <= DB_STATUS_NOT_PROCESSED_CODE:
                 ngram_counter += _store_ngrams_(wystapienie, db_ngram)
                 _mark_wystapienie_processed_(idd, db_sejm, db_html)
-            else: log.warn("'wystapienie' of id=%i has changed its status in meantime (parallel manner execution?).")                
+            else: log.err("'wystapienie' has changed its status in meantime (you should not run more than one copy!!).")                
             db_ngram.commit()
             
     except KeyboardInterrupt:

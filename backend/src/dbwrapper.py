@@ -198,7 +198,9 @@ class DBTableWrapper(DBWrapper):
 
 
 class DBDictionaryTable(DBTableWrapper):
-    """Controls communication to single table with two columns (id, value) that represents dictionary in  database."""        
+    """Controls communication to single table with two columns (id, value) that represents dictionary in  database. 
+
+      WARNING: Multiprocess Unsafe (but fast ;) ) Implementation!"""        
     def __init__(self, table_name, db_autosynchronization = False, transaction_manager = DBTransactionManager()):
         """Whether DB should be updated as soon as it is possible or by db_autosynchronization() method execution."""
         transaction_manager.begin()
