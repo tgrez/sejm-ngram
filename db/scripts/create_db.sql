@@ -81,7 +81,7 @@ CREATE TABLE `ngram_dictionary` (
 	PRIMARY KEY(id)
 );
 INSERT INTO `ngram_dictionary` (`id`,`ngram`) VALUES (0, "UNKNOWN");
-ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`);
+#ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`); #TODO
 
 
 #Dictionary {id: klub}
