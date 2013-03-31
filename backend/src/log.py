@@ -35,13 +35,13 @@ def warn(txt):
     """Log warning."""
     if output_level <= LOG_LEVEL.WARN:
         if not txt.endswith("\n"): txt = txt+"\n"
-        sys.stderr.write( "[WRN][ "+str(inspect.stack()[1][3])+" ] "+str(txt) )
+        sys.stderr.write( "[WRN][ "+str(inspect.stack()[1][3])+" ] %s" % (txt) )
 
 def warning(txt):
     """Log warning."""
     if output_level <= LOG_LEVEL.WARN:
         if not txt.endswith("\n"): txt = txt+"\n"
-        sys.stderr.write( "[WRN][ "+str(inspect.stack()[1][3])+" ] "+str(txt) )
+        sys.stderr.write( "[WRN][ "+str(inspect.stack()[1][3])+" ] %s" % (txt) )
 
 
 
@@ -49,13 +49,13 @@ def err(txt):
     """Log error."""
     if output_level <= LOG_LEVEL.ERR:
         if not txt.endswith("\n"): txt = txt+"\n"
-        sys.stderr.write( "[ERR][ "+str(inspect.stack()[1][3])+" ] "+str(txt) )
+        sys.stderr.write( "[ERR][ "+str(inspect.stack()[1][3])+" ] %s" % (txt) )
 
 def error(txt):
     """Log error."""
     if output_level <= LOG_LEVEL.ERR:
         if not txt.endswith("\n"): txt = txt+"\n"
-        sys.stderr.write( "[ERR][ "+str(inspect.stack()[1][3])+" ] "+str(txt) )
+        sys.stderr.write( "[ERR][ "+str(inspect.stack()[1][3])+" ] %s" % (txt) )
 
 if __name__=="__main__":
     set_output_level(LOG_LEVEL.INFO)

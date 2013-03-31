@@ -10,21 +10,6 @@ from wystapienia_parse import *
 from insertdb import *
 
 
-PHP_SHELL_COMMAND               = "php"
-PHP_SEJM_GETMAXID_FILENAME      = "sejm_getmaxid.php"
-
-DATASETNAME_SEJM_WYSTAPIENIA    = "sejm_wystapienia" #sejmometr API dataset name
-DBTABLE_SEJM_WYSTAPIENIA_NAME   = "sejm_wystapienia" #DB table name
-PHP_SEJM_GET_TMPFILE            = "/tmp/wystapienia.csv"
-PHP_SEJM_GET_FILENAME           = "sejm_get.php -d "+DATASETNAME_SEJM_WYSTAPIENIA+" -o "+PHP_SEJM_GET_TMPFILE
-DBTABLE_SEJM_PACKAGE_SIZE       = 200 #how many should be downloaded and inserted at once
-
-URL_SEJM_WYSTAPIENIA                    = "http://sejmometr.pl/sejm_wystapienia/" #URL where to find html 
-DBTABLE_HTML_WYSTAPIENIA_NAME           = "html_wystapienia" #DB table tame
-DBTABLE_HTML_WYSTAPIENIA_COL_ID         = "id" #DB table column id
-DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER     = "posel" #DB table column name
-DBTABLE_HTML_WYSTAPIENIA_COL_POSITION   = "stanowisko" #DB table column name
-DBTABLE_HTML_WYSTAPIENIA_COL_TEXT       = "tekst" #DB table column name
 
 
 
@@ -41,7 +26,7 @@ def _get_max_available_id_():
 
 
 
-def update_html_wystapienia(db, start_id, last_id):
+def _update_html_wystapienia_(db, start_id, last_id):
     """Retrieves and parses (html_)'wystapienia' from URL_SEJM_WYSTAPIENIA/id for id=start_id...last_id."""
     log.info("retrieving and inserting records of ids in range ["+str(start_id)+", "+str(last_id)+"] into "+str(db)+"...")
     db.begin() 
@@ -58,7 +43,7 @@ def update_html_wystapienia(db, start_id, last_id):
         
         if len(text)>0 or len(position)>0 or len(member)>0:
             #pack as a record
-            record = {  DBTABLE_HTML_WYSTAPIENIA_COL_ID: str(idd), 
+            record = {  ID_COL_NAME: str(idd), 
                         DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER: str(member),
                         DBTABLE_HTML_WYSTAPIENIA_COL_POSITION: str(position),
                         DBTABLE_HTML_WYSTAPIENIA_COL_TEXT: str(text)}
@@ -69,7 +54,7 @@ def update_html_wystapienia(db, start_id, last_id):
     db.commit()
         
 
-def update_sejm_wystapienia(start_id, last_id):
+def _update_sejm_wystapienia_(start_id, last_id):
     """Retrieves and inserts (sejm_)'wystapienia' using sejm API for id=start_id...last_id."""                
     log.dbg("updating start_id="+str(start_id)+" last_id="+str(last_id))
     shellcmd_sejm_get = PHP_SHELL_COMMAND+" "+PHP_SEJM_GET_FILENAME+" -s "+str(start_id)+" -l "+str(last_id)
@@ -87,8 +72,9 @@ if __name__=="__main__":
     log.info("The script automatically updates content of "+DBTABLE_SEJM_WYSTAPIENIA_NAME+
              " & "+DBTABLE_HTML_WYSTAPIENIA_NAME+" tables in default (see config.py) DB.")
 
-    db_html = DBTableWrapper(DBTABLE_HTML_WYSTAPIENIA_NAME)
-    db_sejm = DBTableWrapper(DBTABLE_SEJM_WYSTAPIENIA_NAME)
+    transaction_man = DBTransactionManager(name="Wystapienia Transaction Manager")
+    db_html = DBTableWrapper(DBTABLE_HTML_WYSTAPIENIA_NAME, transaction_manager=transaction_man)
+    db_sejm = DBTableWrapper(DBTABLE_SEJM_WYSTAPIENIA_NAME, transaction_manager=transaction_man)
 
     try:
         while True:
@@ -102,7 +88,7 @@ if __name__=="__main__":
 
             if maxid>max_sejm_wystapienia_id:
                 log.info("retrieving missing entries in '"+DBTABLE_SEJM_WYSTAPIENIA_NAME+"'")
-                update_sejm_wystapienia(max_sejm_wystapienia_id+1, min(maxid, max_sejm_wystapienia_id+DBTABLE_SEJM_PACKAGE_SIZE))
+                _update_sejm_wystapienia_(max_sejm_wystapienia_id+1, min(maxid, max_sejm_wystapienia_id+DBTABLE_SEJM_PACKAGE_SIZE))
             
             max_html_wystapienia_id = db_html.get_table_max_id()
             if max_html_wystapienia_id is None: max_html_wystapienia_id = 0
@@ -110,7 +96,7 @@ if __name__=="__main__":
 
             if max_sejm_wystapienia_id>max_html_wystapienia_id:
                 log.info("retrieving missing entries in '"+DBTABLE_HTML_WYSTAPIENIA_NAME+"'")
-                update_html_wystapienia(db_html, max_html_wystapienia_id+1, max_sejm_wystapienia_id)
+                _update_html_wystapienia_(db_html, max_html_wystapienia_id+1, max_sejm_wystapienia_id)
 
             if max_sejm_wystapienia_id==maxid: 
                 log.info("database is up to date.")
