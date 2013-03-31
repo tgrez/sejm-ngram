@@ -64,6 +64,14 @@ def filterout_dictionary(dct, keyset):
     """Takes dictionary dct and returns dictionary only with keys from keyset."""
     keyset = set(keyset)
     return dict( (k,v) for k,v in dct.iteritems() if k in keyset)
+
+def write_row(f, row, separator=CSV_SEPARATOR):
+    """Writes row (list of values) into file."""
+    for i in xrange(len(row)-1):      
+        f.write( unicode(row[i]).replace(separator.strip(), CSV_REPLACEMENT)  )
+        f.write(separator)
+    f.write( unicode(row[len(row)-1]).replace(separator.strip(), CSV_REPLACEMENT) )
+    f.write("\n")
         
 
 def download_file(URL=None):

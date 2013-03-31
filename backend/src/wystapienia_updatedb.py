@@ -54,9 +54,9 @@ def _update_html_wystapienia_(db, start_id, last_id):
             else: log.dbg("empty data extracted. skipping")
         db.commit()
     except: #TODO More descriptive information :)
-        log.err("Failed. Rollback!") 
         db.rollback()
-        
+        log.err("Failed. Rollback!")
+        raise        
 
 def _update_sejm_wystapienia_(start_id, last_id):
     """Retrieves and inserts (sejm_)'wystapienia' using sejm API for id=start_id...last_id."""                

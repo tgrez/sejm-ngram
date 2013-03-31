@@ -23,6 +23,7 @@ def csv_insert_db(inputfile, table_name):
     except: #TODO More descriptive information :)
         log.err("Failed. Rollback!") 
         db.rollback()
+        raise
         
 
 if __name__=="__main__":

@@ -100,6 +100,14 @@ class DBWrapper():
         self.cur.execute(sql)
         return self.cur.fetchall()[0]
 
+    def get_all_rows(self, table_name, colnames):
+        """Retrieve all rows from table."""
+        cols = reduce(lambda c1,c2: c1+", "+c2, (colname for colname in colnames) )
+        sql = "SELECT %s FROM %s" % (cols, table_name)
+        self.cur.execute(sql)
+        return self.cur.fetchall()
+
+
     def insert_record(self, table_name, record):
         """Inserts record (dictionary {column-name: column-value}) into database."""
         try:
@@ -147,6 +155,13 @@ class DBTableWrapper(DBWrapper):
         self.key2type = dict( ( col[0], dbtype2castmethod(col[1]) ) for col in self.columns)
         log.dbg("[DBTableWrapper.__init__] table_name="+self.table_name+" columns="+str(self.columns)+
                 " column_names="+str(self.column_names)+" key2type ="+str(self.key2type))
+
+    def get_column_names(self):
+        return self.column_names
+
+    def get_all_rows(self, colnames):
+        """Retrieve all rows from table."""
+        return DBWrapper.get_all_rows(self, self.table_name, colnames)
 
     def get_table_max_id(self):
         """Returns maximal value of id column in table of specified name."""
