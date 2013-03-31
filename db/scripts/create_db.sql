@@ -1,14 +1,14 @@
 DROP DATABASE IF EXISTS `wystapienia`;
 
-CREATE DATABASE `wystapienia` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE `wystapienia` DEFAULT CHARACTER SET utf8 COLLATE utf8_polish_ci;
 
 USE `wystapienia`;
 
 GRANT ALL ON wystapienia.* TO 'testuser'@'localhost';
 
-######################################################################################################
+/*--------------------------------------------------------------------------------------------------------------*/
 
-#Storage for data downloaded from http://sejmometr.pl/sejm_wystapienia/id where id 1..
+/*--Storage for data downloaded from http://sejmometr.pl/sejm_wystapienia/id where id 1..*/
 CREATE TABLE `html_wystapienia` (
     `id` INT NOT NULL,
 	`posel` 		    VARCHAR(64),
@@ -18,7 +18,7 @@ CREATE TABLE `html_wystapienia` (
 	PRIMARY KEY(id)
 );
 
-#Storage for table from http://sejmometr.pl/api/docs/ep_Sejm_Wystapienie (dataset sejm_wystapienia)
+/*--Storage for table from http://sejmometr.pl/api/docs/ep_Sejm_Wystapienie (dataset sejm_wystapienia)*/
 CREATE TABLE `sejm_wystapienia` (
  `id` INT NOT NULL,
  `data` DATE,
@@ -39,23 +39,23 @@ CREATE TABLE `sejm_wystapienia` (
 );
 
 
-######################################################################################################
+/*-----------------------------------------------------------------------------------*/
 
 DROP TABLE `ngrams`;
 CREATE TABLE `ngrams` (
     `id`                INT NOT NULL AUTO_INCREMENT,
 
-	`ngram_id`		    INT NOT NULL,  #corresponding id of entry from ngram_dictionary
-	`posel_id` 		    INT default 0, #corresponding id of entry from posel_dictionary
+	`ngram_id`		    INT NOT NULL,  /*--corresponding id of entry from ngram_dictionary*/
+	`posel_id` 		    INT default 0, /*--corresponding id of entry from posel_dictionary*/
 
-	`klub_id` 	        INT default 0, #copied from sejm_wystapienia
-	`wystapienie_id` 	INT default 0, #copied from sejm_wystapienia
-	`data` 			    DATE NOT NULL, #copied from sejm_wystapienia
+	`klub_id` 	        INT default 0, /*--copied from sejm_wystapienia*/
+	`wystapienie_id` 	INT default 0, /*--copied from sejm_wystapienia*/
+	`data` 			    DATE NOT NULL, /*--copied from sejm_wystapienia*/
     
-    ##HERE YOU CAN ADD ANY COLUMNS EITHER FROM sejm_wystapienia OR html_wystapienia 
-    ##AND IT WILL BE AUTOMATICALLY COPIED e.g.:
-    #`tytul` VARCHAR(128),
-    #`debata_id` INT,
+    /*----HERE YOU CAN ADD ANY COLUMNS EITHER FROM sejm_wystapienia OR html_wystapienia */
+    /*----AND IT WILL BE AUTOMATICALLY COPIED e.g.:*/
+    /*--`tytul` VARCHAR(128),*/
+    /*--`debata_id` INT,*/
 
 	PRIMARY KEY(id)
 );
@@ -63,7 +63,7 @@ ALTER TABLE `ngrams` ADD INDEX (`data`);
 ALTER TABLE `ngrams` ADD INDEX (`klub_id`);
 
 
-#Dictionary {id: posel-name}
+/*--Dictionary {id: posel-name}*/
 DROP TABLE `posel_dictionary`;
 CREATE TABLE `posel_dictionary` (
     `id`             INT NOT NULL, 
@@ -73,18 +73,18 @@ CREATE TABLE `posel_dictionary` (
 INSERT INTO `posel_dictionary` (`id`,`posel`) VALUES (0, "UNKNOWN");
 
 
-#Dictionary {id: ngram}
+/*--Dictionary {id: ngram}*/
 DROP TABLE `ngram_dictionary`;
 CREATE TABLE `ngram_dictionary` (
     `id`             INT NOT NULL, 
-    `ngram` 		 VARCHAR(256),
+    `ngram` 		 VARCHAR(255),
 	PRIMARY KEY(id)
 );
 INSERT INTO `ngram_dictionary` (`id`,`ngram`) VALUES (0, "UNKNOWN");
-#ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`); #TODO
+ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`); 
 
 
-#Dictionary {id: klub}
+/*--Dictionary {id: klub}*/
 DROP TABLE `klub_dictionary`;
 CREATE TABLE `klub_dictionary` (
     `id`             INT NOT NULL, 
