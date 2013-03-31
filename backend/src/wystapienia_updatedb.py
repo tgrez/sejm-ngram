@@ -29,29 +29,33 @@ def _get_max_available_id_():
 def _update_html_wystapienia_(db, start_id, last_id):
     """Retrieves and parses (html_)'wystapienia' from URL_SEJM_WYSTAPIENIA/id for id=start_id...last_id."""
     log.info("retrieving and inserting records of ids in range ["+str(start_id)+", "+str(last_id)+"] into "+str(db)+"...")
-    db.begin() 
-    for idd in xrange(start_id, last_id+1):
-        
-        #retrieve www code
-        htmlcode = download_file(URL_SEJM_WYSTAPIENIA+str(idd))
-        log.dbg("id="+str(idd)+" htmlcode="+str(htmlcode.replace("\n",""))[:100]+"...")        
+    try:
+        db.begin() 
+        for idd in xrange(start_id, last_id+1):
+            
+            #retrieve www code
+            htmlcode = download_file(URL_SEJM_WYSTAPIENIA+str(idd))
+            log.dbg("id="+str(idd)+" htmlcode="+str(htmlcode.replace("\n",""))[:100]+"...")        
 
-        #extract fields
-        parser = WystapienieHTMLParser()
-        parser.feed(htmlcode)
-        member, position, text = parser.extract_fields()  
-        
-        if len(text)>0 or len(position)>0 or len(member)>0:
-            #pack as a record
-            record = {  ID_COL_NAME: str(idd), 
-                        DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER: str(member),
-                        DBTABLE_HTML_WYSTAPIENIA_COL_POSITION: str(position),
-                        DBTABLE_HTML_WYSTAPIENIA_COL_TEXT: str(text)}
+            #extract fields
+            parser = WystapienieHTMLParser()
+            parser.feed(htmlcode)
+            member, position, text = parser.extract_fields()  
+            
+            if len(text)>0 or len(position)>0 or len(member)>0:
+                #pack as a record
+                record = {  ID_COL_NAME: str(idd), 
+                            DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER: str(member),
+                            DBTABLE_HTML_WYSTAPIENIA_COL_POSITION: str(position),
+                            DBTABLE_HTML_WYSTAPIENIA_COL_TEXT: str(text)}
 
-            #insert into db
-            db.insert_record(record)
-        else: log.dbg("empty data extracted. skipping")
-    db.commit()
+                #insert into db
+                db.insert_record(record)
+            else: log.dbg("empty data extracted. skipping")
+        db.commit()
+    except: #TODO More descriptive information :)
+        log.err("Failed. Rollback!") 
+        db.rollback()
         
 
 def _update_sejm_wystapienia_(start_id, last_id):

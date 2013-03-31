@@ -49,6 +49,10 @@ class DBTransactionManager():
         self.con.commit()
         self.in_transaction = False
 
+    def rollback(self):
+        log.dbg("[%s] transaction rollback" % self.name)
+        self.con.rollback()
+
     def get_cursor(self):
         return self.cur
 
@@ -127,6 +131,9 @@ class DBWrapper():
         """Finalizes transaction."""
         return self.transaction.commit()
 
+    def rollback(self):
+        """Rollback transaction."""
+        return self.transaction.rollback()
 
 
 class DBTableWrapper(DBWrapper):

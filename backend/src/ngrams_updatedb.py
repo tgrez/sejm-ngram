@@ -129,6 +129,7 @@ if __name__=="__main__":
             db_ngram.commit()
             
     except KeyboardInterrupt:
+        db_ngram.rollback()
         log.error("interrupted by user...")
 
     #Store dictionaries into DB:    
@@ -140,6 +141,7 @@ if __name__=="__main__":
             transaction_man.commit()
             break
         except KeyboardInterrupt:
+            transaction_man.rollback()
             log.info("synchronizing! please wait!")
 
 

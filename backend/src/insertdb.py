@@ -14,12 +14,16 @@ def csv_insert_db(inputfile, table_name):
     header = load_csv_header(inputfile)
         
     log.info("inserting records ("+str(header)+") from '"+str(inputfile)+"' into DB table '"+str(table_name)+"'...")
-    db.begin()    
-    for row in load_csv_rows(inputfile):
-        record = combine_dictionary(header, row)
-        db.insert_record(record)
-    db.commit()
-
+    try:
+        db.begin()    
+        for row in load_csv_rows(inputfile):
+            record = combine_dictionary(header, row)
+            db.insert_record(record)
+        db.commit()
+    except: #TODO More descriptive information :)
+        log.err("Failed. Rollback!") 
+        db.rollback()
+        
 
 if __name__=="__main__":
     log.info("The script loads from stdin CSV file and inserts it into DB Table (table name is given as the first argument).")
