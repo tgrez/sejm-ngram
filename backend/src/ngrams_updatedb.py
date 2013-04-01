@@ -5,6 +5,7 @@ from dbwrapper import *
 from config import *
 from utils import *
 import string
+import time
 
 def text_filterout(text, replace_with = ''):
     """Removes specific characters from text."""
@@ -108,25 +109,31 @@ if __name__=="__main__":
     #Update ngrams
     try:
         ngram_counter = 0
-        for progress, idd in enumerate(not_processed_ids):
-            if progress%10 == 0: log.info("%i records processed out ouf %i (%i ngram occurrences inserted, %i already known ngrams, current id=%i)" 
-                                            % (progress, len(not_processed_ids), ngram_counter, db_ngram_dict.get_size(), idd))
-            db_ngram.begin()  
+        start_time = time.time()
+        transaction_man.begin()
+
+        for progress, idd in enumerate(not_processed_ids):  
+            if progress%10 == 0:  #commit every 10 records
+                log.info("[%s] %i records processed out ouf %i (%i ngram occurrences inserted, %i already known ngrams, current id=%i)" 
+                          % (str(time.time()-start_time), progress, len(not_processed_ids), ngram_counter, db_ngram_dict.get_size(), idd))
+                transaction_man.commit()
+                transaction_man.begin()
+            
             wystapienie = _retrieve_wystapienie_(idd, db_sejm, db_html, db_posel_dict)
             if wystapienie[STATUS_COL_NAME] <= DB_STATUS_NOT_PROCESSED_CODE:
                 ngram_counter += _store_ngrams_(wystapienie, db_ngram)
                 _mark_wystapienie_processed_(idd, db_sejm, db_html)
-            else: log.err("'wystapienie' has changed its status in meantime (you should not run more than one copy!!).")                
-            db_ngram.commit()
-            
+            else: log.err("'wystapienie' has changed its status in meantime (you should not run more than one copy!!).")  
+                          
+        transaction_man.commit()
     except KeyboardInterrupt:
-        db_ngram.rollback()
+        transaction_man.rollback()
         log.error("interrupted by user...")
 
     #Store dictionaries into DB:    
     while True:
         try:
-            transaction_man.begin()
+            transaction_man.begin()  
             db_ngram_dict.synchronize_db()
             db_posel_dict.synchronize_db()
             transaction_man.commit()
@@ -135,4 +142,5 @@ if __name__=="__main__":
             transaction_man.rollback()
             log.info("synchronizing! please wait!")
 
+    transaction_man.commit()
 

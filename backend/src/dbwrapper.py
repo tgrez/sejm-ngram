@@ -196,6 +196,49 @@ class DBTableWrapper(DBWrapper):
         return DBWrapper.get_ids(self, self.table_name, status_value)
 
 
+class DBTableInsterterCache(DBTableWrapper):
+    """Instead of online instering records stores it in memory and insterts on flush."""
+    
+    def __init__(self, table_name, transaction_manager = DBTransactionManager()):
+        DBTableWrapper.__init__(self, table_name, transaction_manager)
+        self.insert_cache = []
+        self.update_cache = []
+
+    def insert_record(self, record):
+        """Stores record in memory for further writining (on flush)."""
+        shared_colnames = set(record.keys()).intersection(self.column_names)
+        record = filterout_dictionary(record, shared_colnames) 
+        record = map_values_types(record, self.key2type)
+        self.insert_cache.append(record)
+
+    def update(self, idd, column_name, value):
+        if column_name not in self.column_names: 
+            raise Exception("[update] There is no column %s in table %s!" % column_name, self.table_name)
+        record = map_values_types({column_name: value}, self.key2type) #cast types
+        self.update_cache.append( (idd,column_name,record[column_name]) )
+
+    def flush(self):
+        """Writes cached records into DB."""
+        try:
+            self.begin()
+
+            log.info("Inserting %i records into table '%s'" % (len(self.insert_cache),self.table_name))
+            for record in self.insert_cache:
+                DBWrapper.insert_record(self, self.table_name, record)
+            self.insert_cache = []
+
+            log.info("Updating %i records in table '%s'" % (len(self.update_cache),self.table_name))
+            for idd, column_name, val in self.update_cache:
+                DBWrapper.update(self, self.table_name, idd, column_name, val)
+            self.update_cache = []
+
+            self.commit()
+        except:
+            self.rollback()
+            log.err("Failed flushing. Rollback!")
+            raise
+
+    
 
 class DBDictionaryTable(DBTableWrapper):
     """Controls communication to single table with two columns (id, value) that represents dictionary in  database. 

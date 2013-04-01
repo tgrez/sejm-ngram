@@ -59,7 +59,7 @@ CREATE TABLE `sejm_kluby` (
 
 /*-----------------------------------------------------------------------------------*/
 
-DROP TABLE `ngrams`;
+DROP TABLE  IF EXISTS `ngrams`;
 CREATE TABLE `ngrams` (
     `id`                INT NOT NULL AUTO_INCREMENT,
 
@@ -79,10 +79,11 @@ CREATE TABLE `ngrams` (
 );
 ALTER TABLE `ngrams` ADD INDEX (`data`);
 ALTER TABLE `ngrams` ADD INDEX (`klub_id`);
+ALTER TABLE `ngrams` ADD INDEX (`ngram_id`);
 
 
 /*--Dictionary {id: posel-name}*/
-DROP TABLE `posel_dictionary`;
+DROP TABLE  IF EXISTS `posel_dictionary`;
 CREATE TABLE `posel_dictionary` (
     `id`             INT NOT NULL, 
     `posel` 		 VARCHAR(64),
@@ -92,18 +93,19 @@ INSERT INTO `posel_dictionary` (`id`,`posel`) VALUES (0, "UNKNOWN");
 
 
 /*--Dictionary {id: ngram}*/
-DROP TABLE `ngram_dictionary`;
+DROP TABLE  IF EXISTS `ngram_dictionary`;
 CREATE TABLE `ngram_dictionary` (
     `id`             INT NOT NULL, 
     `ngram` 		 VARCHAR(255),
 	PRIMARY KEY(id)
 );
 INSERT INTO `ngram_dictionary` (`id`,`ngram`) VALUES (0, "UNKNOWN");
-ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`); 
+/*ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`); TODO */
+ALTER TABLE `ngram_dictionary` ADD INDEX (`ngram`);
 
 
 /*--Dictionary {id: klub}*/
-DROP TABLE `klub_dictionary`;
+DROP TABLE  IF EXISTS `klub_dictionary`;
 CREATE TABLE `klub_dictionary` (
     `id`             INT NOT NULL, 
     `klub` 		     VARCHAR(128),
