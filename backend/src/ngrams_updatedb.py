@@ -19,6 +19,7 @@ def text_filterout(text, replace_with = ''):
 
     text_nopunct = text_nopunct.replace('(', replace_with)
     text_nopunct = text_nopunct.replace(')', replace_with)
+    text_nopunct = text_nopunct.replace('_', replace_with)
     text_nopunct = text_nopunct.replace('"', replace_with)
     text_nopunct = text_nopunct.replace('\'', replace_with)
     text_nopunct = text_nopunct.replace('~', replace_with)
@@ -59,29 +60,35 @@ def _extract_not_processed_ids_(db_sejm, db_html):
 
 def _retrieve_wystapienie_(idd, db_sejm, db_html, db_posel_dict):
     """Constructs full record 'wystopienie' for given id. """
-    wystapienie = db_html.get_record(idd)               #get half of the record 
-    wystapienie.update( db_sejm.get_record(idd) )       #get second half of the record 
-    wystapienie.pop(ID_COL_NAME)                        #remove column with wystapienie_id
-    wystapienie[DBTABLE_WYSTAPIENIEID_COL_NAME] = idd   #insert wystapienie_id into proper column
+    start_time = time.time()
+    wystapienie = db_html.get_record(idd)                                           #get half of the record 
+    wystapienie.update( db_sejm.get_record(idd) )                                   #get second half of the record 
+    wystapienie.pop(ID_COL_NAME)                                                    #remove column with wystapienie_id
+    wystapienie[DBTABLE_WYSTAPIENIEID_COL_NAME] = idd                               #insert wystapienie_id into proper column
     wystapienie[DBTABLE_POSELID_COL_NAME] = db_posel_dict.retrieve_id( wystapienie[DBTABLE_HTML_WYSTAPIENIA_COL_MEMBER] )
+    log.dbg("idd=%s time=%s" % (str(idd), time.time()-start_time) )
     return wystapienie
-
-def _mark_wystapienie_processed_(idd, db_sejm, db_html):
-    """Marks coresponding records in DB as already proccessed."""
-    db_html.update(idd, STATUS_COL_NAME, DB_STATUS_PROCESSED_CODE)
-    db_sejm.update(idd, STATUS_COL_NAME, DB_STATUS_PROCESSED_CODE)
-
 
 
 def _store_ngrams_(wystapienie, db_ngram):
     """Extracts ngrams from wystapienie and inserts into db_ngram."""
+    start_time = time.time()
     ngrams = build_many_ngrams(wystapienie[DBTABLE_HTML_WYSTAPIENIA_COL_TEXT], NGRAMS_LENGTHS) 
     log.dbg("inserting %i ngrams for wystopienie id=%i" % (len(ngrams),wystapienie[DBTABLE_WYSTAPIENIEID_COL_NAME]) )      
-    for ngram in ngrams:        
-        wystapienie[DBTABLE_NGRAMID_COL_NAME] = db_ngram_dict.retrieve_id(ngram)  #set ngram number (from dictionary)
-        db_ngram.insert_record(wystapienie) #insert ngram occurrence    
+    for ngram in ngrams:                
+        wystapienie[DBTABLE_NGRAMID_COL_NAME] = db_ngram_dict.retrieve_id(ngram)    #set ngram number (from dictionary)
+        db_ngram.insert_record(wystapienie)                                         #insert ngram occurrence
+        pass
+    log.dbg("idd=%s time=%s ngrams=%i" % (str(wystapienie[DBTABLE_WYSTAPIENIEID_COL_NAME]), time.time()-start_time, len(ngrams)) )    
     return len(ngrams)
         
+def _mark_wystapienie_processed_(idd, db_sejm, db_html):
+    """Marks coresponding records in DB as already proccessed."""
+    start_time = time.time()
+    db_html.update(idd, STATUS_COL_NAME, DB_STATUS_PROCESSED_CODE)
+    db_sejm.update(idd, STATUS_COL_NAME, DB_STATUS_PROCESSED_CODE)
+    log.dbg("idd=%s time=%s" % (str(idd), time.time()-start_time) )
+
 
 
 if __name__=="__main__":
@@ -113,9 +120,9 @@ if __name__=="__main__":
         transaction_man.begin()
 
         for progress, idd in enumerate(not_processed_ids):  
-            if progress%10 == 0:  #commit every 10 records
-                log.info("[%s] %i records processed out ouf %i (%i ngram occurrences inserted, %i already known ngrams, current id=%i)" 
-                          % (str(time.time()-start_time), progress, len(not_processed_ids), ngram_counter, db_ngram_dict.get_size(), idd))
+            if progress%NGRAMS_DB_PACKAGE_SIZE == 0: 
+                log.info("[%ss] %i records processed out ouf %i (%i ngram occurrences inserted, %i already known ngrams, current id=%i)" 
+                          % (('%.1f' % (time.time()-start_time)), progress, len(not_processed_ids), ngram_counter, db_ngram_dict.get_size(), idd))
                 transaction_man.commit()
                 transaction_man.begin()
             
@@ -128,7 +135,7 @@ if __name__=="__main__":
         transaction_man.commit()
     except KeyboardInterrupt:
         transaction_man.rollback()
-        log.error("interrupted by user...")
+        log.error("interrupted by user. rollback of the last transaction...")
 
     #Store dictionaries into DB:    
     while True:

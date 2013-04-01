@@ -5,6 +5,7 @@ import log
 import sys
 from config import *
 from utils import *
+import time
 from calendar import datetime
 
 
@@ -22,7 +23,6 @@ def map_values_types(record, key2type):
     """Replaces types in records according to mapper key2type = {key: cast_method} as returned by DBWrapper.get_column_types(...) ."""
     for k,cast_type in key2type.iteritems(): 
         if k not in record: continue
-        #print "[map_values_types]",type(record[k]),"->",cast_type
         if   type(record[k])==str and cast_type==unicode:       
             record[k] = record[k].decode('UTF-8')
         else: record[k] = cast_type(record[k])
@@ -244,6 +244,7 @@ class DBDictionaryTable(DBTableWrapper):
     """Controls communication to single table with two columns (id, value) that represents dictionary in  database. 
 
       WARNING: Multiprocess Unsafe (but fast ;) ) Implementation!"""        
+
     def __init__(self, table_name, db_autosynchronization = False, transaction_manager = DBTransactionManager()):
         """Whether DB should be updated as soon as it is possible or by db_autosynchronization() method execution."""
         transaction_manager.begin()
@@ -251,10 +252,10 @@ class DBDictionaryTable(DBTableWrapper):
         DBTableWrapper.__init__(self, table_name, transaction_manager)        
         self.db_autosynchronization = db_autosynchronization
 
-        if not len(self.columns) == 2: #guarantee that we have two columns
+        if not len(self.columns) == 2:                  #guarantee that we have two columns
             raise Exception("[DBTableDictionary.__init__] Table "+str(table_name)+
                             " should have two columns but has "+str(len(self.columns)) )
-        if ID_COL_NAME not in self.column_names: #guarantee that one of columns is ID
+        if ID_COL_NAME not in self.column_names:        #guarantee that one of columns is ID
             raise Exception("[DBTableDictionary.__init__] Table "+str(table_name)+
                             " must containe column of name id!")
 
@@ -271,10 +272,25 @@ class DBDictionaryTable(DBTableWrapper):
         self.ids    = set(idd for idd, val in rows)       #set of id of elements that are already in DB
         self.id2val = dict((idd,val) for idd,val in rows) #dictionary {id: value}
         self.val2id = dict((val,idd) for idd,val in rows) #dictionary {value: id}
+        self.max_id_cache = max( self.id2val.keys() )
         log.info("[DBDictionaryTable.__init__] table %s dictionaries: len(id2val)=%i len(val2id)=%i" 
             % (self.table_name, len(self.id2val),len(self.val2id)) )
 
         transaction_manager.commit()
+
+
+    def _get_max_id_(self):
+        if self.db_autosynchronization:
+            return self.get_table_max_id()
+        else:
+            return self.max_id_cache
+
+    def _increase_max_id_(self):
+        if self.db_autosynchronization:
+            self.max_id_cache = self.get_table_max_id()
+        else:
+            self.max_id_cache += 1
+
 
     def get_size(self):
         """Returns number of entries in dictionary."""
@@ -312,23 +328,20 @@ class DBDictionaryTable(DBTableWrapper):
             return
         log.info("synchronizing table %s (%i rows to be stored)" % (self.table_name,len(self.id2val)) )
         self.begin()
-        self.cur.execute( u"DELETE FROM `%s`" % self.table_name )     #TODO maybe less 'invasive' implementation?
+        self.cur.execute( u"DELETE FROM `%s`" % self.table_name )    
         for idd, value in self.id2val.iteritems():
             self.insert_record( {"id": idd, self.value_column: value} )
         self.commit()
-
-    def _get_max_id_(self):
-        if self.db_autosynchronization:
-            return self.get_table_max_id()
-        else:
-            return max(self.id2val.keys())
+        
 
     def retrieve_id(self, value):
         """Returns id assigned to given value. If not found than new entry is created and dictionary is updated."""
         idd = self.get_id(value)
         if idd is None:
-           self.set_pair(self._get_max_id_()+1, value)             
-        idd = self.get_id(value)
+            current_max_id = self._get_max_id_()
+            self.set_pair(current_max_id+1, value)             
+            self._increase_max_id_()
+            idd = self.get_id(value)
         return idd
     
     def __str__(self):
