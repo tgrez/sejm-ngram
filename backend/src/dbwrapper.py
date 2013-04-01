@@ -321,16 +321,25 @@ class DBDictionaryTable(DBTableWrapper):
             self.ids.add(idd)
             self.commit()
 
-    def synchronize_db(self):
+    def synchronize_db(self, replace=False):
         """Writes dicionary data into DB."""
         if self.db_autosynchronization: 
             log.info("assuming that table %s is already synchronized with dictionary" % (self.table_name))
             return
-        log.info("synchronizing table %s (%i rows to be stored)" % (self.table_name,len(self.id2val)) )
+        
         self.begin()
-        self.cur.execute( u"DELETE FROM `%s`" % self.table_name )    
-        for idd, value in self.id2val.iteritems():
+
+        ids_to_updated = set( self.id2val.keys() )
+        if replace:
+            self.cur.execute( u"DELETE FROM `%s`" % self.table_name )    
+        else:
+            ids_to_updated.difference_update(self.ids)
+            
+        log.info("synchronizing table %s (%i rows to be stored)" % (self.table_name,len(ids_to_updated)) )
+        for idd in ids_to_updated:
+            value = self.id2val[idd]
             self.insert_record( {"id": idd, self.value_column: value} )
+
         self.commit()
         
 
