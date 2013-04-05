@@ -238,12 +238,12 @@ class DBTableInsterterCache(DBTableWrapper):
             log.err("Failed flushing. Rollback!")
             raise
 
-    
 
-class DBDictionaryTable(DBTableWrapper):
+
+class DBDictionaryTable(DBTableWrapper): #TODO: kill this monster!!!
     """Controls communication to single table with two columns (id, value) that represents dictionary in  database. 
 
-      WARNING: Multiprocess Unsafe (but fast ;) ) Implementation!"""        
+      WARNING: Multiprocess Unsafe Implementation!"""        
 
     def __init__(self, table_name, db_autosynchronization = False, transaction_manager = DBTransactionManager()):
         """Whether DB should be updated as soon as it is possible or by db_autosynchronization() method execution."""
@@ -358,14 +358,30 @@ class DBDictionaryTable(DBTableWrapper):
 
 
 
-    
-#if __name__=="__main__":
-#    log.set_output_level(log.LOG_LEVEL.DBG)
-#    table = DBDictionaryTable("posel_dictionary")
-#    print "posel3 -> id",table.retrieve_id("posel3")
-#    print "posel33 -> id",table.retrieve_id("posel33")
+class DBDictionaryTableDummy:
+    """Dummy (does-nothing) simulator of DBDictionaryTable."""
+
+    def __init__(self, table_name, db_autosynchronization = False, transaction_manager = None):
+        pass
+
+    def retrieve_id(self, value):
+        return 0   
+
+    def synchronize_db(self, replace=False):
+        pass
+
+    def set_pair(self, idd, value):
+        pass
+
+    def get_size(self):
+        return 0
+   
+    def get_value(self, idd):
+        return ""
+        
+    def get_id(self, value):
+        return 0
     
 
 
-    
 

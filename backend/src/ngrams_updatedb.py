@@ -70,13 +70,14 @@ def _retrieve_wystapienie_(idd, db_sejm, db_html, db_posel_dict):
     return wystapienie
 
 
-def _store_ngrams_(wystapienie, db_ngram):
+def _store_ngrams_(wystapienie, db_ngram, db_ngram_dict):
     """Extracts ngrams from wystapienie and inserts into db_ngram."""
     start_time = time.time()
     ngrams = build_many_ngrams(wystapienie[DBTABLE_HTML_WYSTAPIENIA_COL_TEXT], NGRAMS_LENGTHS) 
     log.dbg("inserting %i ngrams for wystopienie id=%i" % (len(ngrams),wystapienie[DBTABLE_WYSTAPIENIEID_COL_NAME]) )      
     for ngram in ngrams:                
-        wystapienie[DBTABLE_NGRAMID_COL_NAME] = db_ngram_dict.retrieve_id(ngram)    #set ngram number (from dictionary)
+        wystapienie[DBTABLE_NGRAM_COL_NAME]     = ngram                             #set ngram value   
+        wystapienie[DBTABLE_NGRAMID_COL_NAME]   = db_ngram_dict.retrieve_id(ngram)  #set ngram number (from dictionary)
         db_ngram.insert_record(wystapienie)                                         #insert ngram occurrence
         pass
     log.dbg("idd=%s time=%s ngrams=%i" % (str(wystapienie[DBTABLE_WYSTAPIENIEID_COL_NAME]), time.time()-start_time, len(ngrams)) )    
@@ -103,7 +104,7 @@ if __name__=="__main__":
     db_html         = DBTableWrapper(DBTABLE_HTML_WYSTAPIENIA_NAME, transaction_manager=transaction_man)
     db_sejm         = DBTableWrapper(DBTABLE_SEJM_WYSTAPIENIA_NAME, transaction_manager=transaction_man)
     db_ngram        = DBTableWrapper(DBTABLE_NGRAMS_NAME, transaction_manager=transaction_man)
-    db_ngram_dict   = DBDictionaryTable(DBTABLE_NGRAMS_DICT_NAME, 
+    db_ngram_dict   = DBDictionaryTableDummy(DBTABLE_NGRAMS_DICT_NAME, 
                                         db_autosynchronization=NGRAMS_DBACCESS_AUTOSYNCH, 
                                         transaction_manager=transaction_man)
     db_posel_dict   = DBDictionaryTable(DBTABLE_POSEL_DICT_NAME, 
@@ -121,14 +122,14 @@ if __name__=="__main__":
 
         for progress, idd in enumerate(not_processed_ids):  
             if progress%NGRAMS_DB_PACKAGE_SIZE == 0: 
-                log.info("[%ss] %i records processed out ouf %i (%i ngram occurrences inserted, %i already known ngrams, current id=%i)" 
-                          % (('%.1f' % (time.time()-start_time)), progress, len(not_processed_ids), ngram_counter, db_ngram_dict.get_size(), idd))
+                log.info("[%ss] %i records processed out ouf %i (%i ngram occurrences inserted, current id=%i)" 
+                          % (('%.1f' % (time.time()-start_time)), progress, len(not_processed_ids), ngram_counter, idd))
                 transaction_man.commit()
                 transaction_man.begin()
             
             wystapienie = _retrieve_wystapienie_(idd, db_sejm, db_html, db_posel_dict)
             if wystapienie[STATUS_COL_NAME] <= DB_STATUS_NOT_PROCESSED_CODE:
-                ngram_counter += _store_ngrams_(wystapienie, db_ngram)
+                ngram_counter += _store_ngrams_(wystapienie, db_ngram, db_ngram_dict)
                 _mark_wystapienie_processed_(idd, db_sejm, db_html)
             else: log.err("'wystapienie' has changed its status in meantime (you should not run more than one copy!!).")  
                           

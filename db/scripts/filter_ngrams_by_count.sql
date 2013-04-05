@@ -31,15 +31,18 @@ CREATE TABLE `ngrams_filtered` (
 
 	PRIMARY KEY(id)
 );
-ALTER TABLE `ngrams_filtered` ADD INDEX (`data`);
-ALTER TABLE `ngrams_filtered` ADD INDEX (`klub_id`);
-ALTER TABLE `ngrams_filtered` ADD INDEX (`ngram_id`);
 
 /* -- fill-in with selected records*/
 insert `ngrams_filtered` (`id`, `ngram_id`, `posel_id`, `klub_id`, `wystapienie_id`, `data`)
 select `id`, ngrams.ngram_id, `posel_id`, `klub_id`, `wystapienie_id`, `data` 
 from `ngrams` inner join `ngrams_id_filtered` 
-where ngrams.ngram_id = ngrams_id_filtered.ngram_id
+where ngrams.ngram_id = ngrams_id_filtered.ngram_id;
+
+/* -- add indexes */
+ALTER TABLE `ngrams_filtered` ADD INDEX (`data`);
+ALTER TABLE `ngrams_filtered` ADD INDEX (`klub_id`);
+ALTER TABLE `ngrams_filtered` ADD INDEX (`ngram_id`);
+
 
 
 /* -- TODO filtered out ngram_dictionary */

@@ -63,12 +63,13 @@ DROP TABLE  IF EXISTS `ngrams`;
 CREATE TABLE `ngrams` (
     `id`                INT NOT NULL AUTO_INCREMENT,
 
-	`ngram_id`		    INT NOT NULL,  /*--corresponding id of entry from ngram_dictionary*/
-	`posel_id` 		    INT default 0, /*--corresponding id of entry from posel_dictionary*/
+    `ngram` 		    VARCHAR(255),  /* -- full ngram entry */
+	`ngram_id`		    INT default 0, /* -- corresponding id of entry from ngram_dictionary*/
+	`posel_id` 		    INT default 0, /* -- corresponding id of entry from posel_dictionary*/
 
-	`klub_id` 	        INT default 0, /*--copied from sejm_wystapienia*/
-	`wystapienie_id` 	INT default 0, /*--copied from sejm_wystapienia*/
-	`data` 			    DATE NOT NULL, /*--copied from sejm_wystapienia*/
+	`klub_id` 	        INT default 0, /* -- copied from sejm_wystapienia*/
+	`wystapienie_id` 	INT default 0, /* -- copied from sejm_wystapienia*/
+	`data` 			    DATE NOT NULL, /* -- copied from sejm_wystapienia*/
     
     /*----HERE YOU CAN ADD ANY COLUMNS EITHER FROM sejm_wystapienia OR html_wystapienia */
     /*----AND IT WILL BE AUTOMATICALLY COPIED e.g.:*/
@@ -77,10 +78,14 @@ CREATE TABLE `ngrams` (
 
 	PRIMARY KEY(id)
 );
+
 ALTER TABLE `ngrams` ADD INDEX (`data`);
 ALTER TABLE `ngrams` ADD INDEX (`klub_id`);
+
+ALTER TABLE `ngrams` ADD INDEX (`ngram`);
 ALTER TABLE `ngrams` ADD INDEX (`ngram_id`);
 
+/*-----------------------------------------------------------------------------------*/
 
 /*--Dictionary {id: posel-name}*/
 DROP TABLE  IF EXISTS `posel_dictionary`;
@@ -102,15 +107,5 @@ CREATE TABLE `ngram_dictionary` (
 INSERT INTO `ngram_dictionary` (`id`,`ngram`) VALUES (0, "UNKNOWN");
 /*ALTER TABLE `ngram_dictionary` ADD UNIQUE INDEX (`ngram`); TODO */
 ALTER TABLE `ngram_dictionary` ADD INDEX (`ngram`);
-
-
-/*--Dictionary {id: klub}*/
-DROP TABLE  IF EXISTS `klub_dictionary`;
-CREATE TABLE `klub_dictionary` (
-    `id`             INT NOT NULL, 
-    `klub` 		     VARCHAR(128),
-	PRIMARY KEY(id)
-);
-INSERT INTO `klub_dictionary` (`id`,`klub`) VALUES (0, "UNKNOWN");
 
 
