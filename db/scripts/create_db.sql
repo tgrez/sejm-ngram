@@ -56,6 +56,7 @@ CREATE TABLE `sejm_kluby` (
     `srednia_zbuntowanie` FLOAT,
      PRIMARY KEY(id)
 );
+INSERT INTO `sejm_kluby` (`id`,`nazwa`, `skrot`) VALUES (0, "UNKNOWN", "UNKNOWN");
 
 /*-----------------------------------------------------------------------------------*/
 
