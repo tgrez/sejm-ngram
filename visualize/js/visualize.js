@@ -21,8 +21,44 @@ Main visualization function
 */
 function startVisualization(nGramToVisualize){
 
+    console.log("startVisuzalition() with param: " + nGramToVisualize);
 
-            console.log("startVisuzalition() with param: " + nGramToVisualize);
+    var step = 12;
+    var datefrom = "2011-11-08";
+    var dateto = "2011-12-01";
+    var ngram = "w";
+    var optionsString = "?datefrom=" +datefrom+ "&dateto=" + dateto + "&ngram=" + ngram;
+    //test retrieving data from  mysql
+    console.log(optionsString);
+
+    // here we're launching the php script that queries the mysql and returns json with response
+    d3.text("mysql/queryNgrams.php" + optionsString, function(txt) {
+      var jsonResponse = JSON.parse(txt); 
+      console.log(jsonResponse);
+
+      var startDate = datefrom;
+      var stopDate = dateto;
+      var dataSets = new Array();
+        //the coding party_id -> name_of_party is perfomed according to database content (table sejm_kluby)
+        dataSets["PIS"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 2, nGramToVisualize);
+        // dataSets["PO"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 1, nGramToVisualize);
+        // dataSets["RP"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 5, nGramToVisualize);
+        // dataSets["SLD"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 4, nGramToVisualize);
+        // dataSets["PSL"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 3, nGramToVisualize);
+        // dataSets["SP"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 6, nGramToVisualize);
+        // dataSets["N"] = getNGramsListFromJSON(jsonResponse, startDate, stopDate, step, 7, nGramToVisualize);
+      visualize(dataSets, parseDate(startDate), parseDate(stopDate), step);
+      // console.log(jsonResponse[0]);
+      // txt.split("\n").forEach(function(line,i) {
+      //   console.log(line);
+      //     // line.split(",").forEach(function(d,j) {
+      //     //   data[i][j]=parseFloat(d);
+      //     //   d3.selectAll(".r"+i+".c"+j).style("fill",function() {return cScale(data[i][j]);});
+      //     // })
+      // });
+    
+    });
+        /*
 
             // reset the div with graph
             document.getElementById("graph").innerHTML = "";
@@ -40,9 +76,14 @@ function startVisualization(nGramToVisualize){
                     dataSets["PSL"] = getNGramsList(data, startDate, stopDate, step, "PSL", nGramToVisualize);
                 visualize(dataSets, startDate, stopDate, step);
         });
+
+            */
 }
 
-
+/**
+dataSets - ?
+startDate, stopDate - should be provided as JavaScript DATE objects
+*/
 function visualize(dataSets, startDate, stopDate, step){
     /* implementation heavily influenced by http://bl.ocks.org/1166403 */
         // data = [];
@@ -52,16 +93,16 @@ function visualize(dataSets, startDate, stopDate, step){
 
         // temp_dataSet = Array();
         // temp_dataSet.push()
-        console.log(temp_dataSet);
+        //console.log(temp_dataSet);
 
         // firstly we are converint associative arrays into "normal" ones
-        for(a in dataSets){
-            dataSets[a] =  convertAssArrayToNormal(dataSets[a], step);
-        }
+        // for(a in dataSets){
+        //     dataSets[a] =  convertAssArrayToNormal(dataSets[a], step);
+        // }
 
         var maxVal = maxValueFromDataSetS(dataSets);
         console.log("max val: " + maxVal);
-        console.log(dataSets);
+         console.log(dataSets);
 
         // define dimensions of graph
         var m = [80, 80, 80, 80]; // margins
@@ -96,7 +137,15 @@ function visualize(dataSets, startDate, stopDate, step){
         // X scale will fit all values from data[] within pixels 0-w
         // var x = d3.scale.linear().domain([0, 12]).range([0, w]); //12 used to be data.length
         // console.log(dataSets["PIS"]);
+
+        console.log("start nize: i stop:")
+        console.log(startDate);
+        console.log(stopDate);
+
        var x = d3.time.scale().domain([startDate, stopDate]).range([0, w]);
+       console.log("dzialanie naszej skali X");
+       console.log(x(startDate));
+       console.log(x(stopDate));
 
 
         // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
@@ -109,17 +158,21 @@ function visualize(dataSets, startDate, stopDate, step){
             // assign the X function to plot our line as we wish
             .x(function(d,i) { 
                 // verbose logging to show what's actually being done
-                // console.log(d + ' ' + i);
-                 // console.log('Plotting X value for data point: ' + d + ' using index: ' + i + ' to be at: ' + x(i) + ' using our xScale.');
+                 // console.log(d);
+                 // console.log(i);
+                 // console.log(d.key);
+                 // console.log(x(new Date(d.key)));
+                  console.log('Plotting X value for data point: ' + d.key + ' using index: ' + i + ' to be at: ' + x(d.key) + ' using our xScale.');
                 // return the X coordinate where we want to plot this datapoint
 
-                return x(i + 1); 
+                return x(new Date(d.key)); 
             })
             .y(function(d) { 
                 // verbose logging to show what's actually being done
-                // console.log('Plotting Y value for data point: ' + d + ' to be at: ' + y(d) + " using our yScale.");
+                console.log(d);
+                 console.log('Plotting Y value for data point: ' + d.value + ' to be at: ' + y(d.value) + " using our yScale.");
                 // return the Y coordinate where we want to plot this datapoint
-                return y(d); 
+                return y(d.value); 
             }
 )
             // Add an SVG element with the desired dimensions and margin.
@@ -152,8 +205,12 @@ function visualize(dataSets, startDate, stopDate, step){
             // Add the line by appending an svg:path element with the data line we created above
             // do this AFTER the axes above so that the line is above the tick-lines
             var i = 1
+
+
             for(partyLines in dataSets){
-                graph.append("svg:path").attr("d", line(dataSets[partyLines])).attr("class", "path" + i);
+                graph.append("svg:path")
+                      .attr("d", line(d3.entries(dataSets[partyLines])))
+                      .attr("class", "path" + i);
                 i++;
             }
 

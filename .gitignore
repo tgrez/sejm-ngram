@@ -6,3 +6,7 @@
 
 # personal directories (too lazy to create branch right now)
 michal/
+
+# unpacked data
+data/html_wystapienia.csv
+data/sejm_wystapienia.csv
