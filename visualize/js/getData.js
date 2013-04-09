@@ -77,13 +77,20 @@ function getNGramsDatesList(data, startDate, stopDate, step, party, nGramToVisua
 /** 
 This method is meant to provide an array of [] of objects containing
 pairs:
+The ngrams are grouped into "boxes" of a equal period from time.
+There is "step" number of boxed between "startDate" and "stopDate", each
+of a length l = [(stopDate - startDate) / "step"] 
+- showAllDays - bool; is TRUE - then ngrams are grouped by each date they occured on
+                if FALSE - then ngrams are grouped into "step" number of dates, being spread equally
+                from starDate to stopDate
+
 [ 
     {date: "2022-22-22", nrngrams: 45},
     {date: "2022-22-22", nrngrams: 45},
     ...
 ]
 */
-function getNGramsListFromJSON(data, startDate, stopDate, step, partyNr, nGramToVisualize){
+function getNGramsListFromJSON(data, startDate, stopDate, step, partyNr, nGramToVisualize, useAllDays ){
 
     //will return this stuff, create associative array
     var nGramNumbers = {}
@@ -98,17 +105,7 @@ function getNGramsListFromJSON(data, startDate, stopDate, step, partyNr, nGramTo
     for(var i = 0; i < step; i++ ){
         nGramNumbers[new Date(jsStartDate.getTime() + (i * msStep))] = 0;
     }
-    // console.log("nGramNumbers len " + nGramNumbers.length);
-    // nGramNumbers['new-key'] = 'new value';
-    // console.log("nGramNumbers len " + nGramNumbers.length);
 
-    // console.log(data);
-    console.log(nGramNumbers);
-
-
-    //console.log(msPeriod);
-
-    // console.log("msStep:" + msStep)
     for (var i=0,len=data.length; i<len; i++){
 
         // Object {klub_id: "2", data: "2011-12-01"}  
@@ -116,54 +113,42 @@ function getNGramsListFromJSON(data, startDate, stopDate, step, partyNr, nGramTo
 
         nGramDate = parseDate(data[i].data);
 
-        //calculte ms betwen ngramdate and stardate
-        msBetweenNgram = nGramDate - jsStartDate;
-        if(msBetweenNgram > msPeriod){ //in case this date is greater than the first
-            console.log("WARN: The date in the set " + nGramDate + " is greater than the stopDate: " + stopDate);
-            continue;
+        var dateToPutNgramTo = null;
+
+        //if showAllDAys is TRUE - then each date contained in SQL will be shown separatedly
+        // o therwise - ngrams will be show into "step" number of "boxes" spread equally 
+        // through the (starDate; stopDate) period
+        if(useAllDays){
+            dateToPutNgramTo = nGramDate;
+        }else{
+            //calculte ms betwen ngramdate and stardate
+            msBetweenNgram = nGramDate - jsStartDate;
+            if(msBetweenNgram > msPeriod){ //in case this date is greater than the first
+                console.log("WARN: The date in the set " + nGramDate + " is greater than the stopDate: " + stopDate);
+                continue;
+            }
+
+             //calculate the nr of segment it should go to -> and dateToPutNGramTo
+            if(msBetweenNgram < 0) console.log(" < 0: " + nGramDate );
+            nrSegment = msBetweenNgram / msStep;
+            nrSegment = Math.floor(nrSegment); //so segment shows the center point, we can calculate date then!
+            segmentDate = new Date(jsStartDate.getTime() + (nrSegment * msStep));
+
+            dateToPutNgramTo = segmentDate;
         }
 
-         //calculate the nr of segment it should go to 
-        if(msBetweenNgram < 0) console.log(" < 0: " + nGramDate );
-        nrSegment = msBetweenNgram / msStep;
-
-        nrSegment = Math.floor(nrSegment); //so segment shows the center point, we can calculate date then!
-
-        segmentDate = new Date(jsStartDate.getTime() + (nrSegment * msStep));
-        // console.log("seg date " + segmentDate);
-
-
-
-        //console.log("nr segment:" + nrSegment + ", dateofNgram:" + nGramDate);
-
-        if(typeof nGramNumbers[segmentDate] == 'undefined') nGramNumbers[segmentDate] = 0;
-        nGramNumbers[segmentDate] = nGramNumbers[segmentDate] + 1;
+        if(typeof nGramNumbers[dateToPutNgramTo] == 'undefined') nGramNumbers[dateToPutNgramTo] = 0;
+        nGramNumbers[dateToPutNgramTo] = nGramNumbers[dateToPutNgramTo] + 1;
 
     }
-    //console.log(nGramNumbers[0] + " innny " + nGramNumbers[1]);
-    console.log(nGramNumbers);
     return nGramNumbers;
 }
 
 
-/**      It's parsing String in this format 18-06-2008 22:51 
-and creating a JS Date object.
- */
-function parseDate(csvDateString){
-    // nGramDateRawString = data[i]["Data"];
-    // var dateParts = csvDateString.split(" ");
-    var dateYearPart = csvDateString.split("-");
-    // var dateHourPart = dateParts[1].split(":");
-    var year = dateYearPart[0];
-    var month = dateYearPart[1];
-    var day = dateYearPart[2];
-    //var hour = dateHourPart[0];
-   // var minutes = dateHourPart[1];
 
-    nGramDate = new Date(year, month - 1, day);
-    // nGramDate = new Date(year, month - 1, day, hour, minutes, 0, 0);
-    return nGramDate;
-}
+
+
+
 
 
 //function getFrom

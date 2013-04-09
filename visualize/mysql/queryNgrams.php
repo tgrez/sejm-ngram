@@ -9,17 +9,18 @@
     $dateTo = $_GET["dateto"];
     $ngram = $_GET["ngram"];
 
-   // var_dump($dateFrom);
- //   var_dump($ngram);
-    // reads the map db
 
+
+    // some weird fixes for Polish diacritics
+    mysql_query("set charset utf8");
+    mysql_query("set names utf8");
+
+    //prepare normal query
     $query = 
-            "SELECT klub_id, data from ngrams AS a 
-                JOIN ngram_dictionary AS b ON 
-                    b.id = a.ngram_id 
+            "SELECT klub_id, data from ngrams 
             WHERE   data >= '". $dateFrom ."' AND 
                     data <= '". $dateTo."' AND 
-                    b.ngram LIKE '".$ngram."';";
+                    ngram LIKE '".$ngram."';";
 
      
     //$query="SELECT `id`, `data`, `posiedzenie_id` FROM `sejm_wystapienia` LIMIT 2;";
@@ -28,6 +29,7 @@
     $result = mysql_query($query,$link) or die('Errant query: '.$query);
 
     $rows = array();
+   
     while($r = mysql_fetch_assoc($result)) {
         $rows[] = $r;
     }

@@ -41,7 +41,15 @@ JOIN ngram_dictionary AS b ON
 
 WHERE   data > '2011-11-18' AND 
         data < '2012-05-01' AND 
-        b.ngram LIKE 'kultury';
+        b.ngram LIKE 'po';
+
+
+# nowy prawdziwszy SQL do zdobycia ngramów
+SELECT klub_id, data from ngrams
+
+WHERE   data > '2011-11-18' AND 
+        data < '2012-05-01' AND 
+        b.ngram LIKE 'po';
 
 
 
@@ -63,3 +71,39 @@ ngram
 |  4 |        4 |        1 |       3 |              1 | 2011-11-08 |
 |  5 |        5 |        1 |       3 |              1 | 2011-11-08 |
 |  6 |        6 |        1 |       3 |              1 | 2011-11-08 |
+
+
+kluby id id
+|  1 | Platforma Obywatelska        |
+|  2 | Prawo i Sprawiedliwość       |
+|  3 | Polskie Stronnictwo Ludowe   |
+|  4 | Sojusz Lewicy Demokratycznej |
+|  5 | Ruch Palikota                |
+|  6 | Solidarna Polska             |
+|  7 | Niezrzeszeni                 |
+
+
+TEMP
+segmentDate
++----------+------------+
+| count(*) | data       |
++----------+------------+
+|      200 | 2011-11-08 |
+|      183 | 2011-11-17 |
+|      769 | 2011-11-18 |
+|       83 | 2011-11-19 |
+|       75 | 2011-12-01 |
++----------+------------+
+
+Tue Nov 08 2011 00:00:00 GMT+0100 (CET): 200
+Tue Nov 15 2011 16:00:00 GMT+0100 (CET): 183
+Thu Nov 17 2011 14:00:00 GMT+0100 (CET): 852
+
+
+
+Thu Dec 01 2011 00:00:00 GMT+0100 (CET): 75
+
+
+
+
+

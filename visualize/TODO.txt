@@ -1,0 +1,14 @@
+TODOs
+
+------------------          IMPORTANT ----------------------
+- this whole method of getNGramsListFromJSON is extremeleny unefficient (it's called for each part over and over - fix it!)
+
+
+
+
+
+
+
+
+
+------------------          NOT MUCH IMPORTANT------------
