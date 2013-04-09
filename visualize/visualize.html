@@ -98,6 +98,18 @@
 
             <input type="button" size="25" value="Generate Viz!" onClick="buttonGenVizPressed();">  
 
+            <div id = "queryDbInfoDiv" style="display:none">
+                <img src="img/loading.gif" style="width:30px"/>
+                querying db...
+            </div>
+
+            <div id = "processDataInfoDiv" style="display:none">
+                <img src="img/loading.gif" style="width:30px"/>
+                processing data..
+            </div>
+
+
+
             <div>
                 <div style="float:left">
                   <label for="selectField1Grams">popular 1grams:</label> <br/>
@@ -121,7 +133,23 @@
         </div>
 
         <!-- <div id="graph" class="aGraph" style="position:absolute;top:0px;left:0; float:left;"></div> -->
-        <div id="graph" class="aGraph"></div> 
+        <!-- That's a main chart div-->
+        <div id="graph" class="aGraph" style="float:left"></div> 
+
+
+        <!-- That's legend / turning on/off the sets for different parties -->
+        <div id="legendDiv" style="margin-top: 50px"> 
+            <div> 
+                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
+                PartyName_1;
+            </div>
+            <div> 
+                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
+                PartyName_2;
+            </div>
+        </div>
+        <div style="clear:both">
+
 
         <h4> viz debug options:</h4>
 
@@ -131,10 +159,15 @@
             <input type="checkbox" id= "inputChkBoxDrawLines" size="25" value="!" onClick="checkBoxDrawLinesPressed(this);"/>  
         </div>
 
-        <div style=" margin-left:200px">
+        <div style="margin-left:110px; float:left">
             <label for="inputChkBoxIncludeZeros">include 0-s: (needs to generate viz again)</label>
             <input type="checkbox" id= "inputChkBoxIncludeZeros" size="25" value="!" onClick="console.log('chbox presed! ' + this.checked );"/>  
         </div>
+
+        <div style="margin-left:550px;">
+            <label for="inputChkBoxLegendChart">show on-chart legend:</label>
+            <input type="checkbox" id= "inputChkBoxLegendChart" size="25" value="!" onClick="checkBoxShowChartLegendPressed(this);"/>  
+        </div>        
 
         <div style="float:left; " >
             <label for="inputXRes">x-res: </label>
@@ -146,6 +179,7 @@
             <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
         </div>
         <div style="clear:both">
+
 
         <h1> help </h1>
         <a name="help"></a>
@@ -216,11 +250,37 @@
                 }
             }
 
+            /** Handles checkbox for chart legend pressed */
+            function checkBoxShowChartLegendPressed(chkBox){
+                var chartLegendGroup = document.getElementById("legendOnChart");
+                chartLegendGroup.style.visibility = 
+                    chkBox.checked ? "visible" : "hidden";
+            }
+
             /* Puts chosen ngram to textField. Invoked after selecting ngram from 
                 any of the select fields
             */
             function ngramSelected(ngramWord){
                 document.getElementById("inputNgram").value = ngramWord;
+            }
+
+            /* for manipulating*/
+            function partyLegendCheckBoxClicked(checkBox){
+                
+                var divId = checkBox.parentNode.id; //divId = "legendDiv" + "nr"
+                var clickedPartyId = divId.substring(9);
+
+                var lineGroupId = document.getElementById("lineGroupId" + clickedPartyId);
+                // lineGroupId.style.visibility = 
+                //     checkBox.checked ? "visible" : "hidden";
+
+                 lineGroupId.style.display = 
+                    checkBox.checked ? "inline" : "none";
+
+
+                // console.log("legen checkbox clicked!");
+                // console.log(checkBox);
+                // console.log(clickedPartyId);
             }
 
             /* Fills the form with necessary data*/

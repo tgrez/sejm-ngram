@@ -3,23 +3,110 @@
 
 
 /* Some global objects go here!*/
-
 var dataSets = null;
-/* 
 
-dataSets - array of arrays containing nrOfNGrams for relevant period for one party
- eg. dataSets
-        => "PIS"
-            => [0] : 1
-            => [2] : 3
-            => .......
-            => [10] : 1;
-        => "PO"
-            => [0] : 1
-            => [2] : 3
-            => .......
-            => [10] : 1;
+var color_hash = {  "0": "green",
+                    "1" :  "orange",
+                    "2" : "blue",
+                    "3" : "red",
+                    "4": "black",
+                    "5": "yellow",
+                    "6": "violet",
+                    "7": "brown",
+              }  
+
+/* 
+Converts associative array ("key1" => "value1", "key2" => "value2" ... )
+to normal one [a, b,c ]
+params:
+ associativeArray - array that is to be converted
+ length  - desired length of array
 */
+function convertAssArrayToNormal( associativeArray, length ){
+    
+    var normalArray = [];
+    for(var i = 0; i < length; i++){
+        var tmpData = associativeArray[i];
+        if(typeof tmpData == 'undefined')
+            tmpData = 0;
+        normalArray.push(tmpData)
+    }
+    return normalArray;
+}
+
+/* This function creates legend on a basis od global dataSets object 
+(assuming it's already loaded). The legend is created in div of id
+"ledendDiv"
+params:
+- partiesIdNames - dict <id, party>
+*/
+function create_legend(partiesIdNames){
+  var legendDiv = document.getElementById("legendDiv");
+  
+  console.log(partiesIdNames);
+  
+  //first we remove all of the children of the div
+  while (legendDiv.hasChildNodes()) {
+    legendDiv.removeChild(legendDiv.lastChild);
+  }
+  //just to be sure (on stackoverflow some memory leaks were reported)
+  legendDiv.innerHTML = "";
+
+  //now we are creating new elements 
+  /*
+            <div> 
+                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
+                PartyName_1;
+            </div>
+  */
+  for(partyLines in dataSets){
+    var partyName = partiesIdNames[partyLines];
+
+
+    var divTag = document.createElement("div");
+      divTag.id = "legendDiv" + partyLines; 
+      divTag.setAttribute("style", "color:" + color_hash[partyLines]);
+      divTag.innerHTML = partyName;
+      var inputTag = document.createElement("input");
+        inputTag.setAttribute("type", "checkbox");
+        inputTag.setAttribute("value", "!");
+        inputTag.setAttribute("onClick", "partyLegendCheckBoxClicked(this);");
+        inputTag.checked = true;
+      divTag.appendChild(inputTag);
+    legendDiv.appendChild(divTag); 
+  }
+}
+
+/**
+  This function extracts from JsonConfResponse the entries (partyID : partyName)
+  and put all of them as a properties of object that is returned (a "dictionary"
+  of <partyId, partyName> is returned)
+*/
+function extractPartiesId(jsonConfResponse){
+  var partiesIdArray = jsonConfResponse.parties_id;
+  var partiesIdDict = {};
+  for( var i = 0; i < partiesIdArray.length; i++){
+    var entryKey = partiesIdArray[i].id;
+    var entryVal = partiesIdArray[i].nazwa;
+    partiesIdDict[entryKey] = entryVal;
+  }
+  return partiesIdDict;
+}
+
+
+/* 
+This one finds max val in the whole dataSets structure;
+It's used for scaling the graph
+*/
+function maxValueFromDataSetS(dataSets){
+    var maxVal = 0;
+    for(a in dataSets)
+        for(b in dataSets[a])
+            if(dataSets[a][b] > maxVal)
+                maxVal = dataSets[a][b]
+    return maxVal;
+ }
+
 
 /* 
 Main visualization function
@@ -48,8 +135,16 @@ function startVisualization(nGramToVisualize, datefrom, dateto, xRes){
 
     // here we're launching the php script that queries the mysql and returns json with response
     console.log("start querying the SQL DB..");
+
+    //show loading db giff
+    document.getElementById("queryDbInfoDiv").style.display="inline";
+
     d3.text("mysql/queryNgrams.php" + optionsString, function(txt) {
       console.log("stopped querying the SQL DB..");
+      
+      //hide loading db gif
+      document.getElementById("queryDbInfoDiv").style.display="none";
+      
       var jsonResponse = JSON.parse(txt); 
       
       console.log("below JSON response (ngrams queried from SQL)::");
@@ -69,6 +164,10 @@ function startVisualization(nGramToVisualize, datefrom, dateto, xRes){
       // Here we're processing the data: from entries partyId, date we're creating the dataSets array
       // containing the points for each party. The points are arranged in the manner <date => nrOfNgramOccurencies>
       console.log("processing the retrieved data.. start");
+
+      //show processing the date gif
+      document.getElementById("processDataInfoDiv").style.display="inline";
+
       useAllDays = document.getElementById("inputChkUseAllDataPoints").checked; //checks inputChkUseAllDataPoints checkbox
 
       for(partyLines in partiesIdsNames){
@@ -76,6 +175,10 @@ function startVisualization(nGramToVisualize, datefrom, dateto, xRes){
                         stopDate, step, partyLines, nGramToVisualize, useAllDays);
       }
       console.log("processing the retrieved data.. stop");
+      
+      //hide processing data gif
+      document.getElementById("processDataInfoDiv").style.display="none";
+
       console.log("DataSets to be visualized (each array element is a separated path on the chart): ")
       console.log(dataSets);
 
@@ -94,26 +197,17 @@ function startVisualization(nGramToVisualize, datefrom, dateto, xRes){
         console.log("Final Data to be visualized (after erasing 0-s)");
         console.log(dataSets);
       }
+
+     
       visualize(partiesIdsNames, parseDate(startDate), parseDate(stopDate), step, ngram);
+
+       //create the legend in here
+      create_legend(partiesIdsNames);
     });
 
 }
 
-/**
-  This function extracts from JsonConfResponse the entries (partyID : partyName)
-  and put all of them as a properties of object that is returned (a "dictionary"
-  of <partyId, partyName> is returned)
-*/
-function extractPartiesId(jsonConfResponse){
-  var partiesIdArray = jsonConfResponse.parties_id;
-  var partiesIdDict = {};
-  for( var i = 0; i < partiesIdArray.length; i++){
-    var entryKey = partiesIdArray[i].id;
-    var entryVal = partiesIdArray[i].nazwa;
-    partiesIdDict[entryKey] = entryVal;
-  }
-  return partiesIdDict;
-}
+
 
 /**
 dataSets - ?
@@ -138,15 +232,7 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
         var w = 1000 - m[1] - m[3]; // width
         var h = 400 - m[0] - m[2]; // height
 
-        var color_hash = {  "0": "green",
-                            "1" :  "orange",
-                            "2" : "blue",
-                            "3" : "red",
-                            "4": "black",
-                            "5": "yellow",
-                            "6": "violet",
-                            "7": "brown",
-                      }      
+    
 
         var x = d3.time.scale().domain([startDate, stopDate]).range([0, w]);
 
@@ -206,7 +292,8 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
                 lineGroup = 
                   graph
                     .append('svg:g')
-                    .attr('class', 'lineGroup' + partyLines);
+                    .attr('class', 'lineGroup' + partyLines)
+                    .attr("id", "lineGroupId" + partyLines);
 
                       // document.geEle
                 // Append & draw the Linex (if checkbox is true)
@@ -244,7 +331,7 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
                       .attr('cx', function(d) { console.log("drawing circle "); return x(new Date(d.key)) })
                       .attr('cy', function(d) { return y(d.value) })
                       .attr('r', function() {
-                        return 4;
+                        return 3;
                        // return (data.length <= maxDataPointsForDots) ? pointRadius : 0 
                      })
             }
@@ -278,11 +365,14 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
 
             //add legend
             var legend = graph.append("g")
+              .attr("id", "legendOnChart")
               .attr("class", "legend")
-              .attr("x", w - 65)
+              .attr("visibility", "hidden")
+              .attr("x", w-300)
               .attr("y", 25)
               .attr("height", 100)
               .attr("width", 100);
+
 
             //here we're preparing the datalabels. 
             // leneg rectangles here             
@@ -314,43 +404,3 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
             
 }
 
-/* 
-Converts associative array ("key1" => "value1", "key2" => "value2" ... )
-to normal one [a, b,c ]
-params:
- associativeArray - array that is to be converted
- length  - desired length of array
-*/
-function convertAssArrayToNormal( associativeArray, length ){
-    
-    var normalArray = [];
-    for(var i = 0; i < length; i++){
-        var tmpData = associativeArray[i];
-        if(typeof tmpData == 'undefined')
-            tmpData = 0;
-        normalArray.push(tmpData)
-    }
-    return normalArray;
-}
-
-
-/* 
-This one finds max val in the whole dataSets structure;
-It's used for scaling the graph
-*/
-function maxValueFromDataSetS(dataSets){
-    var maxVal = 0;
-    for(a in dataSets)
-        for(b in dataSets[a])
-            if(dataSets[a][b] > maxVal)
-                maxVal = dataSets[a][b]
-
-  
-    // for(var x = 0; x < dataSets.length; x++)
-    //     for(var i = 0; i < dataSets[x].length; i++){
-    //         console.log(dataSets[x][i]);
-    //         if(dataSets[x][i] > maxVal)
-    //             maxVal = dataSets[x][i];
-    //     }
-    return maxVal;
- }
