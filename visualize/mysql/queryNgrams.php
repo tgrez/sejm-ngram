@@ -1,6 +1,10 @@
 <?php
     // load in mysql server configuration (connection string, user/pw, etc)
     include 'mysqlConfig.php';
+
+    //override PHP memory default value
+    ini_set('memory_limit', '-1');
+
     // connect to the database
     @mysql_select_db($dsn) or die( "Unable to select database");
      
