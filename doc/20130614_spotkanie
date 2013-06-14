@@ -1,0 +1,27 @@
+Spotkanie 2013 - 06 - 17
+
+TODO
+- Backened
+	-> napisać w Pythonie wtyczkę modpython
+	-> zrobic methodę w tej wtyczce API - getNgrams (data_od, data_do, ngram)
+		zwracającą listę wierszy, gdzie każðy wiersz to
+			klub_id, data, liczba_wystapien, nr_posiedzenia
+	-> odflitrować listę ngramów występujących MNIEJ NIŻ JEDEN raz (xD)
+	-> dodać wywalanie stopwrodów podczas generacji nword 
+- Baza
+	-> Sparsować XMLe nowe
+	-> pogrupować po dniach wpisy
+	-> zrzucić te wpisy do blobów
+	-> podzielić na lata tabele
+	-> 
+
+- FrontEnd
+	-> skomunikować się z middleWare'm
+	-> zrobić to ładniej
+	->
+	- >Wygladzenie zrobić
+		-> kernel density estimation
+	-> dodać wybraine skali po lata, miesiace, dni, posiedzenia
+	-> ladny pasek z zakresem dat
+
+
