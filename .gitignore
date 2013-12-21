@@ -10,3 +10,11 @@ michal/
 # unpacked data
 data/html_wystapienia.csv
 data/sejm_wystapienia.csv
+
+# java target dir
+target/
+
+# java eclipse files
+.settings/
+.classpath
+.project
