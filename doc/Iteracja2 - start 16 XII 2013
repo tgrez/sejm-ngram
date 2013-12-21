@@ -1,0 +1,8 @@
+Iteracja 2 - start 16 XII 2013
+
+
+Co zrobimy:
+ - postawimy nowy (SIemion) AWS z baza danych + gitowym clonem projektu
+ - Przeprocesujemy dane i bedziemy miec najnowsze mozliwe na SQLu na AWSie
+ - zrobimy bootstrapowy layout
+ - dopiescimy wyglad pozniej
