@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+# API METHODS
+
+# uses query string params
+POST     /api/ngrams/searches                           controllers.Ngrams.searches()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+
+GET     /test                   controllers.Application.testMethod()
