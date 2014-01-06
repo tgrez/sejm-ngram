@@ -1,6 +1,6 @@
 package org.sejmngram.sejmometr.client;
 
-import org.sejmngram.sejmometr.json.JsonProcessor;
+import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.sejmometr.json.datamodel.Wystapienie;
 
 import com.sun.jersey.api.client.Client;

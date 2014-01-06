@@ -1,4 +1,4 @@
-package org.sejmngram.sejmometr.json;
+package org.sejmngram.common.json;
 
 import java.io.IOException;
 
