@@ -19,3 +19,6 @@ target/
 .settings/
 .classpath
 .project
+
+# java idea files
+.idea/

@@ -1,6 +1,6 @@
 imie posla (ludzie.nazwa, id)
-tytul
-data
-czas rozpoczecia, czas zakonczenia
+tytul wystąpienia
+data wystąpienia
 stanowisko
+treść wystąpienia
 klub_id (przynaleznosc partyjna)
