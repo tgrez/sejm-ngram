@@ -9,18 +9,12 @@ import org.sejmngram.common.json.datamodel.Dokument;
 
 public class Printer {
 
+	// TODO read common output filename from properties file
+	public static final String filename = "output.json";
+	
 	public static void printCommonJsonToFile(Dokument dokument) {
-		System.out.println();
-		System.out.println("### CONTENT WRITTEN TO FILE ###");
-		System.out.println();
 		try {
-			System.out.println(JsonProcessor.transformToJson(dokument));
-			System.out.println();
-			System.out.println("### WRITING TO FILE ###");
-			System.out.println();
-			String filename = "output.json";
 			JsonProcessor.printToFile(filename, dokument);
-			System.out.println("### CONTENT WRITTEN SUCCESFULLY TO FILE: " + filename + " ###");
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

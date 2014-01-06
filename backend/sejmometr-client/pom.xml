@@ -56,7 +56,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.sejmngram.sejmometr.client.RestClient</mainClass>
+							<mainClass>org.sejmngram.sejmometr.App</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
