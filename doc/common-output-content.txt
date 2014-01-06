@@ -1,0 +1,6 @@
+imie posla (ludzie.nazwa, id)
+tytul
+data
+czas rozpoczecia, czas zakonczenia
+stanowisko
+klub_id (przynaleznosc partyjna)
