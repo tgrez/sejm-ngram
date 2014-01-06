@@ -11,6 +11,7 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.jsoup.Jsoup;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "html" })
@@ -23,6 +24,10 @@ public class Layers {
 	@JsonProperty("html")
 	public String getHtml() {
 		return html;
+	}
+	
+	public String getHtmlText() {
+	    return Jsoup.parse(html).text();
 	}
 
 	@JsonProperty("html")

@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "document" })
-public class Wystapienie {
+public class SejmometrWystapienie {
 
 	@JsonProperty("document")
 	private Document document;

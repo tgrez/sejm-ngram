@@ -1,9 +1,12 @@
 package org.sejmngram.common.json;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class JsonProcessor {
@@ -18,4 +21,14 @@ public class JsonProcessor {
 		return objectMapper.readValue(stringFormat, clazz);
 	}
 
+	public static <T> String transformToJson(T jsonPojo)
+			throws JsonGenerationException, JsonMappingException, IOException {
+		return objectMapper.writeValueAsString(jsonPojo);
+	}
+
+	public static <T> void printToFile(String filename, T jsonPojo)
+			throws JsonGenerationException, JsonMappingException, IOException {
+		// TODO handle exception when file exists
+		objectMapper.writeValue(new File(filename), jsonPojo);
+	}
 }
