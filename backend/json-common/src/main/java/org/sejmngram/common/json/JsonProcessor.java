@@ -28,7 +28,7 @@ public class JsonProcessor {
 
 	public static <T> void printToFile(String filename, T jsonPojo)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		// TODO handle exception when file exists
+		// TODO when file exists then append
 		objectMapper.writeValue(new File(filename), jsonPojo);
 	}
 }

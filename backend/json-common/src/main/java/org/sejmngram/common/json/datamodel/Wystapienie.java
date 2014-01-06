@@ -1,5 +1,6 @@
 package org.sejmngram.common.json.datamodel;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.sejmngram.common.json.JsonDateSerializer;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "posel", "tytul", "data", "stanowisko", "partia", "tresc" })
@@ -21,7 +23,7 @@ public class Wystapienie {
 	@JsonProperty("tytul")
 	private String tytul;
 	@JsonProperty("data")
-	private String data;
+	private Date data;
 	@JsonProperty("stanowisko")
 	private String stanowisko;
 	@JsonProperty("partia")
@@ -51,12 +53,13 @@ public class Wystapienie {
 	}
 
 	@JsonProperty("data")
-	public String getData() {
+	@JsonSerialize(using=JsonDateSerializer.class)
+	public Date getData() {
 		return data;
 	}
 
 	@JsonProperty("data")
-	public void setData(String data) {
+	public void setData(Date data) {
 		this.data = data;
 	}
 

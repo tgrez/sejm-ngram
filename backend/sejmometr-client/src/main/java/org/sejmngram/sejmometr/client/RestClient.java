@@ -1,14 +1,15 @@
 package org.sejmngram.sejmometr.client;
 
+import org.sejmngram.common.Configuration;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 public class RestClient {
 	
-	private static final String url = "http://sejmometr.pl/sejm_wystapienia/";
-	
-	private static final String acceptHeader = "application/vnd.EPF_API.v1+json";
+	private static final String url = Configuration.getInstance().getSejmometrUrl();
+	private static final String acceptHeader = Configuration.getInstance().getSejmometrAcceptHeader(); 
 	
 	public static String getWystapienie(int id) {
 		Client client = Client.create();
