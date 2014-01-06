@@ -7,3 +7,9 @@ Index:
 -------------------------
 Ad1.
 http://www.alchemyapi.com/api/sentiment/?ga=1021 - service providing sentiment analysis
+
+
+
+
+sejmometr REST API:
+http://epf.org.pl/app/webroot/api/rest/
