@@ -10,7 +10,14 @@
 #Meetings:
 [sejmngram meetings on trello][3]
 
+![Alt text](/doc/SejmoGram-architecture.jpg "Optional title")
+
+
+
 [1]: https://trello.com/sejmngram
 [2]: https://trello.com/board/taski/50e60e90d94b35bf5e00057d
 [3]: https://trello.com/board/spotkania/50eaea8ed16b3c041b002567
 [4]: http://54.225.87.177/visualize.html
+
+
+
