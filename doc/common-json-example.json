@@ -1,0 +1,21 @@
+{
+	"wystapienia" : [
+		{
+			"posel"			: "Ryszard Kowalski",
+			"tytul"			: "Wystapienie o kulturze w sejmie",
+			"data"			: "2011-11-08T00:00:00Z",
+			"stanowisko"	: "Wyzszy Reprezentant",
+			"partia"		: "Apple",
+			"tresc"			: "blabla"
+		},
+
+		{
+			"posel"			: "Ryszard Kowalski",
+			"tytul"			: "Wystapienie o kulturze w sejmie 2",
+			"data"			: "2011-11-09T00:00:00Z",
+			"stanowisko"	: "Wyzszy Reprezentant",
+			"partia"		: "Apple",
+			"tresc"			: "blabla, blabla"
+		}
+	]
+}
