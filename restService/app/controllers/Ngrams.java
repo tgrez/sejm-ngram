@@ -47,7 +47,17 @@ public class Ngrams extends Controller {
             i++;
         }
         return ok(result);
+    }
 
 
+    public static Result list( String list) {
+        ObjectNode result = Json.newObject();
+        int k = 1;
+        for (int i = 0; i < 10; i++) {
+
+            result.put("" + i, list);
+            k++;
+        }
+        return ok(result);
     }
 }
