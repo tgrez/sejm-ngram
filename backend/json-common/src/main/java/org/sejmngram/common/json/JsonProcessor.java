@@ -1,6 +1,7 @@
 package org.sejmngram.common.json;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -28,7 +29,8 @@ public class JsonProcessor {
 
 	public static <T> void printToFile(String filename, T jsonPojo)
 			throws JsonGenerationException, JsonMappingException, IOException {
-		// TODO handle exception when file exists
-		objectMapper.writeValue(new File(filename), jsonPojo);
+		objectMapper.writeValue(
+				new FileOutputStream(new File(filename), true),
+				jsonPojo);
 	}
 }

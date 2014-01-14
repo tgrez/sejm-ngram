@@ -28,6 +28,14 @@ public class Dokument {
 	public void setWystapienia(List<Wystapienie> wystapienia) {
 		this.wystapienia = wystapienia;
 	}
+	
+	public void addWystapienia(List<Wystapienie> wystapienia) {
+		this.wystapienia.addAll(wystapienia);
+	}
+	
+	public void addWystapienie(Wystapienie wystapienie) {
+		wystapienia.add(wystapienie);
+	}
 
 	@JsonAnyGetter
 	public Map<String, Object> getAdditionalProperties() {

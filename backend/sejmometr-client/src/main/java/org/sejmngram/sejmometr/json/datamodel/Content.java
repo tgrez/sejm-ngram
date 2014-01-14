@@ -10,7 +10,9 @@ import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.sejmngram.sejmometr.json.SejmometrJsonContentDeserializer;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "data", "layers" })
@@ -28,6 +30,7 @@ public class Content {
 	}
 
 	@JsonProperty("data")
+	@JsonDeserialize(using = SejmometrJsonContentDeserializer.class)
 	public void setData(Data data) {
 		this.data = data;
 	}

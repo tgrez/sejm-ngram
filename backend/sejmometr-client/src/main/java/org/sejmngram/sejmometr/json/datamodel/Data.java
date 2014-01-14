@@ -1,5 +1,6 @@
 package org.sejmngram.sejmometr.json.datamodel;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,9 @@ import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.sejmngram.sejmometr.json.SejmometrJsonDateDeserializer;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonPropertyOrder({ "ludzie.avatar", "ludzie.id", "ludzie.nazwa",
@@ -42,7 +45,7 @@ public class Data {
 	@JsonProperty("sejm_debaty.tytul")
 	private String sejm_debaty_tytul;
 	@JsonProperty("data")
-	private String data;
+	private Date data;
 	@JsonProperty("id")
 	private String id;
 	@JsonProperty("posiedzenie_id")
@@ -178,12 +181,13 @@ public class Data {
 	}
 
 	@JsonProperty("data")
-	public String getData() {
+	public Date getData() {
 		return data;
 	}
 
 	@JsonProperty("data")
-	public void setData(String data) {
+	@JsonDeserialize(using = SejmometrJsonDateDeserializer.class)
+	public void setData(Date data) {
 		this.data = data;
 	}
 
