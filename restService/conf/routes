@@ -8,10 +8,10 @@ GET     /                           controllers.Application.index()
 # API METHODS
 
 # uses query string params
-POST     /api/ngrams/searches                           controllers.Ngrams.searches()
+GET     /api/ngrams/:ngramName             controllers.Ngrams.list( ngramName : String )
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /assets/*file                       controllers.Assets.at(path="/public", file)
 
 
-GET     /test                   controllers.Application.testMethod()
+GET     /test                               controllers.Application.testMethod()

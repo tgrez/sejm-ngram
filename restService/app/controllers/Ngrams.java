@@ -17,43 +17,47 @@ public class Ngrams extends Controller {
     /**
      * request should go like:
      * {
-     *  "dateFrom"    : 2012-06-02,
-     *  "dateTo"      : 2012-08-23,
-     *  "ngram"      : "some ngram value"
+     * "dateFrom"    : 2012-06-02,
+     * "dateTo"      : 2012-08-23,
+     * "ngram"      : "some ngram value"
      * }
-     *
+     * <p/>
      * and bitches should be like happy.
-     *
+     * <p/>
      * response:
      * {
-     *     "ngram1" :   "some",
-     *     "ngram2" :   "ngram",
-     *     "ngram3" :   "value"
+     * "ngram1" :   "some",
+     * "ngram2" :   "ngram",
+     * "ngram3" :   "value"
      * }
      *
      * @return
      */
     @BodyParser.Of(BodyParser.Json.class)
-    public static Result searches(){
+    public static Result searches() {
         JsonNode json = request().body().asJson();
-        String ngramValue = json.findPath( "ngram").textValue();
-//        Logger.info( ngramValue);
-
-
-        String[] ngrams = ngramValue.split( " ");
-
+        String ngramValue = json.findPath("ngram").textValue();
+        String[] ngrams = ngramValue.split(" ");
         ObjectNode result = Json.newObject();
-
         int i = 1;
-        for ( String ngram : ngrams){
+        for (String ngram : ngrams) {
 
-             Logger.info( ngram);
-                           result.put("" + i, ngram);
+            Logger.info(ngram);
+            result.put("" + i, ngram);
             i++;
         }
+        return ok(result);
+    }
 
-        return ok (result);
 
+    public static Result list( String list) {
+        ObjectNode result = Json.newObject();
+        int k = 1;
+        for (int i = 0; i < 10; i++) {
 
+            result.put("" + i, list);
+            k++;
+        }
+        return ok(result);
     }
 }
