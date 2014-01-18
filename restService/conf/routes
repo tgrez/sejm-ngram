@@ -3,7 +3,9 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
+# GET     /index.html                           controllers.Application.index()
+GET     /test.html                           controllers.Assets.at(path="/public", file="test.html")
+
 
 # API METHODS
 

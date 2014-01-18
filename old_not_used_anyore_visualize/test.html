@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+
+    <title>sejm-ngram</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="../assets/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap-select.css" rel="stylesheet">
+
+    <script src="../assets/js/jquery-1.10.2.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/holder.js"></script>
+    <script src="../assets/js/bootstrap-select.js"></script>
+
+
+    <!-- Our own code -->
+    <script type="text/javascript" src="d3/d3.v3.js"></script>
+    <script type="text/javascript" src="js/getData.js"></script>
+    <script type="text/javascript" src="js/visualize.js"></script>
+    <script type="text/javascript" src="js/helper.js"></script>
+    <script type="text/javascript" src="js/jquery.tipsy.js"></script>
+    <script type="text/javascript" src="js/bestNgrams.js"></script>
+
+    <!-- Custom styles for this template -->
+    <link href="theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+	<style>
+		.dropdown-menu {
+		  width: 100%; 
+		}
+
+		.btn{
+		 width: 100%;
+		}
+	</style>
+  </head>
+
+  <body  onload="loadForms();">
+
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">sejm-ngram</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+			<li class="active"><a href="#" id="current">Visualize</a></li>
+            <li><a href="#help">Help</a></li>
+            <li><a href="#idea">Idea</a></li>
+            <li><a href="#authors">Authors</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container theme-showcase">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>sejm-ngram</h1>
+        <p>version 0.2.0, <a href="changelog.txt"> changelog </a></p>
+      </div>
+
+		<form class="form-horizontal">
+			<div class="form-group">
+				<div class="col-xs-2">
+					<label class="control-label" for="inputNgram">ngram:</label>
+				</div>
+				<div class="col-xs-3">
+					<input class="form-control" id="inputNgram" type="text" placeholder="tutaj wpisz ngram">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-2">
+					<label class="control-label" for="inputDateFrom">date from:</label>
+				</div>
+				<div class="col-xs-3">
+					<input id="inputDateFrom" class="form-control" placeholder="2011-11-8">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-2">
+					<label class="control-label" for="inputDateTo">date to:</label>
+				</div>
+				<div class="col-xs-3">
+					<input id="inputDateTo" class="form-control" placeholder="2011-12-1">
+				</div>
+			</div>
+
+<!--			<div class="form-group">
+				<div class="btn-group col-xs-3">
+				  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"  onChange="ngramSelected(this.text);">
+					Action <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+				  </ul>
+				</div>
+			</div>
+-->
+			<div class="form-group">
+				<div class="col-xs-3">
+					<button type="button" class="btn btn-default" onClick="buttonGenVizPressed();">Generate Viz!</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-2">
+		        	<label class="control-label" for="selectField1Grams">popular 1grams:</label>
+				</div>
+				<div class="col-xs-3">
+					<select id="selectField1Grams" class="selectpicker" onChange="ngramSelected(this.options[this.value].text);" />
+					</select>
+		        </div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-xs-2">
+			    	<label class="control-label" for="selectField2Grams">popular 3grams:</label>
+				</div>
+				<div class="col-xs-3">
+					<select id="selectField2Grams" class="selectpicker" onChange="ngramSelected(this.options[this.value].text);">
+					</select>
+				</div>
+	        </div>
+
+			<div class="form-group">
+				<div class="col-xs-2">
+					<label class="control-label" for="selectField3Grams">popular 3grams:</label>
+				</div>
+				<div class="col-xs-3">					
+					<select id="selectField3Grams" class="selectpicker" onChange="ngramSelected(this.options[this.value].text);">
+					</select>
+		        </div>
+		    </div>
+
+		</form>
+
+	<div id="graph" class="aGraph" style="float:left"></div>
+        <!-- That's legend / turning on/off the sets for different parties -->
+        <div id="legendDiv" style="margin-top: 50px"> 
+            <div> 
+                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
+                PartyName_1;
+            </div>
+            <div> 
+                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
+                PartyName_2;
+            </div>
+        </div>
+        <div style="clear:both">
+
+
+        <h4> viz debug options:</h4>
+
+        <!-- Some more controls for bottom line -->
+        <div style="float:left;" >
+            <label for="inputChkBoxDrawLines">draw lines: </label>
+            <input type="checkbox" id= "inputChkBoxDrawLines" size="25" value="!" onClick="checkBoxDrawLinesPressed(this);"/>  
+        </div>
+
+        <div style="margin-left:110px; float:left">
+            <label for="inputChkBoxIncludeZeros">include 0-s: (needs to generate viz again)</label>
+            <input type="checkbox" id= "inputChkBoxIncludeZeros" size="25" value="!" onClick="console.log('chbox presed! ' + this.checked );"/>  
+        </div>
+
+        <div style="margin-left:550px;">
+            <label for="inputChkBoxLegendChart">show on-chart legend:</label>
+            <input type="checkbox" id= "inputChkBoxLegendChart" size="25" value="!" onClick="checkBoxShowChartLegendPressed(this);"/>  
+        </div>        
+
+        <div style="float:left; " >
+            <label for="inputXRes">x-res: </label>
+            <input id="inputXRes" type="text" size="15" value="12"/>  
+        </div>
+
+        <div style="float:left; margin-left:35px">
+            <label for="inputChkUseAllDataPoints">use all datapoints (needs to regenerate viz again): </label>
+            <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
+        </div>
+        <div style="clear:both"/>
+
+
+        <h1> help </h1>
+        <a name="help"></a>
+        <p> It's very easy. Simply type some ngram into "ngram" text field, type dates (from / to) in the "yyyy-mm-dd"
+            format and press "Generate Viz!" button. Since we're working on it we have provided some debug options on
+            the bottom of chart. 
+        </p>
+
+              <ul id="debugOptionsList">
+                <li>draw lines - simply connects the datapoints for each party. does not require generating the chart again.</a></li>
+                <li>include 0-s - showing the datapoints of 0 value for dates / periods (see "use all data points") that don't have any ngrams. requires generating the chart again.</a></li>
+                <li>x-res - when "use all datapoints" is not selected the time scope between "startDate" and "stopDate" is divided into "x-res" number of boxes; the ngrams with dates fitting the single box's (sic!) scope are summarized</a></li>
+                <li>use all datapoints - when selected, the ngrams are summarized per single day, otherwise the whole time scope is divided into a number of boxes specified by "x-res" value. </a></li>
+            </ul>
+
+        <h1> idea </h1>
+        <a name="idea"></a>
+        <p> 
+            The sejm-ngram provides a visualization of selected <a href="http://en.wikipedia.org/wiki/N-gram"> ngrams </a> occurences within the speeches of Polish Parliament members. 
+            The project is meant to become an useful tool for a simple, quantitative analysis of what is happening behind the doors of Polish Parliament. Initially we would like to provide simple, ngram analysis, possibly with extending it by sentiment analysis. Sejm-ngram, by being based on open data with public speeches of Polish deputies (provided by http://sejmometr.pl/) aspires to be an example of data journalism - a domain that we believe is emerging right now.
+
+
+            <h4> current features / matters </h4>            
+            <ul id="currentFeaturesList">
+                <li>Works with 1-, 2- and 3grams (you need more!)</a></li>
+                <li>there's not much data yet - the speeches used as sources took place from 2011-11-08 to 2013-03-22</li>
+                <li>is not super-fast</li>
+            </ul>
+
+            <h4> to be done! </h4>            
+            <ul id="todoFeaturesList">
+                <li>use some no-sql db for faster working</li>
+            </ul>
+
+        </p>
+
+        <h1> authors </h1>
+        <a name="authors"></a>
+         <ul id="authorsList">
+                <li>Tomasz Guz</li>
+                <li>Tomasz Kuśmierczyk</li>
+                <li>Krzysztof Siejkowski</li>
+                <li>Michał Siemiończyk</li>
+            </ul>
+
+
+			    <div id = "queryDbInfoDiv" style="display:none">
+			        <img src="img/loading.gif" style="width:30px"/>
+			        querying db...
+			    </div>
+
+			    <div id = "processDataInfoDiv" style="display:none">
+			        <img src="img/loading.gif" style="width:30px"/>
+			        processing data..
+			    </div>
+
+        <!-- JavaScript - functions for manipulating the GUI (could be in sepearated file though) -->
+        <script>
+
+            //here we contain functions maintaining GUI
+            /* After the button "Generate Viz!" was pressed.*/
+            function buttonGenVizPressed(){
+                console.log("button Pressed");
+                var ngram = document.getElementById("inputNgram").value;
+                var dateFrom = document.getElementById("inputDateFrom").value;
+                var dateTo = document.getElementById("inputDateTo").value;  
+                var xRes = document.getElementById("inputXRes").value;  
+                //startVisualization(ngram, dateFrom, dateTo, xRes);
+                startJsonApiBasedVisualization(ngram, dateFrom, dateTo, xRes)
+            }
+
+            /* Handle "Draw Lines" CheckBox */
+            function checkBoxDrawLinesPressed(chckBox){
+                for(partylines in dataSets){
+                    document.getElementById("idPathPoint" + partylines).style.visibility =
+                        chckBox.checked ? "visible" : "hidden";
+                }
+            }
+
+            /** Handles checkbox for chart legend pressed */
+            function checkBoxShowChartLegendPressed(chkBox){
+                var chartLegendGroup = document.getElementById("legendOnChart");
+                chartLegendGroup.style.visibility = 
+                    chkBox.checked ? "visible" : "hidden";
+            }
+
+            /* Puts chosen ngram to textField. Invoked after selecting ngram from 
+                any of the select fields
+            */
+            function ngramSelected(ngramWord){
+				alert(ngramWord);
+                document.getElementById("inputNgram").value = ngramWord;
+            }
+
+            /* for manipulating*/
+            function partyLegendCheckBoxClicked(checkBox){
+                
+                var divId = checkBox.parentNode.id; //divId = "legendDiv" + "nr"
+                var clickedPartyId = divId.substring(9);
+
+                var lineGroupId = document.getElementById("lineGroupId" + clickedPartyId);
+                // lineGroupId.style.visibility = 
+                //     checkBox.checked ? "visible" : "hidden";
+
+                 lineGroupId.style.display = 
+                    checkBox.checked ? "inline" : "none";
+
+
+                // console.log("legen checkbox clicked!");
+                // console.log(checkBox);
+                // console.log(clickedPartyId);
+            }
+
+            /* Fills the form with necessary data*/
+            function loadForms(){
+                // fill 1grams select form
+                var field1Grams = document.getElementById("selectField1Grams");
+                for(i = 0, x = oneGrams.length;  i < x ; i++){
+                    field1Grams.options[field1Grams.options.length] = new Option(oneGrams[i], i);
+                }
+
+                // fill 2grams select form
+                var field2Grams = document.getElementById("selectField2Grams");
+                for(i = 0, x = twoGrams.length;  i < x ; i++){
+                    field2Grams.options[field2Grams.options.length] = new Option(twoGrams[i], i);
+                }
+
+                // fill 3grams select form
+                var field3Grams = document.getElementById("selectField3Grams");
+                for(i = 0, x = threeGrams.length;  i < x ; i++){
+                    field3Grams.options[field3Grams.options.length] = new Option(threeGrams[i], i);
+                }
+            }
+
+		$(function(){
+
+			$(".dropdown-menu li a").click(function(){
+			  $(".btn:first-child").text($(this).text());
+			  $(".btn:first-child").val($(this).text());
+
+		   });
+		})
+        </script>
+
+        <!-- 
+            JavaScript - Main loop of the file - vizualises default ngrams 
+        -->
+        <script>
+
+            // main loop of our site
+            var ngram = document.getElementById("inputNgram").value;
+            var dateFrom = document.getElementById("inputDateFrom").value;
+            var dateTo = document.getElementById("inputDateTo").value;
+            var xRes = document.getElementById("inputXRes").value; 
+            startVisualization(ngram, dateFrom, dateTo, xRes);
+
+        </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+
+
+
+  </body>
+</html>
+

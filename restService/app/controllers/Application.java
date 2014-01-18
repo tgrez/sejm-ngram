@@ -1,5 +1,6 @@
 package controllers;
 
+import play.api.mvc.Rendering;
 import play.libs.F;
 import play.mvc.*;
 
@@ -14,8 +15,17 @@ public class Application extends Controller {
 
     public static Result index() {
 
-        Result ok = ok("Welcome to out API, you should call api methods with /api/<method_name>");
-        return ok;
+//        Result ok = ok("Welcome to out API, you should call api methods with /api/<method_name>");
+//        return ok;
+//        Rendering.render$();
+
+
+        return ok("super super");
+
+
+
+//        return ok( "Index page is here!");
+
 
     }
 
