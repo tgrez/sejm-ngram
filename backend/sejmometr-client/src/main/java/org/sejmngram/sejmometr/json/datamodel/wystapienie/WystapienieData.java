@@ -1,4 +1,4 @@
-package org.sejmngram.sejmometr.json.datamodel;
+package org.sejmngram.sejmometr.json.datamodel.wystapienie;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import org.sejmngram.sejmometr.json.SejmometrJsonDateDeserializer;
 		"dlugosc", "dzien_sejmowy_id", "ilosc_slow", "klub_id", "kolejnosc",
 		"punkt_id", "skrot", "stanowisko_id", "video", "yt_id", "yt_pl_id",
 		"stanowiska.id", "stanowiska.nazwa", "tytul" })
-public class Data {
+public class WystapienieData {
 
 	@JsonProperty("ludzie.avatar")
 	private String ludzie_avatar;
@@ -67,7 +67,7 @@ public class Data {
 	@JsonProperty("klub_id")
 	private String klub_id;
 	@JsonProperty("kolejnosc")
-	private String kolejnosc;
+	private Double kolejnosc;
 	@JsonProperty("punkt_id")
 	private String punkt_id;
 	@JsonProperty("skrot")
@@ -292,12 +292,12 @@ public class Data {
 	}
 
 	@JsonProperty("kolejnosc")
-	public String getKolejnosc() {
+	public Double getKolejnosc() {
 		return kolejnosc;
 	}
 
 	@JsonProperty("kolejnosc")
-	public void setKolejnosc(String kolejnosc) {
+	public void setKolejnosc(Double kolejnosc) {
 		this.kolejnosc = kolejnosc;
 	}
 
