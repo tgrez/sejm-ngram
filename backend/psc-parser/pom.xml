@@ -56,7 +56,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.sejmngram.psc.parser.fileloader</mainClass>
+							<mainClass>org.sejmngram.psc.parser.FileLoader</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
