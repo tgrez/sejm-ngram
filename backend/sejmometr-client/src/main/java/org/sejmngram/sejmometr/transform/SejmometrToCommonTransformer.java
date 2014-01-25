@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.sejmngram.common.Configuration;
@@ -16,6 +17,7 @@ import org.sejmngram.sejmometr.json.datamodel.wystapienie.WystapienieResponse;
 
 public class SejmometrToCommonTransformer {
 
+	private static final Logger LOG = Logger.getLogger(SejmometrToCommonTransformer.class.getName());
 	
 	private static Map<Integer, String> partyIdToPartyNameMap = new HashMap<Integer, String>();
 	
@@ -49,6 +51,7 @@ public class SejmometrToCommonTransformer {
 		KlubResponse sejmometrResponse = JsonProcessor.transform(
 				jsonString, KlubResponse.class);
 		String nazwa = sejmometrResponse.getDocument().getContent().getData().getNazwa();
+		LOG.debug("Retrieved klub name: " + nazwa + " for klub id: " + klub_id);
 		partyIdToPartyNameMap.put(partyId, nazwa);
 		return nazwa;
 	}

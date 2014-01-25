@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.sejmngram.common.json.JsonProcessor;
@@ -14,6 +15,8 @@ import org.sejmngram.sejmometr.json.datamodel.wystapienie.WystapienieResponse;
 
 public class TransformExecutor {
 
+	private static final Logger LOG = Logger.getLogger(TransformExecutor.class.getName());
+	
 	public static void process(Map<Integer, String> responses)
 			throws JsonParseException, JsonProcessingException, IOException {
 		List<Wystapienie> wystapienia = new ArrayList<Wystapienie>();
@@ -23,6 +26,8 @@ public class TransformExecutor {
 					.doTransform(parseFromJson(response));
 			if (wystapienie != null) {
 				wystapienia.add(wystapienie);
+			} else {
+				LOG.debug("Wystapienie was null for request id: " + responseId);
 			}
 		}
 		Printer.printCommonJsonsToFiles(wystapienia);
