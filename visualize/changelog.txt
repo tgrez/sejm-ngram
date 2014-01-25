@@ -1,6 +1,0 @@
------ version 0.1.0
-
-- comes with MySQL backend (still no nosql)
-- early sketch of GUI (D3 based)
-- many unintuitive "debug options"
-- records from Polish Parliaments from scope: 2011-11-08 : 2013-03-22 (need to get much more)

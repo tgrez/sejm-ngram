@@ -12,7 +12,7 @@ var color_hash = {  "0": "green",
                     "4": "black",
                     "5": "yellow",
                     "6": "violet",
-                    "7": "brown",
+                    "7": "brown"
               }  
 
 /* 
@@ -110,7 +110,7 @@ function maxValueFromDataSetS(dataSets){
 function startJsonApiBasedVisualization( nGramToVisualize, datefrom, dateto, xRes){
 
     console.log("startJsonApiBasedVisualization() method called");
-    var url = "http://localhost:9000/api/ngrams/lista"
+    var url = "http://192.168.1.200:9000/api/ngrams/lista"
     d3.json( url, function(error, json) {
         console.log("received:" + json);
 
@@ -142,13 +142,6 @@ function startJsonApiBasedVisualization( nGramToVisualize, datefrom, dateto, xRe
 
         console.log("date:" + new Date("2012-05-02"));
 
-//        line(d3.entries(dataSets[partyLines]))
-
-
-//        console.log(dataSets)
-
-
-
 
         for (party in dataSets){
 //            console.log("party: " + party)
@@ -157,7 +150,14 @@ function startJsonApiBasedVisualization( nGramToVisualize, datefrom, dateto, xRe
 //        console.log( d3.entries( dataSets[ ]))
 
         console.log("try to visualize");
-        visualize(null, parseDate( "02-05-2012 00:00"), parseDate("05-05-2012 00:00"), null, null);
+//        var startDate = parseDate( "2012-05-02");
+        var startDate = new Date("2012-05-02");
+        var endDate = parseDate( "2012-05-05");
+
+        console.log ( startDate)
+        console.log ( endDate)
+
+        visualize(null, startDate, endDate, null, null);
 
     }   );
 }
@@ -274,202 +274,256 @@ ngram - the ngram word
 function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
     /* implementation heavily influenced by http://bl.ocks.org/1166403 */
 
-        dataCirclesGroup = null;
-       
-        //firstly, we should clean the last viz
-        document.getElementById("graph").innerHTML = "";
+    dataCirclesGroup = null;
 
-        var maxVal = maxValueFromDataSetS(dataSets);
-        console.log("Max  Y-value (for scale calculation): " + maxVal);
+    //firstly, we should clean the last viz
+    document.getElementById("graph").innerHTML = "";
 
-        // define dimensions of graph
-        var m = [80, 80, 80, 80]; // margins
-        var w = 1000 - m[1] - m[3]; // width
-        var h = 400 - m[0] - m[2]; // height
+    var maxVal = maxValueFromDataSetS(dataSets);
+    console.log("Max  Y-value (for scale calculation): " + maxVal);
 
-    
-
-        var x = d3.time.scale().domain([startDate, stopDate]).range([0, w]);
-
-        // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
-        var y = d3.scale.linear().domain([0, maxVal]).range([h, 0]);
-            // automatically determining max range can work something like this
-            // var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
-
-        // create a line function that can convert data[] into x and y points
-        var line = d3.svg.line()
-            // assign the X function to plot our line as we wish
-            .x(function(d,i) { 
-                // verbose logging to show what's actually being done
-                  console.log('Plotting X value for data point: ' + d.key + ' using index: ' + i + ' to be at: ' + x(d.key) + ' using our xScale.');
-                return x(new Date(d.key)); 
-            })
-            .y(function(d) { 
-                // verbose logging to show what's actually being done
-                 console.log('Plotting Y value for data point: ' + d.value + ' to be at: ' + y(d.value) + " using our yScale.");
-                // return the Y coordinate where we want to plot this datapoint
-                return y(d.value); 
-            });
+    // define dimensions of graph
+    var m = [80, 80, 80, 80]; // margins
+    var w = 1000 - m[1] - m[3]; // width
+    var h = 400 - m[0] - m[2]; // height
 
 
-            console.log( "testing vis ")
-            console.log( d3.entries (dataSets["partyA"]))
+    var x = d3.time.scale().domain([startDate, stopDate]).range([0, w]);
 
-        console.log( line(d3.entries (dataSets["partyA"]))    )
-        console.log( line(d3.entries (dataSets["partyA"])).x[1]    )
-        console.log( line(d3.entries (dataSets["partyA"])).x[2]    )
-        console.log( line(d3.entries (dataSets["partyA"])).x[3]    )
+    // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
+    var y = d3.scale.linear().domain([0, maxVal]).range([h, 0]);
+    // automatically determining max range can work something like this
+    // var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
 
-        // Add an SVG element with the desired dimensions and margin.
-        var graph = d3.select("#graph").append("svg:svg")
-              .attr("width", w + m[1] + m[3])
-              .attr("height", h + m[0] + m[2])
-            .append("svg:g")
-              .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    // create a line function that can convert data[] into x and y points
+    var line = d3.svg.line()
+        // assign the X function to plot our line as we wish
+        .x(function (d, i) {
+            // verbose logging to show what's actually being done
+            console.log('Plotting X value for data point: ' + new Date(d.key) + ' using index: ' + i + ' to be at: ' + x(new Date(d.key)) + ' using our xScale.');
+            return x(new Date(d.key));
+        })
+        .y(function (d) {
+            // verbose logging to show what's actually being done
+            console.log('Plotting Y value for data point: ' + d.value + ' to be at: ' + y(d.value) + " using our yScale.");
+            // return the Y coordinate where we want to plot this datapoint
+            return y(d.value);
+        });
 
-        // create yAxis
-        var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
 
-        // Add the x-axis.
-        graph.append("svg:g")
-              .attr("class", "x axis")
-              .attr("transform", "translate(0," + h + ")")
-              .call(xAxis);
+    console.log("testing vis ")
+    console.log(d3.entries(dataSets["partyA"]))
 
-        // create left yAxis
-        var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
-        // Add the y-axis to the left
-        graph.append("svg:g")
-              .attr("class", "y axis")
-              .attr("transform", "translate(-25,0)")
-              .call(yAxisLeft);
+    // Add an SVG element with the desired dimensions and margin.
+    var graph = d3.select("#graph").append("svg:svg")
+        .attr("width", w + m[1] + m[3])
+        .attr("height", h + m[0] + m[2])
+        .append("svg:g")
+        .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-        // add proper data lines
-        // Add the line by appending an svg:path element with the data line we created above
-        // do this AFTER the axes above so that the line is above the tick-lines
+    /*graph.append("rect")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "pink");*/
 
-        // console.log("COLORS COME HERE!!");
-        // console.log(dataSets);
-        for(partyLines in dataSets){
+//    graph.append()
 
-            //create a svg:g group "line" for path + cricles
-            lineGroup =
-              graph
+    // create yAxis
+    var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
+
+
+
+
+    // x-axis.
+    graph.append("svg:g")
+        .attr("class", "xaxis")
+        .attr("transform", "translate(0," + h + ")")
+        .style("stroke-width", 2)
+        .call(xAxis);
+
+    // yAxis
+    var yAxisLeft = d3.svg.axis().scale(y).ticks(6).orient("left");
+    // Add the y-axis to the left
+    graph.append("svg:g")
+        .attr("class", "y axis")
+        .attr("transform", "translate(-25,0)")
+        .call(yAxisLeft);
+
+
+
+    //add X - grid
+    graph.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + h + ")")
+        .call(make_x_axis(x)
+            .tickSize(-h, 0, 0)
+            .tickFormat("")
+        )
+
+    // Y - grid
+    graph.append("g")
+        .attr("class", "grid")
+        .call(make_y_axis(y)
+            .tickSize(-w, 0, 0)
+            .tickFormat("")
+        )
+
+
+    // add proper data lines
+    // Add the line by appending an svg:path element with the data line we created above
+    // do this AFTER the axes above so that the line is above the tick-lines
+
+    // console.log("COLORS COME HERE!!");
+    // console.log(dataSets);
+    var partyNr = 0;
+
+    for (partyLines in dataSets) {
+
+        //create a svg:g group "line" for path + cricles
+        lineGroup =
+            graph
                 .append('svg:g')
                 .attr('class', 'lineGroup' + partyLines)
                 .attr("id", "lineGroupId" + partyLines);
 
-                  // document.geEle
-            // Append & draw the Linex (if checkbox is true)
-            // if(document.getElementById("inputChkBoxDrawLines").checked){
-              lineGroup.append("svg:path")
-                    .attr("d", line(d3.entries(dataSets[partyLines])))
-                    .attr("id", "idPathPoint" + partyLines)
-                    .attr("class", "path" + partyLines)
-                    .attr("visibility", function(){
-                      return document.getElementById("inputChkBoxDrawLines").checked ? "visible" : "hidden";
-                     })
-                    .style("stroke", color_hash[partyLines])
-                    .style("stroke-width", 2)
-                    .style("fill", "none");
-            // }
+        // document.geEle
+        // Append & draw the Linex (if checkbox is true)
+        // if(document.getElementById("inputChkBoxDrawLines").checked){
+        lineGroup.append("svg:path")
+            .attr("d", line(d3.entries(dataSets[partyLines])))
+            .attr("id", "idPathPoint" + partyLines)
+            .attr("class", "path" + partyLines)
+            .attr("visibility", function () {
+                return document.getElementById("inputChkBoxDrawLines").checked ? "visible" : "hidden";
+            })
+            .style("stroke", color_hash[partyNr])
+            .style("stroke-width", 2)
+            .style("fill", "none");
+        // }
 
-            //here I do draw points
-            // Draw the points
-            dataCirclesGroup =
-               lineGroup
-                 .append('svg:g')
-                 .attr('class', 'circlesgroup' + partyLines);
+        //here I do draw points
+        // Draw the points
+        dataCirclesGroup =
+            lineGroup
+                .append('svg:g')
+                .attr('class', 'circlesgroup' + partyLines);
 
-            var circles = dataCirclesGroup.selectAll('.data-point')
-              .data(d3.entries(dataSets[partyLines]));
+        var circles = dataCirclesGroup.selectAll('.data-point')
+            .data(d3.entries(dataSets[partyLines]));
 
-            circles
-              .enter()
-                .append('svg:circle')
-                  .attr('class', 'data-point')
-                  .style('opacity', 1.0)
-                  .style("stroke", color_hash[partyLines])
-                  .style("stroke-width", 2)
-                  .style("fill", "#FFF")
-                  .attr('cx', function(d) { console.log("drawing circle "); return x(new Date(d.key)) })
-                  .attr('cy', function(d) { return y(d.value) })
-                  .attr('r', function() {
-                    return 3;
-                   // return (data.length <= maxDataPointsForDots) ? pointRadius : 0
-                 })
-        }
+        circles
+            .enter()
+            .append('svg:circle')
+            .attr('class', 'data-point')
+            .style('opacity', 1.0)
+            .style("stroke", color_hash[partyNr])
+            .style("stroke-width", 2)
+            .style("fill", function (d, i) {
+                console.log("fill : " + color_hash[ partyNr]);
+                console.log("i2 : " + partyNr);
+                return color_hash[partyNr]
+            })
+            .attr('cx', function (d) {
+                console.log("drawing circle ");
+                return x(new Date(d.key))
+            })
+            .attr('cy', function (d) {
+                return y(d.value)
+            })
+            .attr('r', function () {
+                return 3;
+                // return (data.length <= maxDataPointsForDots) ? pointRadius : 0
+            })
+
+        partyNr = partyNr + 1;
+    }
 
         //adding the tooltips to be shown on top of data points  (using jquery tipsy)
-        $('svg circle').tipsy({
-          gravity: 'w',
-          html: true,
-          title: function() {
-            var d = this.__data__;
-            var pDate = new Date(d.key);
-            pDate = formatDate(pDate, true);
-            return 'Year: ' + pDate + '<br>Value: ' + d.value;
-          }
-        });
+  /*   $('svg circle').tipsy({
+     gravity: 'w',
+     html: true,
+     title: function() {
+     var d = this.__data__;
+     var pDate = new Date(d.key);
+     pDate = formatDate(pDate, true);
+     return 'Year: ' + pDate + '<br>Value: ' + d.value;
+     }
+     });*/
 
     /*    //add title
-        graph.append("svg:text")
-           .attr("class", "title")
-           .attr("x", 20)
-           .attr("y", -20)
-           .text(function(d){
-              // I simply hate JavaScript
-              // var stringDateFrom = startDate.getFullYear() + "-" + (startDate.getMonth() +1) + "-" + startDate.getDate();
-              var stringDateFrom = formatDate(startDate, false);
-              var stringDateTo = formatDate(stopDate, false);
-              // var stringDateTo = stopDate.getFullYear() + "-" + (stopDate.getMonth() +1) + "-" + stopDate.getDate();
-              return "Ngram: " + ngram + ",     from: " + stringDateFrom  + "      to: " + stringDateTo ;
-         })*/
+     graph.append("svg:text")
+     .attr("class", "title")
+     .attr("x", 20)
+     .attr("y", -20)
+     .text(function(d){
+     // I simply hate JavaScript
+     // var stringDateFrom = startDate.getFullYear() + "-" + (startDate.getMonth() +1) + "-" + startDate.getDate();
+     var stringDateFrom = formatDate(startDate, false);
+     var stringDateTo = formatDate(stopDate, false);
+     // var stringDateTo = stopDate.getFullYear() + "-" + (stopDate.getMonth() +1) + "-" + stopDate.getDate();
+     return "Ngram: " + ngram + ",     from: " + stringDateFrom  + "      to: " + stringDateTo ;
+     })*/
 
 
-        //add legend
-        var legend = graph.append("g")
-          .attr("id", "legendOnChart")
-          .attr("class", "legend")
-          .attr("visibility", "hidden")
-          .attr("x", w-300)
-          .attr("y", 25)
-          .attr("height", 100)
-          .attr("width", 100);
+    //add legend
+    var legend = graph.append("g")
+        .attr("id", "legendOnChart")
+        .attr("class", "legend")
+        .attr("visibility", "hidden")
+        .attr("x", w - 300)
+        .attr("y", 25)
+        .attr("height", 100)
+        .attr("width", 100);
 
 
-     /*
-
-      //here we're preparing the datalabels.
-        // leneg rectangles here
-        legend.selectAll('rect')
-              .data(Object.keys(dataSets))  //this is tricky: we provide a list of dataSets properties.. so parties IDs
-              .enter()
-              .append("rect")
-              .attr("x", w - 65)
-              .attr("y", function(d, i){
-                return i *  20;})
-              .attr("width", 10)
-              .attr("height", 10)
-              .style("fill", function(d) {
-                return color_hash[d];
-              });
-
-        legend.selectAll('text')
-          .data(Object.keys(dataSets))
-          .enter()
-          .append("text")
-          .attr("x", w - 52)
-          .attr("y", function(d, i){ return i *  20 + 9;})
-          .text(function(d) {
-            return partiesIdsNames[d];
-          });
 
 
-          */
+    /*
 
-        // graph.append("svg:path").attr("d", line(data)).attr("class", "path1");
-        // graph.append("svg:path").attr("d", line(data2)).attr("class", "path2");
+     //here we're preparing the datalabels.
+     // leneg rectangles here
+     legend.selectAll('rect')
+     .data(Object.keys(dataSets))  //this is tricky: we provide a list of dataSets properties.. so parties IDs
+     .enter()
+     .append("rect")
+     .attr("x", w - 65)
+     .attr("y", function(d, i){
+     return i *  20;})
+     .attr("width", 10)
+     .attr("height", 10)
+     .style("fill", function(d) {
+     return color_hash[d];
+     });
+
+     legend.selectAll('text')
+     .data(Object.keys(dataSets))
+     .enter()
+     .append("text")
+     .attr("x", w - 52)
+     .attr("y", function(d, i){ return i *  20 + 9;})
+     .text(function(d) {
+     return partiesIdsNames[d];
+     });
+
+
+     */
+
+    // graph.append("svg:path").attr("d", line(data)).attr("class", "path1");
+    // graph.append("svg:path").attr("d", line(data2)).attr("class", "path2");
             
+}
+
+function make_x_axis(x) {
+    return d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .ticks(5)
+}
+
+function make_y_axis(y) {
+    return d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(5)
 }
 

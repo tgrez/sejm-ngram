@@ -8,13 +8,17 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../assets/ico/favicon.png">
 
-    <title>sejm-ngram</title>
+    <title>sejm-ngra 22222 m</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/assets/assets/css/bootstrap.css" rel="stylesheet">
     <!-- Bootstrap theme -->
     <link href="/assets/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="/assets/assets/css/bootstrap-select.css" rel="stylesheet">
+
+
+      <!-- SejmoGram own style-->
+      <link href="/assets/stylesheets/main.css" rel="stylesheet">
 
     <script src="/assets/assets/js/jquery-1.10.2.js"></script>
     <script src="/assets/assets/js/bootstrap.min.js"></script>
@@ -52,7 +56,7 @@
 	</style>
   </head>
 
-  <body  onload="loadForms();">
+  <body  onload="loadForms(); buttonGenVizPressed();">
 
     <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -94,7 +98,7 @@
       <!-- Main jumbotron for a primary marketing message or call to action -->
       <div class="jumbotron">
         <h1>sejm-ngram</h1>
-        <p>version 0.2.0, <a href="changelog.txt"> changelog </a></p>
+        <p>version 0.2.1, <a href="changelog.txt"> changelog </a></p>
       </div>
 
 		<form class="form-horizontal">
@@ -268,7 +272,7 @@
             </ul>
 
 
-			    <div id = "queryDbInfoDiv" style="display:none">
+			   <!-- <div id = "queryDbInfoDiv" style="display:none">
 			        <img src="img/loading.gif" style="width:30px"/>
 			        querying db...
 			    </div>
@@ -276,7 +280,7 @@
 			    <div id = "processDataInfoDiv" style="display:none">
 			        <img src="img/loading.gif" style="width:30px"/>
 			        processing data..
-			    </div>
+			    </div>-->
 
         <!-- JavaScript - functions for manipulating the GUI (could be in sepearated file though) -->
         <script>
@@ -370,14 +374,6 @@
             JavaScript - Main loop of the file - vizualises default ngrams 
         -->
         <script>
-
-            // main loop of our site
-            var ngram = document.getElementById("inputNgram").value;
-            var dateFrom = document.getElementById("inputDateFrom").value;
-            var dateTo = document.getElementById("inputDateTo").value;
-            var xRes = document.getElementById("inputXRes").value; 
-            startVisualization(ngram, dateFrom, dateTo, xRes);
-
         </script>
 
     <!-- Bootstrap core JavaScript
