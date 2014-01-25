@@ -1,4 +1,4 @@
-package org.sejmngram.sejmometr.json.datamodel;
+package org.sejmngram.sejmometr.json.datamodel.klub;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,33 +13,21 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonPropertyOrder({ "type", "content" })
-public class Document {
+@JsonPropertyOrder({ "document" })
+public class KlubResponse {
 
-	@JsonProperty("type")
-	private String type;
-	@JsonProperty("content")
-	private Content content;
+	@JsonProperty("document")
+	private Document document;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	@JsonProperty("type")
-	public String getType() {
-		return type;
+	@JsonProperty("document")
+	public Document getDocument() {
+		return document;
 	}
 
-	@JsonProperty("type")
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	@JsonProperty("content")
-	public Content getContent() {
-		return content;
-	}
-
-	@JsonProperty("content")
-	public void setContent(Content content) {
-		this.content = content;
+	@JsonProperty("document")
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 
 	@Override

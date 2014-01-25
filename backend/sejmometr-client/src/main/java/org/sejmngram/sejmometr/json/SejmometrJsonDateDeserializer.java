@@ -10,6 +10,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
 
+// TODO use ObjectMapper.setDateFormat() instead?
 public class SejmometrJsonDateDeserializer extends JsonDeserializer<Date> {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(

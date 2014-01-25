@@ -12,6 +12,8 @@ public class Configuration {
 	private static final String COMMON_OUTPUT_FILENAME_DATE_PATTERN = "common.json.filename.datePattern";
 	private static final String COMMON_OUTPUT_FILENAME_ENDING = "common.json.filename.ending";
 	private static final String SEJMOMETR_URL = "sejmometr.url";
+	private static final String SEJMOMETR_WYSTAPIENIA = "sejmometr.sejmWystapienia";
+	private static final String SEJMOMETR_KLUBY = "sejmometr.sejmKluby";
 	private static final String SEJMOMETR_ACCEPT_HEADER = "sejmometr.acceptHeader";
 	private static final String SEJMOMETR_ID_LIST = "sejmometr.idList";
 	private static final String SEJMOMETR_IDS_DELIMETER = ",";
@@ -52,6 +54,14 @@ public class Configuration {
 	
 	public String getSejmometrUrl() {
 		return properties.getProperty(SEJMOMETR_URL);
+	}
+	
+	public String getSejmometrWystapienia() {
+		return properties.getProperty(SEJMOMETR_WYSTAPIENIA);
+	}
+	
+	public String getSejmometrKluby() {
+		return properties.getProperty(SEJMOMETR_KLUBY);
 	}
 	
 	public String getSejmometrAcceptHeader() {

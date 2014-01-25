@@ -1,4 +1,4 @@
-package org.sejmngram.sejmometr.json.datamodel;
+package org.sejmngram.sejmometr.json.datamodel.wystapienie;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,23 +11,36 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.sejmngram.sejmometr.json.datamodel.wystapienie.Content;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonPropertyOrder({ "document" })
-public class SejmometrWystapienie {
+@JsonPropertyOrder({ "type", "content" })
+public class Document {
 
-	@JsonProperty("document")
-	private Document document;
+	@JsonProperty("type")
+	private String type;
+	@JsonProperty("content")
+	private Content content;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	@JsonProperty("document")
-	public Document getDocument() {
-		return document;
+	@JsonProperty("type")
+	public String getType() {
+		return type;
 	}
 
-	@JsonProperty("document")
-	public void setDocument(Document document) {
-		this.document = document;
+	@JsonProperty("type")
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	@JsonProperty("content")
+	public Content getContent() {
+		return content;
+	}
+
+	@JsonProperty("content")
+	public void setContent(Content content) {
+		this.content = content;
 	}
 
 	@Override

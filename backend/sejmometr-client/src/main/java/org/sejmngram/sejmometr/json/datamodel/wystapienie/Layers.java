@@ -1,4 +1,4 @@
-package org.sejmngram.sejmometr.json.datamodel;
+package org.sejmngram.sejmometr.json.datamodel.wystapienie;
 
 import java.util.HashMap;
 import java.util.Map;

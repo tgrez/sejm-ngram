@@ -1,4 +1,4 @@
-package org.sejmngram.sejmometr.json.datamodel;
+package org.sejmngram.sejmometr.json.datamodel.wystapienie;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,39 +10,25 @@ import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.sejmngram.sejmometr.json.SejmometrJsonContentDeserializer;
+import org.sejmngram.sejmometr.json.datamodel.wystapienie.Document;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonPropertyOrder({ "data", "layers" })
-public class Content {
+@JsonPropertyOrder({ "document" })
+public class WystapienieResponse {
 
-	@JsonProperty("data")
-	private Data data;
-	@JsonProperty("layers")
-	private Layers layers;
+	@JsonProperty("document")
+	private Document document;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	@JsonProperty("data")
-	public Data getData() {
-		return data;
+	@JsonProperty("document")
+	public Document getDocument() {
+		return document;
 	}
 
-	@JsonProperty("data")
-	@JsonDeserialize(using = SejmometrJsonContentDeserializer.class)
-	public void setData(Data data) {
-		this.data = data;
-	}
-
-	@JsonProperty("layers")
-	public Layers getLayers() {
-		return layers;
-	}
-
-	@JsonProperty("layers")
-	public void setLayers(Layers layers) {
-		this.layers = layers;
+	@JsonProperty("document")
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 
 	@Override
@@ -69,5 +55,5 @@ public class Content {
 	public void setAdditionalProperties(String name, Object value) {
 		this.additionalProperties.put(name, value);
 	}
-
+	
 }
