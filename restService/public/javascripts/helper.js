@@ -45,19 +45,6 @@ function parseDate(csvDateString){
     return nGramDate;
 }
 
-
-/* Famous dolar function, -> document.getElementById*/
-function $(element) {
-  if (arguments.length > 1) {
-    for (var i = 0, elements = [], length = arguments.length; i < length; i++)
-      elements.push($(arguments[i]));
-    return elements;
-  }
-  if (Object.isString(element))
-    element = document.getElementById(element);
-  return Element.extend(element);
-}
-
 /* Function for replacing spaces from 2- and mode- grams into %20*/
 function checkNgramUrlSpaces(ngram){
     return ngram.replace(/\s/g,"%20");

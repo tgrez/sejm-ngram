@@ -5,6 +5,8 @@
 /* Some global objects go here!*/
 var dataSets = null;
 
+var HOST = "localhost"
+
 var color_hash = {  "0": "green",
                     "1" :  "orange",
                     "2" : "blue",
@@ -107,12 +109,13 @@ function maxValueFromDataSetS(dataSets){
     return maxVal;
  }
 
-function startJsonApiBasedVisualization( nGramToVisualize, datefrom, dateto, xRes){
+function startJsonApiBasedVisualization( nGramToVisualize){
 
     console.log("startJsonApiBasedVisualization() method called");
-    var url = "http://192.168.1.200:9000/api/ngrams/lista"
+    var url = "http://" + HOST +  ":9000/api/ngrams/" + nGramToVisualize;
     d3.json( url, function(error, json) {
-        console.log("received:" + json);
+        console.log("received:");
+        console.log( json);
 
 
         if (error){
@@ -124,21 +127,9 @@ function startJsonApiBasedVisualization( nGramToVisualize, datefrom, dateto, xRe
             console.log(json)
         }
 
+        dataSets = json;
 
-        dataSets = {
-            "partyA":{
-                "2012-05-02": 5,
-                "2012-05-03": 3,
-                "2012-05-04": 9,
-                "2012-05-05": 11
-            },
-            "partyB":{
-                "2012-05-02": 11,
-                "2012-05-03": 9,
-                "2012-05-04": 3,
-                "2012-05-05": 5
-            }
-        };
+        var maxDate = getMaxDateFromDataSet( dataSets );
 
         console.log("date:" + new Date("2012-05-02"));
 
@@ -150,9 +141,8 @@ function startJsonApiBasedVisualization( nGramToVisualize, datefrom, dateto, xRe
 //        console.log( d3.entries( dataSets[ ]))
 
         console.log("try to visualize");
-//        var startDate = parseDate( "2012-05-02");
-        var startDate = new Date("2012-05-02");
-        var endDate = parseDate( "2012-05-05");
+        var startDate = new Date("2014-01-26");
+        var endDate = parseDate( "2014-02-04");
 
         console.log ( startDate)
         console.log ( endDate)
@@ -301,6 +291,7 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
         .x(function (d, i) {
             // verbose logging to show what's actually being done
             console.log('Plotting X value for data point: ' + new Date(d.key) + ' using index: ' + i + ' to be at: ' + x(new Date(d.key)) + ' using our xScale.');
+//            console.log('Plotting X value for data point: ' + d.key + ' using index: ' + i + ' to be at: ' + x((d.key)) + ' using our xScale.');
             return x(new Date(d.key));
         })
         .y(function (d) {
@@ -525,5 +516,30 @@ function make_y_axis(y) {
         .scale(y)
         .orient("left")
         .ticks(5)
+}
+
+/** *
+ *  "partyA":{
+         "2012-05-02": 5,
+         "2012-05-03": 3,
+         "2012-05-04": 9,
+         "2012-05-05": 11
+     },
+ "partyB":{
+         "2012-05-02": 11,
+         "2012-05-03": 9,
+         "2012-05-04": 3,
+         "2012-05-05": 5
+     }
+ };
+ */
+function getMaxDateFromDataSet( dataSet){
+    var maxDate;
+
+    console.log( " get MaData From Set");
+
+    for ( var party in dataSet ){
+        console.log( party);
+    }
 }
 
