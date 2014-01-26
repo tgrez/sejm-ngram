@@ -5,8 +5,6 @@
 /* Some global objects go here!*/
 var dataSets = null;
 
-var HOST = "localhost"
-
 var color_hash = {  "0": "green",
                     "1" :  "orange",
                     "2" : "blue",
@@ -113,47 +111,41 @@ function maxValueFromDataSetS(dataSets){
     return maxVal;
  }
 
+function onAjaxSuccessVisualize(json) {
+    console.log("received:");
+    console.log( json);
+
+    dataSets = json;
+    var maxDate = getMaxDateFromDataSet( dataSets );
+
+    console.log("date:" + new Date("2012-05-02"));
+
+    for (party in dataSets){
+    //            console.log("party: " + party)
+        console.log(d3.entries(dataSets[party]))
+    }
+    //        console.log( d3.entries( dataSets[ ]))
+
+    console.log("try to visualize");
+    var startDate = new Date("2014-01-26");
+    var endDate = parseDate( "2014-02-04");
+
+    console.log ( startDate)
+    console.log ( endDate)
+
+    visualize(null, startDate, endDate, null, null);
+}
+
 function startJsonApiBasedVisualization( nGramToVisualize){
-
-    console.log("startJsonApiBasedVisualization() method called");
-    var url = "http://" + HOST +  ":9000/api/ngrams/" + nGramToVisualize;
-    d3.json( url, function(error, json) {
-        console.log("received:");
-        console.log( JSON.stringify(json, undefined, 2));
-
-
-        if (error){
+    $.ajax({
+        url: "api/ngrams/" + nGramToVisualize,
+        cache: false,
+        success: onAjaxSuccessVisualize,
+        fail: function (json) {
             console.log("error occured!");
             return console.warn(error);
         }
-        else {
-            console.log("no error!");
-            console.log(json)
-        }
-
-        dataSets = json;
-
-        var maxDate = getMaxDateFromDataSet( dataSets );
-
-        console.log("date:" + new Date("2012-05-02"));
-
-
-        for (party in dataSets){
-//            console.log("party: " + party)
-            console.log(d3.entries(dataSets[party]))
-        }
-//        console.log( d3.entries( dataSets[ ]))
-
-        console.log("try to visualize");
-        var startDate = new Date("2014-01-26");
-        var endDate = parseDate( "2014-02-04");
-
-        console.log ( startDate)
-        console.log ( endDate)
-
-        visualize(null, startDate, endDate, null, null);
-
-    }   );
+    });
 }
 
 /* 
