@@ -58,28 +58,12 @@ public class Ngrams extends Controller {
 
     static String[] partyNames = new String[]{"PIS", "PO", "SLD"};
 
-    /**
-     * Should return
-     * {
-     *
-     *
-     "partyA":{
-         "2012-05-02": 5,
-         "2012-05-03": 3,
-         "2012-05-04": 9,
-         "2012-05-05": 11
-     },
-     "partyB":{
-         "2012-05-02": 11,
-         "2012-05-03": 9,
-         "2012-05-04": 3,
-         "2012-05-05": 5
-     }
-     };
 
-     *
+
+    /**
+     * That's the json it generates
      {
-         partiesNgrams: [
+         partiesNgramses: [
 
              {
                  "partyA":[
@@ -104,6 +88,18 @@ public class Ngrams extends Controller {
     public static Result getNgram( String ngramName) {
         Logger.info("get Ngram:" + ngramName);
 
+        GetNgramResponse response = getFakeNgramResponse( 1, 15, 15);
+
+        Logger.debug( Json.toJson( response ).toString() );
+        return ok(Json.toJson(response));
+    }
+
+
+    /** Fake, generates
+     * @param interval interval between dates (in days)
+     * @param  nrDays the difference between last date and first date (today)
+     * @param maxValue maxValue of single ngram occurences*/
+    private static GetNgramResponse getFakeNgramResponse(int interval, int nrDays, int maxValue){
         SimpleDateFormat sf = new SimpleDateFormat( "yyyy-MM-dd");
 
         GetNgramResponse response = new GetNgramResponse();
@@ -115,21 +111,18 @@ public class Ngrams extends Controller {
             pNgrams.listDates = new ArrayList<ListDate>();
             pNgrams.name = partyN;
 
-            Date[] datesForParty = generateDays( new Date(), 1, 10);
+            Date[] datesForParty = generateDays( new Date(), interval, nrDays);
             for ( Date date : datesForParty){
                 ListDate lDate = new ListDate();
                 lDate.date = sf.format( date );
-                lDate.count = getRandomInt( 15 );
+                lDate.count = getRandomInt( maxValue );
 
                 pNgrams.listDates.add( lDate );
             }
-
             response.partiesNgramses.add( pNgrams);
-
         }
 
-        Logger.debug( Json.toJson( response ).toString() );
-        return ok(Json.toJson(response));
+        return response;
     }
 
     private static int getRandomInt( int max){

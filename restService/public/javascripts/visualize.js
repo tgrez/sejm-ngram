@@ -59,13 +59,13 @@ function create_legend(partiesIdNames){
                 PartyName_1;
             </div>
   */
-  for(partyLines in dataSets){
-    var partyName = partiesIdNames[partyLines];
+  for(partyNr in dataSets){
+    var partyName = partiesIdNames[partyNr];
 
 
     var divTag = document.createElement("div");
-      divTag.id = "legendDiv" + partyLines; 
-      divTag.setAttribute("style", "color:" + color_hash[partyLines]);
+      divTag.id = "legendDiv" + partyNr;
+      divTag.setAttribute("style", "color:" + color_hash[partyNr]);
       divTag.innerHTML = partyName;
       var inputTag = document.createElement("input");
         inputTag.setAttribute("type", "checkbox");
@@ -98,12 +98,12 @@ function extractPartiesId(jsonConfResponse){
 This one finds max val in the whole dataSets structure;
 It's used for scaling the graph
 */
-function maxValueFromDataSetS(dataSets){
+function getMaxValueFromDataSetS(dataSets){
     var maxVal = 0;
 
-    for (i in dataSets["partiesNgramses"]){
-        for (j in dataSets["partiesNgramses"][i]["listDates"]){
-            var value = dataSets["partiesNgramses"][i]["listDates"][j]["count"];
+    for (i in dataSets){
+        for (j in dataSets[i]["listDates"]){
+            var value = dataSets[i]["listDates"][j]["count"];
             if ( value > maxVal) maxVal = value;
         }
     }
@@ -115,23 +115,11 @@ function onAjaxSuccessVisualize(json) {
     console.log("received:");
     console.log( json);
 
-    dataSets = json;
-    var maxDate = getMaxDateFromDataSet( dataSets );
-
-    console.log("date:" + new Date("2012-05-02"));
-
-    for (party in dataSets){
-    //            console.log("party: " + party)
-        console.log(d3.entries(dataSets[party]))
-    }
-    //        console.log( d3.entries( dataSets[ ]))
+    dataSets = json["partiesNgramses"];
 
     console.log("try to visualize");
-    var startDate = new Date("2014-01-26");
-    var endDate = parseDate( "2014-02-04");
-
-    console.log ( startDate)
-    console.log ( endDate)
+    var startDate = getMinDateFromDataSet( dataSets );
+    var endDate = getMaxDateFromDataSet( dataSets );
 
     visualize(null, startDate, endDate, null, null);
 }
@@ -211,9 +199,9 @@ function startVisualization(nGramToVisualize, datefrom, dateto, xRes){
 
       useAllDays = document.getElementById("inputChkUseAllDataPoints").checked; //checks inputChkUseAllDataPoints checkbox
 
-      for(partyLines in partiesIdsNames){
-        dataSets[partyLines] = getNGramsListFromJSON(jsonResponse, startDate, 
-                        stopDate, step, partyLines, nGramToVisualize, useAllDays);
+      for(partyNr in partiesIdsNames){
+        dataSets[partyNr] = getNGramsListFromJSON(jsonResponse, startDate,
+                        stopDate, step, partyNr, nGramToVisualize, useAllDays);
       }
       console.log("processing the retrieved data.. stop");
       
@@ -228,10 +216,10 @@ function startVisualization(nGramToVisualize, datefrom, dateto, xRes){
       if(!document.getElementById("inputChkBoxIncludeZeros").checked){
         console.log("Wr are erasing the dates with 0 ngram occurencies");
         // console.log(dataSets);
-        for(partyLines in dataSets){
-          for(dataPoints in dataSets[partyLines]){
-            if(dataSets[partyLines][dataPoints] == 0){
-              delete dataSets[partyLines][dataPoints];
+        for(partyNr in dataSets){
+          for(dataPoints in dataSets[partyNr]){
+            if(dataSets[partyNr][dataPoints] == 0){
+              delete dataSets[partyNr][dataPoints];
             }
           }
         }
@@ -265,7 +253,7 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
     //firstly, we should clean the last viz
     document.getElementById("graph").innerHTML = "";
 
-    var maxVal = maxValueFromDataSetS(dataSets);
+    var maxVal = getMaxValueFromDataSetS(dataSets);
     console.log("Max  Y-value (for scale calculation): " + maxVal);
 
     // define dimensions of graph
@@ -286,15 +274,15 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
         // assign the X function to plot our line as we wish
         .x(function (d, i) {
             // verbose logging to show what's actually being done
-            console.log('Plotting X value for data point: ' + new Date(d.key) + ' using index: ' + i + ' to be at: ' + x(new Date(d.key)) + ' using our xScale.');
+            console.log('Plotting X value for data point: ' + new Date( d.date ) + ' using index: ' + i + ' to be at: ' + x(new Date(d.date )) + ' using our xScale.');
 //            console.log('Plotting X value for data point: ' + d.key + ' using index: ' + i + ' to be at: ' + x((d.key)) + ' using our xScale.');
-            return x(new Date(d.key));
+            return x(new Date(d.date));
         })
         .y(function (d) {
             // verbose logging to show what's actually being done
-            console.log('Plotting Y value for data point: ' + d.value + ' to be at: ' + y(d.value) + " using our yScale.");
+            console.log('Plotting Y value for data point: ' + d.count + ' to be at: ' + y(d.count) + " using our yScale.");
             // return the Y coordinate where we want to plot this datapoint
-            return y(d.value);
+            return y(d.count);
         });
 
 
@@ -308,18 +296,8 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
         .append("svg:g")
         .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-    /*graph.append("rect")
-        .attr("width", "100%")
-        .attr("height", "100%")
-        .attr("fill", "pink");*/
-
-//    graph.append()
-
     // create yAxis
     var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
-
-
-
 
     // x-axis.
     graph.append("svg:g")
@@ -361,25 +339,26 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
     // do this AFTER the axes above so that the line is above the tick-lines
 
     // console.log("COLORS COME HERE!!");
-    // console.log(dataSets);
-    var partyNr = 0;
 
-    for (partyLines in dataSets) {
+    console.log("Presenting the Data")
+    for (partyNr in dataSets) {
+        console.log( dataSets[partyNr]["listDates"])
 
         //create a svg:g group "line" for path + cricles
         lineGroup =
             graph
                 .append('svg:g')
-                .attr('class', 'lineGroup' + partyLines)
-                .attr("id", "lineGroupId" + partyLines);
+                .attr('class', 'lineGroup' + partyNr)
+                .attr("id", "lineGroupId" + partyNr);
 
         // document.geEle
         // Append & draw the Linex (if checkbox is true)
         // if(document.getElementById("inputChkBoxDrawLines").checked){
         lineGroup.append("svg:path")
-            .attr("d", line(d3.entries(dataSets[partyLines])))
-            .attr("id", "idPathPoint" + partyLines)
-            .attr("class", "path" + partyLines)
+//            .attr("d", line(d3.entries(dataSets[partyNr])))
+            .attr("d", line( dataSets[partyNr]["listDates"] ))
+            .attr("id", "idPathPoint" + partyNr)
+            .attr("class", "path" + partyNr)
             .attr("visibility", function () {
                 return document.getElementById("inputChkBoxDrawLines").checked ? "visible" : "hidden";
             })
@@ -393,10 +372,11 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
         dataCirclesGroup =
             lineGroup
                 .append('svg:g')
-                .attr('class', 'circlesgroup' + partyLines);
+                .attr('class', 'circlesgroup' + partyNr);
 
         var circles = dataCirclesGroup.selectAll('.data-point')
-            .data(d3.entries(dataSets[partyLines]));
+            .data( dataSets[partyNr]["listDates"] );
+//            .data(d3.entries(dataSets[partyNr]));
 
         circles
             .enter()
@@ -412,17 +392,15 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
             })
             .attr('cx', function (d) {
                 console.log("drawing circle ");
-                return x(new Date(d.key))
+                return x(new Date(d.date))
             })
             .attr('cy', function (d) {
-                return y(d.value)
+                return y(d.count)
             })
             .attr('r', function () {
                 return 3;
                 // return (data.length <= maxDataPointsForDots) ? pointRadius : 0
             })
-
-        partyNr = partyNr + 1;
     }
 
         //adding the tooltips to be shown on top of data points  (using jquery tipsy)
@@ -529,13 +507,35 @@ function make_y_axis(y) {
      }
  };
  */
-function getMaxDateFromDataSet( dataSet){
-    var maxDate;
 
-    console.log( " get MaData From Set");
+/** Array of "partiesNgramses" (a values of key "partiesNgramses" should be provided*/
+function getMaxDateFromDataSet( arrayPartyNgrams ){
+    maxDate = new Date("0000-01-01");
 
-    for ( var party in dataSet ){
-        console.log( party);
+    for ( partyIter in arrayPartyNgrams ){
+        var partyNgram = arrayPartyNgrams[partyIter];
+        for ( dateIter in partyNgram["listDates"]){
+            var nGramValue = partyNgram["listDates"][ dateIter ]["date"];
+            var nGramDate =  new Date( nGramValue);
+            if ( maxDate < nGramDate ) maxDate = nGramDate
+        }
     }
+    return maxDate;
+}
+
+
+/** Array of "partiesNgramses" (a values of key "partiesNgramses" should be provided*/
+function getMinDateFromDataSet( arrayPartyNgrams ){
+    var minDate = new Date("2999-01-01");
+
+    for ( partyIter in arrayPartyNgrams ){
+        var partyNgram = arrayPartyNgrams[partyIter];
+        for ( dateIter in partyNgram["listDates"]){
+            var nGramValue = partyNgram["listDates"][ dateIter ]["date"];
+            var nGramDate =  new Date( nGramValue);
+            if ( minDate > nGramDate ) minDate = nGramDate
+        }
+    }
+    return minDate;
 }
 
