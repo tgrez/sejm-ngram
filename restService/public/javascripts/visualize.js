@@ -102,10 +102,14 @@ It's used for scaling the graph
 */
 function maxValueFromDataSetS(dataSets){
     var maxVal = 0;
-    for(a in dataSets)
-        for(b in dataSets[a])
-            if(dataSets[a][b] > maxVal)
-                maxVal = dataSets[a][b]
+
+    for (i in dataSets["partiesNgramses"]){
+        for (j in dataSets["partiesNgramses"][i]["listDates"]){
+            var value = dataSets["partiesNgramses"][i]["listDates"][j]["count"];
+            if ( value > maxVal) maxVal = value;
+        }
+    }
+
     return maxVal;
  }
 
@@ -115,7 +119,7 @@ function startJsonApiBasedVisualization( nGramToVisualize){
     var url = "http://" + HOST +  ":9000/api/ngrams/" + nGramToVisualize;
     d3.json( url, function(error, json) {
         console.log("received:");
-        console.log( json);
+        console.log( JSON.stringify(json, undefined, 2));
 
 
         if (error){
