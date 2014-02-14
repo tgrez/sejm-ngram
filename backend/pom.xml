@@ -13,6 +13,7 @@
     <modules>
         <module>json-common</module>
         <module>sejmometr-client</module>
+        <module>database-fetcher</module>
     </modules>
 
     <build>
