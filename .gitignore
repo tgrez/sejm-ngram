@@ -22,3 +22,6 @@ target/
 
 # java idea files
 .idea/
+
+# downloaded data in common format from e.g. sejmometr
+downloadedData/

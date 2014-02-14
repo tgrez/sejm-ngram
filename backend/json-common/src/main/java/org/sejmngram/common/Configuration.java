@@ -11,6 +11,7 @@ public class Configuration {
 
 	private static final String COMMON_OUTPUT_FILENAME_DATE_PATTERN = "common.json.filename.datePattern";
 	private static final String COMMON_OUTPUT_FILENAME_ENDING = "common.json.filename.ending";
+	private static final String OUTPUT_DIR = "common.json.outputDir";
 	private static final String SEJMOMETR_URL = "sejmometr.url";
 	private static final String SEJMOMETR_WYSTAPIENIA = "sejmometr.sejmWystapienia";
 	private static final String SEJMOMETR_KLUBY = "sejmometr.sejmKluby";
@@ -87,6 +88,10 @@ public class Configuration {
 			}
 		}
 		return result;
+	}
+
+	public String getOutputDir() {
+		return properties.getProperty(OUTPUT_DIR);
 	}
 
 }
