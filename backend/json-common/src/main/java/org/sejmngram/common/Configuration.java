@@ -24,7 +24,7 @@ public class Configuration {
 	private Configuration() {
 		properties = new Properties();
 		try {
-			properties.load(new FileInputStream("common.properties"));
+			properties.load(new FileInputStream(System.getProperty("prop.file.loc")));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

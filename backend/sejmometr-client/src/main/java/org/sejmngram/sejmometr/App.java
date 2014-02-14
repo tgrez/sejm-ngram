@@ -17,7 +17,6 @@ public class App {
 	
 	public static void main(String[] args) {
 		try {
-			// TODO how to read properties file
 			Map<Integer, String> responses = new HashMap<Integer, String>();
 			for (Integer id : Configuration.getInstance().getSejmometrIds()) {
 				responses.put(id, sejmometrRestClient.get(id));
