@@ -3,19 +3,19 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-        <groupId>org.sejmngram</groupId>
+        <groupId>sejm-ngram</groupId>
         <artifactId>sejm-ngram</artifactId>
         <version>1.0</version>
     </parent>
 	
-	<groupId>org.sejmngram</groupId>
+	<groupId>sejm-ngram</groupId>
 	<artifactId>database-inserter</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>database-inserter</name>
 	<dependencies>
 		<dependency>
-			<groupId>org.sejmngram</groupId>
+			<groupId>sejm-ngram</groupId>
 			<artifactId>json-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
