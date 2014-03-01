@@ -37,5 +37,10 @@ public class JsonProcessor {
 				new FileOutputStream(new File(filename), true),
 				jsonPojo);
 	}
+
+    public static <T> T transformFromFile( File file, Class<T> clazz) throws IOException {
+        return objectMapper.readValue( file, clazz);
+
+    }
 	
 }

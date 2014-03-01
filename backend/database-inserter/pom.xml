@@ -41,7 +41,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.sejmngram.sejmometr.Inserter</mainClass>
+                            <mainClass>org.sejmngram.dbinserter.Inserter</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

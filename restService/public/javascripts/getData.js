@@ -84,7 +84,9 @@ of a length l = [(stopDate - startDate) / "step"]
                 if FALSE - then ngrams are grouped into "step" number of dates, being spread equally
                 from starDate to stopDate
 
-[ 
+[
+    parties :[
+ ]
     {date: "2022-22-22", nrngrams: 45},
     {date: "2022-22-22", nrngrams: 45},
     ...
