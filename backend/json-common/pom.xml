@@ -8,7 +8,7 @@
         <version>1.0</version>
     </parent>
 	
-	<groupId>sejm-ngram</groupId>
+
 	<artifactId>json-common</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
