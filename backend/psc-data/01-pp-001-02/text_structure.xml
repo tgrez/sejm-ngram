@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teiCorpus xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0">
+ <xi:include href="PSC_header.xml"/>
+ <TEI>
+  <xi:include href="header.xml"/>
+  <text>
+
+  <front>
+   <div type="contents">
+    <list>
+    <item xml:id="txt_4-item" n="4">
+     <title xml:lang="pl">Wybór składu osobowego Komisji Regulaminowej i Spraw Poselskich.</title>
+     <ptr target="#txt_3-div"/>
+     <ptr target="#txt_5-div"/>
+     <ptr target="#txt_7-div"/>
+     <ptr target="#txt_9-div"/>
+     <ptr target="#txt_11-div"/>
+     <ptr target="#txt_13-div"/>
+     <ptr target="#txt_15-div"/>
+    </item>
+
+    </list>
+   </div>
+  </front> 
+  <body>
+     <div xml:id="div-1">
+      <u xml:id="u-1.1" who="#komentarz">(Wznowienie posiedzenia o godz. 15 min 05)</u>
+      <u xml:id="u-1.2" who="#komentarz">(Na posiedzeniu przewodniczy marszałek Sejmu Wiesław Chrzanowski)</u>
+     </div>
+     <div xml:id="div-2">
+      <u xml:id="u-2.1" who="#Marszalek">Proszę państwa, otwieram drugą część pierwszego posiedzenia Sejmu pierwszej kadencji.</u>
+      <u xml:id="u-2.2" who="#Marszalek">Wznawiam obrady.</u>
+      <u xml:id="u-2.3" who="#Marszalek">W imieniu Prezydium Sejmu - po porozumieniu z Konwentem Seniorów - proponuję następujący porządek dzienny</u>
+      <u xml:id="u-2.4" who="#Marszalek">3. Wybór sekretarzy Sejmu.</u>
+      <u xml:id="u-2.5" who="#Marszalek">4. Wybór składu osobowego Komisji Regulaminowej i Spraw Poselskich.</u>
+      <u xml:id="u-2.6" who="#Marszalek">Równocześnie proponuję, aby pismo pana prezesa Rady Ministrów w sprawie ustąpienia rządu Sejm rozpatrzył w trzeciej części pierwszego posiedzenia Sejmu, w dniu 5 grudnia br. Sprawa ta była przedmiotem porozumienia na posiedzeniu Konwentu Seniorów i takie stanowisko zostało przyjęte. Chodzi o to, że zarówno ja, jak i Konwent Seniorów podejmiemy próbę przeprowadzenia pewnych rozmów dla wyjaśnienia sprawy stanowiska pana prezydenta. Państwo znają list prezydenta w tej sprawie.</u>
+      <u xml:id="u-2.7" who="#Marszalek">W tym samym dniu, w dniu 5 grudnia, Sejm dokona wyboru Trybunału Stanu. Byłaby to trzecia część pierwszego posiedzenia ze względu na to, że w tej chwili nie mamy jeszcze wszystkich danych dotyczących ewentualnych kandydatów. Zasada podziału została ustalona na posiedzeniu Konwentu Seniorów. Istnieje poza tym konieczność sprawdzenia pewnych wymogów formalnych przewidzianych w ustawie o Trybunale Stanu.</u>
+      <u xml:id="u-2.8" who="#Marszalek">Jeżeli nie usłyszę sprzeciwu, uznam, że Sejm propozycję przyjął.</u>
+      <u xml:id="u-2.9" who="#Marszalek">Czy ktoś się zgłasza w tej sprawie?</u>
+      <u xml:id="u-2.10" who="#Marszalek">Nie widzę.</u>
+      <u xml:id="u-2.11" who="#Marszalek">Przystępujemy do rozpatrzenia punktu 3 porządku dziennego: Wybór sekretarzy Sejmu.</u>
+      <u xml:id="u-2.12" who="#Marszalek">Wniosek Prezydium Sejmu w tej sprawie zawarty jest w doręczonym posłankom i posłom druku sejmowym nr 2.</u>
+      <u xml:id="u-2.13" who="#Marszalek">Ponieważ projekt uchwały Sejmu Rzeczypospolitej w sprawie wyboru sekretarzy Sejmu został doręczony, nie będziemy go odczytywać.</u>
+      <u xml:id="u-2.14" who="#Marszalek">Czy w tej sprawie ktoś z posłanek i posłów pragnie zabrać głos?</u>
+      <u xml:id="u-2.15" who="#GlosyZSali">(Nie otrzymaliśmy jeszcze druków.)</u>
+      <u xml:id="u-2.16" who="#Marszalek">Są dopiero w tej chwili rozdawane, przepraszam. To może chwilę poczekamy. To jest projekt uzgodniony na posiedzeniu Konwentu Seniorów.</u>
+      <u xml:id="u-2.17" who="#Marszalek">Zdaje się, że już wszyscy z państwa otrzymali projekt listy.</u>
+      <u xml:id="u-2.18" who="#Marszalek">Czy ktoś z państwa chciałby zabrać głos w sprawie listy kandydatów na sekretarzy?</u>
+      <u xml:id="u-2.19" who="#Marszalek">Czy jeszcze może ktoś jej nie otrzymał?</u>
+      <u xml:id="u-2.20" who="#Marszalek">W takim razie chciałbym przypomnieć, że Sejm, zgodnie z art. 21 ust. 1 tymczasowego regulaminu Sejmu, wybiera 14 sekretarzy w głosowaniu łącznym, naturalnie jeśli została uzgodniona lista kandydatów.</u>
+      <u xml:id="u-2.21" who="#Marszalek">Przystępujemy do głosowania.</u>
+      <u xml:id="u-2.22" who="#Marszalek">Kto z posłanek i posłów jest za przyjęciem przedstawionego projektu uchwały w sprawie wyboru sekretarzy Sejmu, zechce podnieść rękę i nacisnąć przycisk.</u>
+      <u xml:id="u-2.23" who="#Marszalek">Kto jest przeciw?</u>
+      <u xml:id="u-2.24" who="#Marszalek">Kto się wstrzymał od głosowania?</u>
+      <u xml:id="u-2.25" who="#Marszalek">Stwierdzam, że dokonany został wybór sekretarzy Sejmu większością 396 głosów, przy 3 posłach głosujących przeciw i 5 wstrzymujących się.</u>
+      <u xml:id="u-2.26" who="#Marszalek">Na sekretarzy dzisiejszego posiedzenia powołuję panów posłów Marka Domina i Andrzeja Potockiego.</u>
+      <u xml:id="u-2.27" who="#Marszalek">Protokół i listę mówców prowadzić będzie pan poseł Andrzej Potocki.</u>
+      <u xml:id="u-2.28" who="#Marszalek">Proszę panów posłów sekretarzy o zajęcie miejsc przy stole prezydialnym.</u>
+      <u xml:id="u-2.29" who="#Marszalek">Przystępujemy do rozpatrzenia punktu 4 porządku dziennego: Wybór składu osobowego Komisji Regulaminowej i Spraw Poselskich.</u>
+      <u xml:id="u-2.30" who="#Marszalek">Wniosek Prezydium Sejmu w sprawie wyboru składu osobowego komisji zawarty jest w doręczonym państwu druku nr 3. Z tym że chcę wyjaśnić, że dodatkowo został zgłoszony poseł Jan Kulas przez klub poselski ˝Solidarności˝, natomiast został wycofany wniosek o powołanie pana posła Lecha Mażewskiego z Klubu Parlamentarnego Kongresu Liberalno-Demokratycznego.</u>
+      <u xml:id="u-2.31" who="#Marszalek">Czy ktoś z posłanek i posłów pragnie zabrać głos w tej sprawie?</u>
+      <u xml:id="u-2.32" who="#Marszalek">Proszę bardzo.</u>
+     </div>
+     <div xml:id="div-3">
+      <u xml:id="u-3.1" who="#PoselJacekSoska">Panie Marszałku! Wysoka Izbo! Poseł Jacek Soska. Jestem troszeczkę zdziwiony, nie wiem, jakie były dokładne ustalenia Konwentu Seniorów, natomiast kandydatów z PSL jest dwóch, z Kongresu Liberalno-Demokratycznego - trzech, i z KPN - trzech, a te ugrupowania mają mniejszą liczbę posłów. Przepraszam bardzo, mam wyraźnie napisane: KPN - nr 21, 22, 23. I chyba tu jest KL-D, to jest Kongres Liberalno-Demokratyczny, a nie klub...</u>
+      <u xml:id="u-3.2" who="#PoselJacekSoska">(Głosy z sali: Przed chwilą zrezygnował.) Przepraszam.</u>
+     </div>
+     <div xml:id="div-4">
+      <u xml:id="u-4.1" who="#Marszalek">Chciałem powiedzieć, że o ile chodzi o KL-D, przed chwilą podałem do wiadomości, że jest wycofany z listy pan poseł Lech Mażewski, więc pozostaje dwóch...</u>
+      <u xml:id="u-4.2" who="#Marszalek">Proszę, pan poseł chciał zabrać głos.</u>
+     </div>
+     <div xml:id="div-5">
+      <u xml:id="u-5.1" who="#PoselBogdanBorusewicz">Panie Marszałku! Wysoka Izbo! Na posiedzeniu Konwentu Seniorów przyjęliśmy zasady, które miały być zastosowane przy głosowaniu nad tą sprawą. Otóż te zasady wyglądały następująco. Kluby, które liczą powyżej 50 posłów, miały mieć możliwość zgłoszenia trzech kandydatów do Komisji Regulaminowej i Spraw Poselskich, kluby, które liczą od 30 do 49 członków, miały możliwość zgłoszenia dwóch kandydatów, poniżej 30 - po jednym kandydacie. Z tym że jeżeli liczba posłów wynosiła więcej niż 10, miało być zaokrąglenie w górę. Ponieważ te zasady nie zostały zastosowane, proszę pana marszałka o wyjaśnienie.</u>
+     </div>
+     <div xml:id="div-6">
+      <u xml:id="u-6.1" who="#Marszalek">W jakim zakresie?</u>
+     </div>
+     <div xml:id="div-7">
+      <u xml:id="u-7.1" who="#PoselBogdanBorusewicz">Z ZChN jest trzech kandydatów. Prosiłbym pana...</u>
+      <u xml:id="u-7.2" who="#GlosyZSali">(Z KPN.) (Głos z sali: Przedstawiciel ˝piątki˝.)</u>
+     </div>
+     <div xml:id="div-8">
+      <u xml:id="u-8.1" who="#Marszalek">Nie, z ZChN jest rzeczywiście trzech kandydatów.</u>
+     </div>
+     <div xml:id="div-9">
+      <u xml:id="u-9.1" who="#PoselBogdanBorusewicz">Rozumiem. Prosiłbym pana marszałka o wyjaśnienie tej sprawy.</u>
+     </div>
+     <div xml:id="div-10">
+      <u xml:id="u-10.1" who="#Marszalek">Proszę państwa, jest tutaj rzeczywiście pomyłka, bo nawet klub zawiadomił, że skreślił posła Włodzimierza Blajerskiego, bo to były wstępne... to jest pomyłka Kancelarii Sejmu. Natomiast jeśli chodzi o KPN, to jest to uzasadnione, bo klub ten liczy w tej chwili powyżej 50 członków.</u>
+     </div>
+     <div xml:id="div-11">
+      <u xml:id="u-11.1" who="#PoselBogdanBorusewicz">Nie brałem oczywiście pod uwagę KPN. Chodziło mi o ZChN. To wyjaśnienie mnie satysfakcjonuje.</u>
+     </div>
+     <div xml:id="div-12">
+      <u xml:id="u-12.1" who="#Marszalek">Dziękuję.</u>
+     </div>
+     <div xml:id="div-13">
+      <u xml:id="u-13.1" who="#PoselKrzysztofKrol">Przepraszam, panie marszałku, jest jedna rzecz do wyjaśnienia. Z ław Unii Demokratycznej słyszałem bardzo wyraźne głosy, że KPN zachowuje się nieuczciwie. Chciałbym wobec tego oświadczyć, iż klub KPN liczy 5l posłów i mam nadzieję, że Kancelaria Sejmu będzie prowadziła zaktualizowany wykaz klubów z aktualną liczbą członków, żeby nie narażać nas wszystkich na tym podobne zarzuty.</u>
+      <u xml:id="u-13.2" who="#komentarz">(Oklaski)</u>
+     </div>
+     <div xml:id="div-14">
+      <u xml:id="u-14.1" who="#Marszalek">Dziękuję.</u>
+      <u xml:id="u-14.2" who="#Marszalek">Proszę państwa, chcę powiedzieć, że z przedstawionej listy zostały dwa nazwiska: Lecha Mażewskiego i Włodzimierza Blajerskiego, natomiast dopisane zostało nazwisko posła Jana Kulasa z klubu ˝Solidarności˝. Zatem jest propozycja wybrania komisji w składzie 24-osobowym.</u>
+      <u xml:id="u-14.3" who="#Marszalek">Czy w tej sprawie jeszcze ktoś chciałby zabrać głos?</u>
+      <u xml:id="u-14.4" who="#Marszalek">Proszę bardzo.</u>
+     </div>
+     <div xml:id="div-15">
+      <u xml:id="u-15.1" who="#PoselRomanJagielinski">Panie Marszałku! Wysoki Sejmie! Roman Jagieliński. W imieniu Parlamentarnego Klubu Polskiego Stronnictwa Ludowego informuję, że klub liczy 50 posłów. W związku z tym proponowałbym krótką przerwę, żebyśmy mogli spośród nas wytypować jeszcze jednego członka komisji regulaminowej .</u>
+      <u xml:id="u-15.2" who="#PoselBronislawGeremek">(Musi być 51.) Przepraszam, kolega z ˝Solidarności˝ mówił, że kluby liczące od 50 członków typują po 3 posłów. (Poseł Bogdan Boruszewicz)</u>
+     </div>
+     <div xml:id="div-16">
+      <u xml:id="u-16.1" who="#Marszalek">Proszę Państwa! Rzeczywiście zaistniały pomyłki, sekretariat wcześniej nie skreślił jednego posła, ale wydawało się, że sprawa na posiedzeniu Konwentu Seniorów była ustalona i te zasady zostały zachowane.</u>
+      <u xml:id="u-16.2" who="#Marszalek">Czy jeszcze w tej sprawie ktoś z państwa prosi o głos?</u>
+      <u xml:id="u-16.3" who="#Marszalek">Jeśli nie, poddam wniosek pod głosowanie według normalnego trybu.</u>
+      <u xml:id="u-16.4" who="#Marszalek">Kto z posłanek i posłów jest za przyjęciem projektu uchwały w sprawie składu Komisji Regulaminowej i Spraw Poselskich, zechce podnieść rękę i nacisnąć przycisk.</u>
+      <u xml:id="u-16.5" who="#Marszalek">Kto jest przeciw?</u>
+      <u xml:id="u-16.6" who="#Marszalek">Kto się wstrzymał od głosowania?</u>
+      <u xml:id="u-16.7" who="#Marszalek">Stwierdzam, że uchwała została przyjęta większością 414 głosów przy 6 posłach głosujących przeciw i 13 wstrzymujących się.</u>
+      <u xml:id="u-16.8" who="#Marszalek">Proszę posła sekretarza o odczytanie komunikatów.</u>
+     </div>
+     <div xml:id="div-17">
+      <u xml:id="u-17.1" who="#SekretarzPoselMarekDomin">Posiedzenie Komisji Regulaminowej i Spraw Poselskich odbędzie się w dniu dzisiejszym o godzinie l9.30 w sali nr 101.</u>
+     </div>
+     <div xml:id="div-18">
+      <u xml:id="u-18.1" who="#Marszalek">Zarządzam przerwę w obradach do czwartku, tj. 5 grudnia 1991 r., do godziny 10.</u>
+     </div>
+     <div xml:id="div-19">
+      <u xml:id="u-19.1" who="#komentarz">(Przerwa w posiedzeniu o godz. 15 min 25)</u>
+     </div>
+    </body>
+  </text>
+ </TEI>
+</teiCorpus>
+    

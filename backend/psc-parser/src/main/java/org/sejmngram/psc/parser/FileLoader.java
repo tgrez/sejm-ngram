@@ -1,6 +1,8 @@
 package org.sejmngram.psc.parser;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.joox.JOOX;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
@@ -22,40 +24,56 @@ public class FileLoader {
 
     private static void parsePSC() {
 
-        int kadencja = 1;
+        String basePath = "../psc-data";
+        File baseDir = FileUtils.getFile(basePath);
+        Collection<File> dirs = FileUtils.listFilesAndDirs(baseDir, FileFilterUtils.directoryFileFilter(), TrueFileFilter.INSTANCE);
 
-        ArrayList partiesList = readPartiesListFile(kadencja);
-        HashMap<String, OpisPoslaHelper> partie = parsePartiesList(partiesList);
-        HashSet<String> imionaPoslow = getImionaPoslow(partie);
+        dirs.remove(baseDir);
 
-        // TODO: dopisać fragment, ktory chodzi po katalogach i parsuje plik po pliku
-        String header = readHeaderFile();
-        String text = readContentFile();
-        Date date = getDate(header);
-        String baseTitle = getBaseTitle(header);
-        Hashtable<String, String> poslowie = getPoslowie(header);
+        int kadencja = 0;
+
+        ArrayList partiesList = null;
+        HashMap<String, OpisPoslaHelper> partie = null;
+        HashSet<String> imionaPoslow = null;
+
+        for (File dir : dirs) {
+
+            if (!dir.getPath().startsWith(basePath.concat("/0" + kadencja))) {
+                String substring = dir.getPath().replace(basePath + "/0", "").substring(0, 1);
+                kadencja = Integer.valueOf(substring).intValue();
+                partiesList = readPartiesListFile(kadencja);
+                partie = parsePartiesList(partiesList);
+                imionaPoslow = getImionaPoslow(partie);
+            }
+
+            String header = readHeaderFile(dir);
+            String text = readContentFile(dir);
+            Date date = getDate(header);
+            String baseTitle = getBaseTitle(header);
+            Hashtable<String, String> poslowie = getPoslowie(header);
 
 
-        List<Wystapienie> wystapienies = new ArrayList<Wystapienie>();
-        List<Element> wystapienia = JOOX.$(text).find("body").find("div").get();
-        for (Element wystąpienie : wystapienia) {
-            List<Element> wypowiedzi = JOOX.$(wystąpienie).find("u").get();
-            for (Element wypowiedz : wypowiedzi) {
-                String who = JOOX.$(wypowiedz).attr("who");
-                if (who != null && !who.equalsIgnoreCase("#komentarz")) {
-                    String keyForPoslowie = who.replace("#", "");
-                    String poselFull = poslowie.get(keyForPoslowie);
-                    PoselStanowiskoHelper poselStanowisko = getPoselStanowisko(imionaPoslow, keyForPoslowie, poselFull);
-                    String tresc = getTresc(wypowiedz);
-                    String tytul = getTytul(baseTitle, poselFull);
-                    String partia = getPartia(partie, poselStanowisko.posel);
-                    Wystapienie wystapienie = createWystapienie(date, poselStanowisko.posel,
-                            poselStanowisko.stanowisko, tresc, tytul, partia);
-                    wystapienies.add(wystapienie);
+            List<Wystapienie> wystapienies = new ArrayList<Wystapienie>();
+            List<Element> wystapienia = JOOX.$(text).find("body").find("div").get();
+            for (Element wystąpienie : wystapienia) {
+                List<Element> wypowiedzi = JOOX.$(wystąpienie).find("u").get();
+                for (Element wypowiedz : wypowiedzi) {
+                    String who = JOOX.$(wypowiedz).attr("who");
+                    if (who != null && !who.equalsIgnoreCase("#komentarz")) {
+                        String keyForPoslowie = who.replace("#", "");
+                        String poselFull = poslowie.get(keyForPoslowie);
+                        PoselStanowiskoHelper poselStanowisko = getPoselStanowisko(imionaPoslow, keyForPoslowie, poselFull);
+                        String tresc = getTresc(wypowiedz);
+                        String tytul = getTytul(baseTitle, poselFull);
+                        String partia = getPartia(partie, poselStanowisko.posel);
+                        Wystapienie wystapienie = createWystapienie(date, poselStanowisko.posel,
+                                poselStanowisko.stanowisko, tresc, tytul, partia);
+                        wystapienies.add(wystapienie);
+                    }
                 }
             }
+            Printer.printCommonJsonsToFiles(wystapienies);
         }
-        Printer.printCommonJsonsToFiles(wystapienies);
     }
 
     private static PoselStanowiskoHelper getPoselStanowisko(HashSet<String> imionaPoslow, String keyForPoslowie, String poselFull) {
@@ -143,7 +161,7 @@ public class FileLoader {
     private static Date getDate(String header) {
         String dateString = JOOX.$(header).find("sourceDesc").find("bibl")
                 .find("date").first().content();
-        DateFormat dateFormatter = new SimpleDateFormat("YYYY-MM-DD");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         Date parse = null;
         try {
             parse = dateFormatter.parse(dateString);
@@ -162,8 +180,8 @@ public class FileLoader {
         return baseTitle;
     }
 
-    private static String readContentFile() {
-        File textFile = FileUtils.getFile("../psc-data/01-pp-001-01/text_structure.xml");
+    private static String readContentFile(File dir) {
+        File textFile = FileUtils.getFile(dir.getPath() + "/text_structure.xml");
         String text = null;
         try {
             text = FileUtils.readFileToString(textFile);
@@ -173,8 +191,8 @@ public class FileLoader {
         return text;
     }
 
-    private static String readHeaderFile() {
-        File headerFile = FileUtils.getFile("../psc-data/01-pp-001-01/header.xml");
+    private static String readHeaderFile(File dir) {
+        File headerFile = FileUtils.getFile(dir.getPath() + "/header.xml");
         String header = null;
         try {
             header = FileUtils.readFileToString(headerFile);

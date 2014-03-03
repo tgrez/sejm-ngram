@@ -31,7 +31,7 @@ public class Configuration {
             if (propertyFilePath == null) {
                 properties.setProperty("common.json.filename.datePattern", "yyyy-MM-dd");
                 properties.setProperty("common.json.filename.ending", ".json");
-                properties.setProperty("common.json.outputDir", "jsonPrinterDir");
+                properties.setProperty("common.json.outputDir", "../jsonPrinterDir");
             } else {
                 properties.load(new FileInputStream(propertyFilePath));
             }

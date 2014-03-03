@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <teiHeader xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="PSC_01-pp-002-02">
+  <fileDesc>
+   <titleStmt>
+    <title xml:lang="pl">Sprawozdanie stenograficzne z obrad Sejmu RP z 18 grudnia 1991 r. (kadencja I, Posiedzenie Plenarne 2, dzień 2).</title>
+    <title xml:lang="en">The Polish Sejm sitting shorthands record, 18th December 1991 (term I, Session 2, day 2).</title>
+   </titleStmt>
+
+   <publicationStmt>
+    <p xml:lang="pl">Prosimy o zapoznanie się z nagłówkiem korpusu (PSC_header.xml).</p>
+    <p xml:lang="en">See the corpus header (PSC_header.xml).</p>
+   </publicationStmt>
+
+   <sourceDesc>
+    <bibl>
+     <title xml:lang="pl">Sprawozdanie stenograficzne z obrad Sejmu RP z 18 grudnia 1991 r. (kadencja I, Posiedzenie Plenarne 2, dzień 2).</title>
+     <title xml:lang="en">The Polish Sejm sitting shorthands record, 18th December 1991 (term I, Session 2, day 2).</title>
+     <publisher xml:lang="pl">Kancelaria Sejmu Rzeczypospolitej Polskiej</publisher>
+     <publisher xml:lang="en">Chancellery of the Sejm</publisher>
+     <note type="termNo">1</note>
+     <note type="type">Posiedzenie Plenarne</note>
+     <note type="sessionNo">2</note>
+     <note type="dayNo">2</note>
+     <date>1991-12-18</date>
+    </bibl>
+   </sourceDesc>
+
+ </fileDesc>
+ <profileDesc>
+
+  <textClass>
+   <catRef scheme="#taxonomy-type" target="#typ_qmow"/>
+   <catRef scheme="#taxonomy-channel" target="#kanal_prasa_inne"/>
+  </textClass>
+
+  <particDesc>
+    <person xml:id="PoslowieStefanNiesiolowskiIJaroslawKaczynskiWymieniajaUsciskiDloniZPoslami" role="speaker"><persName>Posłowie Stefan Niesiołowski i Jarosław Kaczyński wymieniają uściski dłoni z posłami</persName></person>
+    <person xml:id="PoselWitoldBialobrzewski" role="speaker"><persName>Poseł Witold Białobrzewski</persName></person>
+    <person xml:id="PoselPawelMusiol" role="speaker"><persName>Poseł Paweł Musioł</persName></person>
+    <person xml:id="komentarz" role="commentator"><persName>Przypis stenotypisty</persName></person>
+    <person xml:id="PoselAndrzejBorowski" role="speaker"><persName>Poseł Andrzej Borowski</persName></person>
+    <person xml:id="PoselAleksanderMalachowski" role="speaker"><persName>Poseł Aleksander Małachowski</persName></person>
+    <person xml:id="PoselKazimierzChelstowski" role="speaker"><persName>Poseł Kazimierz Chełstowski</persName></person>
+    <person xml:id="PoselZygmuntMogilaLisowski" role="speaker"><persName>Poseł Zygmunt Mogiła-Lisowski</persName></person>
+    <person xml:id="PoselTadeuszIwinski" role="speaker"><persName>Poseł Tadeusz Iwiński</persName></person>
+    <person xml:id="PoselLonginPastusiak" role="speaker"><persName>Poseł Longin Pastusiak</persName></person>
+    <person xml:id="GlosyZSali" role="speaker"><persName>Głosy z sali</persName></person>
+    <person xml:id="PoselTadeuszKowalczykSFranciszka" role="speaker"><persName>Poseł Tadeusz Kowalczyk s. Franciszka</persName></person>
+    <person xml:id="PoselJacekMaziarski" role="speaker"><persName>Poseł Jacek Maziarski</persName></person>
+    <person xml:id="PoselStefanNiesiolowski" role="speaker"><persName>Poseł Stefan Niesiołowski</persName></person>
+    <person xml:id="PoselAntoniFurtak" role="speaker"><persName>Poseł Antoni Furtak</persName></person>
+    <person xml:id="PoselJerzyOsiatynski" role="speaker"><persName>Poseł Jerzy Osiatyński</persName></person>
+    <person xml:id="PoselHenrykGoryszewski" role="speaker"><persName>Poseł Henryk Goryszewski</persName></person>
+    <person xml:id="PoselWojciechZarzycki" role="speaker"><persName>Poseł Wojciech Zarzycki</persName></person>
+    <person xml:id="PoselJaroslawWartak" role="speaker"><persName>Poseł Jarosław Wartak</persName></person>
+    <person xml:id="PoselTomaszSzyszko" role="speaker"><persName>Poseł Tomasz Szyszko</persName></person>
+    <person xml:id="PoselMaciejManicki" role="speaker"><persName>Poseł Maciej Manicki</persName></person>
+    <person xml:id="PoselZbigniewEysmont" role="speaker"><persName>Poseł Zbigniew Eysmont</persName></person>
+    <person xml:id="PoselTadeuszLasocki" role="speaker"><persName>Poseł Tadeusz Lasocki</persName></person>
+    <person xml:id="PrezesRadyMinistrowJanOlszewski" role="speaker"><persName>Prezes Rady Ministrów Jan Olszewski</persName></person>
+    <person xml:id="PoselAleksanderKwasniewski" role="speaker"><persName>Poseł Aleksander Kwaśniewski</persName></person>
+    <person xml:id="PoselAntoniCzajka" role="speaker"><persName>Poseł Antoni Czajka</persName></person>
+    <person xml:id="PoselJacekMerkel" role="speaker"><persName>Poseł Jacek Merkel</persName></person>
+    <person xml:id="PoselJanLitynski" role="speaker"><persName>Poseł Jan Lityński</persName></person>
+    <person xml:id="PoselRyszardCzarnecki" role="speaker"><persName>Poseł Ryszard Czarnecki</persName></person>
+    <person xml:id="PoselIzabellaSierakowska" role="speaker"><persName>Poseł Izabella Sierakowska</persName></person>
+    <person xml:id="PoselAndrzejTadeuszMazurkiewicz" role="speaker"><persName>Poseł Andrzej Tadeusz Mazurkiewicz</persName></person>
+    <person xml:id="PoselWieslawaZiolkowska" role="speaker"><persName>Poseł Wiesława Ziółkowska</persName></person>
+    <person xml:id="PoselJanuszKorwinMikke" role="speaker"><persName>Poseł Janusz Korwin-Mikke</persName></person>
+    <person xml:id="PoselTadeuszMazowiecki" role="speaker"><persName>Poseł Tadeusz Mazowiecki</persName></person>
+    <person xml:id="PoselWlodzimierzSumara" role="speaker"><persName>Poseł Włodzimierz Sumara</persName></person>
+    <person xml:id="PaniHannaGronkiewiczWaltz" role="speaker"><persName>Pani Hanna Gronkiewicz-Waltz</persName></person>
+    <person xml:id="MinisterPracyIPolitykiSocjalnejMichalBoni" role="speaker"><persName>Minister Pracy i Polityki Socjalnej Michał Boni</persName></person>
+    <person xml:id="PoselJerzyKropiwnicki" role="speaker"><persName>Poseł Jerzy Kropiwnicki</persName></person>
+    <person xml:id="PoselMarcinLibicki" role="speaker"><persName>Poseł Marcin Libicki</persName></person>
+    <person xml:id="PoselMarekBorowski" role="speaker"><persName>Poseł Marek Borowski</persName></person>
+    <person xml:id="PoselIreneuszNiewiarowski" role="speaker"><persName>Poseł Ireneusz Niewiarowski</persName></person>
+    <person xml:id="PoselJacekKuron" role="speaker"><persName>Poseł Jacek Kuroń</persName></person>
+    <person xml:id="PoselHenrykKlata" role="speaker"><persName>Poseł Henryk Klata</persName></person>
+    <person xml:id="PoselWaldemarPawlak" role="speaker"><persName>Poseł Waldemar Pawlak</persName></person>
+    <person xml:id="PoselElzbietaSeferowicz" role="speaker"><persName>Poseł Elżbieta Seferowicz</persName></person>
+    <person xml:id="PoselWladyslawSerafin" role="speaker"><persName>Poseł Władysław Serafin</persName></person>
+    <person xml:id="PoselWaldemarJedryka" role="speaker"><persName>Poseł Waldemar Jędryka</persName></person>
+    <person xml:id="PoselBronislawGeremek" role="speaker"><persName>Poseł Bronisław Geremek</persName></person>
+    <person xml:id="PoselBoleslawTwarog" role="speaker"><persName>Poseł Bolesław Twaróg</persName></person>
+    <person xml:id="PoselKazimierzSwiton" role="speaker"><persName>Poseł Kazimierz Świtoń</persName></person>
+    <person xml:id="PoselHalinaNowinaKonopka" role="speaker"><persName>Poseł Halina Nowina-Konopka</persName></person>
+    <person xml:id="PoselKrzysztofKrol" role="speaker"><persName>Poseł Krzysztof Król</persName></person>
+    <person xml:id="PodsekretarzStanuWMinisterstwieFinansowWojciechMisiag" role="speaker"><persName>Podsekretarz Stanu w Ministerstwie Finansów Wojciech Misiąg</persName></person>
+    <person xml:id="PoselBogdanLukasiewicz" role="speaker"><persName>Poseł Bogdan Łukasiewicz</persName></person>
+    <person xml:id="PoselKrzysztofTchorzewski" role="speaker"><persName>Poseł Krzysztof Tchórzewski</persName></person>
+    <person xml:id="SekretarzPoselFilipKaczmarek" role="speaker"><persName>Sekretarz poseł Filip Kaczmarek</persName></person>
+    <person xml:id="PoselMiroslawLewandowski" role="speaker"><persName>Poseł Mirosław Lewandowski</persName></person>
+    <person xml:id="PoselLeszekMoczulski" role="speaker"><persName>Poseł Leszek Moczulski</persName></person>
+    <person xml:id="PoselMarekDziubek" role="speaker"><persName>Poseł Marek Dziubek</persName></person>
+    <person xml:id="PoselMarianZenkiewicz" role="speaker"><persName>Poseł Marian Żenkiewicz</persName></person>
+    <person xml:id="PoselStanislawWeglarz" role="speaker"><persName>Poseł Stanisław Węglarz</persName></person>
+    <person xml:id="PoselZbigniewBujak" role="speaker"><persName>Poseł Zbigniew Bujak</persName></person>
+    <person xml:id="PoselSlawomirSiwek" role="speaker"><persName>Poseł Sławomir Siwek</persName></person>
+    <person xml:id="PoselGabrielJanowski" role="speaker"><persName>Poseł Gabriel Janowski</persName></person>
+    <person xml:id="PoselLechPruchnoWroblewski" role="speaker"><persName>Poseł Lech Pruchno-Wróblewski</persName></person>
+    <person xml:id="PoselRyszardSmolarek" role="speaker"><persName>Poseł Ryszard Smolarek</persName></person>
+    <person xml:id="PoselWladyslawAdamski" role="speaker"><persName>Poseł Władysław Adamski</persName></person>
+    <person xml:id="PoselJanRulewski" role="speaker"><persName>Poseł Jan Rulewski</persName></person>
+    <person xml:id="Marszalek" role="speaker"><persName>Marszałek</persName></person>
+    <person xml:id="PoselMarekMarkiewicz" role="speaker"><persName>Poseł Marek Markiewicz</persName></person>
+    <person xml:id="PoselJaroslawKaczynski" role="speaker"><persName>Poseł Jarosław Kaczyński</persName></person>
+    <person xml:id="PoselAlojzyPietrzyk" role="speaker"><persName>Poseł Alojzy Pietrzyk</persName></person>
+    <person xml:id="PoselJanLopuszanski" role="speaker"><persName>Poseł Jan Łopuszański</persName></person>
+  </particDesc>
+ </profileDesc>
+
+ <revisionDesc>
+  <change who="#mlenart" when="2012-08-06">Automatic creation of text_structure.xml from the corresponding Sejm protocols.</change>
+ </revisionDesc>
+</teiHeader>
