@@ -16,6 +16,16 @@ public class MockFileGenerator {
 	private static final Random rand = new Random();
 	private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 	
+	private static final String[] ngramArray =  {
+		"aaa",
+		"bbb",
+		"ccc",
+		"aa",
+		"bla",
+		"blabla",
+		"co"
+		};
+	
 	public static void generateMockFile(int numberOfRows) throws IOException {
 		File file = new File(filename);
 		file.delete();
@@ -36,6 +46,8 @@ public class MockFileGenerator {
 			StringBuilder line = new StringBuilder();
 			line.append(i);
 			line.append(lineDelimeter);
+			line.append(getRandomNgram());
+			line.append(lineDelimeter);
 			line.append(df.format(getDate(1990)));
 			line.append(lineDelimeter);
 			line.append(df.format(getDate(2014)));
@@ -49,6 +61,10 @@ public class MockFileGenerator {
 		out.close();
 	}
 	
+	private static String getRandomNgram() {
+		return ngramArray[rand.nextInt(ngramArray.length)];
+	}
+
 	private static Date getDate(int year) {
 		Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
