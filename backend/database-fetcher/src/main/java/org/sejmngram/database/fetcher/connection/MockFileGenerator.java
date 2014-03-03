@@ -21,9 +21,9 @@ public class MockFileGenerator {
 		file.delete();
 		BufferedWriter out = new BufferedWriter(new FileWriter(file), 32768);
 		String blobDelimeter = ";";
-		String lineDelimeter = "|";
+		String lineDelimeter = "?";
 		for (int i = 0; i < numberOfRows; ++i) {
-			int n = 1000; 
+			int n = 1000;
 			StringBuilder blob = new StringBuilder();
 			for (int k = 0; k < n; ++k) {
 				blob.append(df.format(generateRandomDate()));

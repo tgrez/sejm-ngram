@@ -1,11 +1,18 @@
 package org.sejmngram.database.fetcher;
 
-import java.util.Date;
-import java.util.List;
+import org.sejmngram.database.fetcher.connection.DbConnector;
+import org.sejmngram.database.fetcher.connection.DbConnectorMock;
+import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
 public class DbManager {
 
-	public List<Date> filterByParty() {
-		return null;
+	private DbConnector dbConn = new DbConnectorMock();
+	
+	public static class A {
+		
+	}
+	
+	public NgramResponse filterByParty(String ngram, int partyId) {
+		return dbConn.retrieve(ngram, null, null, partyId);
 	}
 }

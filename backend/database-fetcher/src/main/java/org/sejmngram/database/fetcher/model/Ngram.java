@@ -5,6 +5,7 @@ import java.util.Date;
 public class Ngram {
 
 	private int id;
+	private String ngram;
 	private Date from;
 	private Date to;
 	private int count;
@@ -39,5 +40,11 @@ public class Ngram {
 	}
 	public void setBlob(byte[] blob) {
 		this.blob = blob;
+	}
+	public String getNgram() {
+		return ngram;
+	}
+	public void setNgram(String ngram) {
+		this.ngram = ngram;
 	}
 }
