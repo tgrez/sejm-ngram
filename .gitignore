@@ -5,6 +5,12 @@
 *~
 *.sublime-*
 
+# classes file
+backend/classes
+
+# logs
+restService/logs
+
 # personal directories (too lazy to create branch right now)
 michal/
 
@@ -22,7 +28,14 @@ target/
 
 # java idea files
 .idea/
+*.iml
 
 # downloaded data in common format from e.g. sejmometr
 downloadedData/
+
+# other downloaded data
+jsonPrinterDir/
+data/
+
+# intellij files
 *.iml

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <teiHeader xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.tei-c.org/ns/1.0" xml:id="PSC_01-pp-006-01">
+  <fileDesc>
+   <titleStmt>
+    <title xml:lang="pl">Sprawozdanie stenograficzne z obrad Sejmu RP z 23 stycznia 1992 r. (kadencja I, Posiedzenie Plenarne 6, dzień 1).</title>
+    <title xml:lang="en">The Polish Sejm sitting shorthands record, 23rd January 1992 (term I, Session 6, day 1).</title>
+   </titleStmt>
+
+   <publicationStmt>
+    <p xml:lang="pl">Prosimy o zapoznanie się z nagłówkiem korpusu (PSC_header.xml).</p>
+    <p xml:lang="en">See the corpus header (PSC_header.xml).</p>
+   </publicationStmt>
+
+   <sourceDesc>
+    <bibl>
+     <title xml:lang="pl">Sprawozdanie stenograficzne z obrad Sejmu RP z 23 stycznia 1992 r. (kadencja I, Posiedzenie Plenarne 6, dzień 1).</title>
+     <title xml:lang="en">The Polish Sejm sitting shorthands record, 23rd January 1992 (term I, Session 6, day 1).</title>
+     <publisher xml:lang="pl">Kancelaria Sejmu Rzeczypospolitej Polskiej</publisher>
+     <publisher xml:lang="en">Chancellery of the Sejm</publisher>
+     <note type="termNo">1</note>
+     <note type="type">Posiedzenie Plenarne</note>
+     <note type="sessionNo">6</note>
+     <note type="dayNo">1</note>
+     <date>1992-01-23</date>
+    </bibl>
+   </sourceDesc>
+
+ </fileDesc>
+ <profileDesc>
+
+  <textClass>
+   <catRef scheme="#taxonomy-type" target="#typ_qmow"/>
+   <catRef scheme="#taxonomy-channel" target="#kanal_prasa_inne"/>
+  </textClass>
+
+  <particDesc>
+    <person xml:id="PoselBarbaraCzyz" role="speaker"><persName>Poseł Barbara Czyż</persName></person>
+    <person xml:id="PoselJerzyJankowski" role="speaker"><persName>Poseł Jerzy Jankowski</persName></person>
+    <person xml:id="PoselPawelMusiol" role="speaker"><persName>Poseł Paweł Musioł</persName></person>
+    <person xml:id="PoselJozefHermanowicz" role="speaker"><persName>Poseł Józef Hermanowicz</persName></person>
+    <person xml:id="PoselTeresaLiszcz" role="speaker"><persName>Poseł Teresa Liszcz</persName></person>
+    <person xml:id="komentarz" role="commentator"><persName>Przypis stenotypisty</persName></person>
+    <person xml:id="PoselWaclawNiewiarowski" role="speaker"><persName>Poseł Wacław Niewiarowski</persName></person>
+    <person xml:id="PoselJanKowalik" role="speaker"><persName>Poseł Jan Kowalik</persName></person>
+    <person xml:id="PoselZbigniewSkorecki" role="speaker"><persName>Poseł Zbigniew Skorecki</persName></person>
+    <person xml:id="GlosyZSali" role="speaker"><persName>Głosy z sali</persName></person>
+    <person xml:id="PoselAlojzySzablewski" role="speaker"><persName>Poseł Alojzy Szablewski</persName></person>
+    <person xml:id="PoselLeszekBialy" role="speaker"><persName>Poseł Leszek Biały</persName></person>
+    <person xml:id="PodsekretarzStanuWMinisterstwieTransportuIGospodarkiMorskiejZbigniewSulatycki" role="speaker"><persName>Podsekretarz Stanu w Ministerstwie Transportu i Gospodarki Morskiej Zbigniew Sulatycki</persName></person>
+    <person xml:id="PoselJozefKaleta" role="speaker"><persName>Poseł Józef Kaleta</persName></person>
+    <person xml:id="PoselJanZylber" role="speaker"><persName>Poseł Jan Zylber</persName></person>
+    <person xml:id="PodsekretarzStanuWMinisterstwieKulturyISztukiAgnieszkaMorawinska" role="speaker"><persName>Podsekretarz Stanu w Ministerstwie Kultury i Sztuki Agnieszka Morawińska</persName></person>
+    <person xml:id="PoselStefanNiesiolowski" role="speaker"><persName>Poseł Stefan Niesiołowski</persName></person>
+    <person xml:id="PoselAnnaUrbanowicz" role="speaker"><persName>Poseł Anna Urbanowicz</persName></person>
+    <person xml:id="PoselWaldemarBartosz" role="speaker"><persName>Poseł Waldemar Bartosz</persName></person>
+    <person xml:id="KierownikMinisterstwaPrzemysluIHandluAndrzejLipko" role="speaker"><persName>Kierownik Ministerstwa Przemysłu i Handlu Andrzej Lipko</persName></person>
+    <person xml:id="PoselJerzyOsiatynski" role="speaker"><persName>Poseł Jerzy Osiatyński</persName></person>
+    <person xml:id="PoselHenrykGoryszewski" role="speaker"><persName>Poseł Henryk Goryszewski</persName></person>
+    <person xml:id="WiceprezesNarodowegoBankuPolskiegoAndrzejTopinski" role="speaker"><persName>Wiceprezes Narodowego Banku Polskiego Andrzej Topiński</persName></person>
+    <person xml:id="PoselZbigniewFrost" role="speaker"><persName>Poseł Zbigniew Frost</persName></person>
+    <person xml:id="PoselJerzyJaskiernia" role="speaker"><persName>Poseł Jerzy Jaskiernia</persName></person>
+    <person xml:id="PoselWojciechZarzycki" role="speaker"><persName>Poseł Wojciech Zarzycki</persName></person>
+    <person xml:id="WicemarszalekAndrzejKern" role="speaker"><persName>Wicemarszałek Andrzej Kern.</persName></person>
+    <person xml:id="PoselMaciejManicki" role="speaker"><persName>Poseł Maciej Manicki</persName></person>
+    <person xml:id="PoselJozefJacekPawelec" role="speaker"><persName>Poseł Józef Jacek Pawelec</persName></person>
+    <person xml:id="PoselAleksanderKwasniewski" role="speaker"><persName>Poseł Aleksander Kwaśniewski</persName></person>
+    <person xml:id="KierownikMinisterstwaGospodarkiPrzestrzennejIBudownictwaAndrzejDiakonow" role="speaker"><persName>Kierownik Ministerstwa Gospodarki Przestrzennej i Budownictwa Andrzej Diakonow</persName></person>
+    <person xml:id="PoselTadeuszBilinski" role="speaker"><persName>Poseł Tadeusz Biliński</persName></person>
+    <person xml:id="PoselMarekJurek" role="speaker"><persName>Poseł Marek Jurek</persName></person>
+    <person xml:id="WicemarszalekHenrykBak" role="speaker"><persName>Wicemarszałek Henryk Bąk</persName></person>
+    <person xml:id="PoselWojciechKwiatkowski" role="speaker"><persName>Poseł Wojciech Kwiatkowski</persName></person>
+    <person xml:id="PoselAntoniDzierzynski" role="speaker"><persName>Poseł Antoni Dzierżyński</persName></person>
+    <person xml:id="PoselWojciechArkuszewski" role="speaker"><persName>Poseł Wojciech Arkuszewski</persName></person>
+    <person xml:id="PoselWieslawaZiolkowska" role="speaker"><persName>Poseł Wiesława Ziółkowska</persName></person>
+    <person xml:id="PoselJanuszKorwinMikke" role="speaker"><persName>Poseł Janusz Korwin-Mikke</persName></person>
+    <person xml:id="PoselCzeslawSterkowicz" role="speaker"><persName>Poseł Czesław Sterkowicz</persName></person>
+    <person xml:id="PoselLeszekGolba" role="speaker"><persName>Poseł Leszek Golba</persName></person>
+    <person xml:id="PoselWlodzimierzSumara" role="speaker"><persName>Poseł Włodzimierz Sumara</persName></person>
+    <person xml:id="SekretarzPoselPiotrKrutul" role="speaker"><persName>Sekretarz poseł Piotr Krutul</persName></person>
+    <person xml:id="PoselEdwardRzepka" role="speaker"><persName>Poseł Edward Rzepka</persName></person>
+    <person xml:id="PoselRyszardJacekZochowski" role="speaker"><persName>Poseł Ryszard Jacek Żochowski</persName></person>
+    <person xml:id="PoselMarcinLibicki" role="speaker"><persName>Poseł Marcin Libicki</persName></person>
+    <person xml:id="PodsekretarzStanuWMinisterstwiePracyIPolitykiSocjalnejAleksandraWiktorow" role="speaker"><persName>Podsekretarz Stanu w Ministerstwie Pracy i Polityki Socjalnej Aleksandra Wiktorow</persName></person>
+    <person xml:id="PoselAleksanderBentkowski" role="speaker"><persName>Poseł Aleksander Bentkowski</persName></person>
+    <person xml:id="PoselPiotrFogler" role="speaker"><persName>Poseł Piotr Fogler</persName></person>
+    <person xml:id="PoselWaldemarPawlak" role="speaker"><persName>Poseł Waldemar Pawlak</persName></person>
+    <person xml:id="PoselElzbietaSeferowicz" role="speaker"><persName>Poseł Elżbieta Seferowicz</persName></person>
+    <person xml:id="MinisterPracyIPolitykiSocjalnejJerzyKropiwnicki" role="speaker"><persName>Minister Pracy i Polityki Socjalnej Jerzy Kropiwnicki</persName></person>
+    <person xml:id="PoselAndrzejTerlecki" role="speaker"><persName>Poseł Andrzej Terlecki</persName></person>
+    <person xml:id="PoselWladyslawSerafin" role="speaker"><persName>Poseł Władysław Serafin</persName></person>
+    <person xml:id="PoselGrzegorzKazimierski" role="speaker"><persName>Poseł Grzegorz Kazimierski</persName></person>
+    <person xml:id="PoselBronislawGeremek" role="speaker"><persName>Poseł Bronisław Geremek</persName></person>
+    <person xml:id="PoselJozefKowalczyk" role="speaker"><persName>Poseł Józef Kowalczyk</persName></person>
+    <person xml:id="PoselMiroslawDrzewiecki" role="speaker"><persName>Poseł Mirosław Drzewiecki</persName></person>
+    <person xml:id="PoselJacekSoska" role="speaker"><persName>Poseł Jacek Soska</persName></person>
+    <person xml:id="PoselAndrzejWielowieyski" role="speaker"><persName>Poseł Andrzej Wielowieyski</persName></person>
+    <person xml:id="PoselMiroslawLewandowski" role="speaker"><persName>Poseł Mirosław Lewandowski</persName></person>
+    <person xml:id="PoselLeszekMoczulski" role="speaker"><persName>Poseł Leszek Moczulski</persName></person>
+    <person xml:id="PoselMarekDziubek" role="speaker"><persName>Poseł Marek Dziubek</persName></person>
+    <person xml:id="PoselWieslawKlisiewicz" role="speaker"><persName>Poseł Wiesław Klisiewicz</persName></person>
+    <person xml:id="PoselJanRokita" role="speaker"><persName>Poseł Jan Rokita</persName></person>
+    <person xml:id="PoselJozefLochowski" role="speaker"><persName>Poseł Józef Łochowski</persName></person>
+    <person xml:id="PoselAndrzejAdamowicz" role="speaker"><persName>Poseł Andrzej Adamowicz</persName></person>
+    <person xml:id="PoselWladyslawAdamski" role="speaker"><persName>Poseł Władysław Adamski</persName></person>
+    <person xml:id="PoselJanRulewski" role="speaker"><persName>Poseł Jan Rulewski</persName></person>
+    <person xml:id="PoselZdzislawTuszynski" role="speaker"><persName>Poseł Zdzisław Tuszyński</persName></person>
+    <person xml:id="PoselWitoldGadomski" role="speaker"><persName>Poseł Witold Gadomski</persName></person>
+    <person xml:id="Marszalek" role="speaker"><persName>Marszałek</persName></person>
+    <person xml:id="PoselMarekMarkiewicz" role="speaker"><persName>Poseł Marek Markiewicz</persName></person>
+    <person xml:id="PoselRadoslawGawlik" role="speaker"><persName>Poseł Radosław Gawlik</persName></person>
+    <person xml:id="MinisterSzefUrzeduRadyMinistrowWojciechWlodarczyk" role="speaker"><persName>Minister - Szef Urzędu Rady Ministrów Wojciech Włodarczyk</persName></person>
+    <person xml:id="PoselJanuszSzymanski" role="speaker"><persName>Poseł Janusz Szymański</persName></person>
+    <person xml:id="PoselZbigniewKaniewski" role="speaker"><persName>Poseł Zbigniew Kaniewski</persName></person>
+  </particDesc>
+ </profileDesc>
+
+ <revisionDesc>
+  <change who="#mlenart" when="2012-08-06">Automatic creation of text_structure.xml from the corresponding Sejm protocols.</change>
+ </revisionDesc>
+</teiHeader>
