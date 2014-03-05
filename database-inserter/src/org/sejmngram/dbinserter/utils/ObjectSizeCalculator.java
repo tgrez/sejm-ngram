@@ -1,4 +1,4 @@
-package org.sejmngram.dbinserter;
+package org.sejmngram.dbinserter.utils;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;

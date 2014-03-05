@@ -1,4 +1,4 @@
-package org.sejmngram.dbinserter;
+package org.sejmngram.dbinserter.model;
 
 import java.util.ArrayList;
 import java.util.Date;

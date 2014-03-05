@@ -30,8 +30,9 @@ target/
 .idea/
 *.iml
 
-# downloaded data in common format from e.g. sejmometr
+# downloaded or extracted from corpus data in common format from e.g. sejmometr
 downloadedData/
+scripts/sejmometr/dataFromCorpus/
 
 # other downloaded data
 jsonPrinterDir/
