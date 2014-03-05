@@ -1,1 +1,7 @@
 language: java
+
+notifications:
+  email:
+    - secure: "bpCmn82sUi0zxuM6ezUCxbPxcaz7xV7sAaAHkC+THhE/p64DRZDYZ4t+ldW9cjpeK9nfqDdEieM/dl4/3nSZFz7ZLYP5d+Vug1BnedhN7TPbOwTpxF/8wCaYJLLE4mZMx6T3fV7bwpl70a83TnomHIondiPD3Ke1C/mGoNXgon8="
+    - secure: "jXvXO0Jjnr157S2CjnXXiK5gzfVGxiavQ9sT+ByErvB0FASA9b9UoTjc+WgQJPEop/jE4zKAZog1gE+DpTIjIPPikRceGwEaxdbLKAqU71It8EzDAO4BRsvlmxg1g48cn4BAHSvQtr5XOB1L1nrZirghNIeZx6US+q8P2PTvJ8o="
+    - secure: "IaZ8ZbXG/doPFzQA5Hg+hGbjVTV/91TYHSsYgGC4ZbQwJOecLjS8395BU7Rks/UZBfx9mGSL3GkTynmiAdrrVVso7H0sVkwype9f4ogpULeqEc7CsA0x0vk7Vkh4E8BJatCcrTNCxgm+ydegDiuaVTAOyLN/aL35+FdXup0MgOI="
