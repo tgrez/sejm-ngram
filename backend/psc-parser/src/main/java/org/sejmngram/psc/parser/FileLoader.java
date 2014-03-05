@@ -53,6 +53,9 @@ public class FileLoader {
             Hashtable<String, String> poslowie = getPoslowie(header);
 
 
+            HashSet<PoselStanowiskoHelper> poselStanowiskoHelperHashSet = new HashSet<PoselStanowiskoHelper>();
+            
+
             List<Wystapienie> wystapienies = new ArrayList<Wystapienie>();
             List<Element> wystapienia = JOOX.$(text).find("body").find("div").get();
             for (Element wystąpienie : wystapienia) {
@@ -63,6 +66,7 @@ public class FileLoader {
                         String keyForPoslowie = who.replace("#", "");
                         String poselFull = poslowie.get(keyForPoslowie);
                         PoselStanowiskoHelper poselStanowisko = getPoselStanowisko(imionaPoslow, keyForPoslowie, poselFull);
+
                         String tresc = getTresc(wypowiedz);
                         String tytul = getTytul(baseTitle, poselFull);
                         String partia = getPartia(partie, poselStanowisko.posel);
