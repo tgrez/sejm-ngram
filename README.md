@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tgrez/sejm-ngram.png?branch=master)](https://travis-ci.org/tgrez/sejm-ngram)
+
 #Sejm-ngram website (early version 0.1.0):
 [sejm-ngram website][4]
 
