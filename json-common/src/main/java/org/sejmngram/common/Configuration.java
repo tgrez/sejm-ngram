@@ -15,10 +15,12 @@ public class Configuration {
 	private static final String COMMON_OUTPUT_FILENAME_ENDING = "common.json.filename.ending";
 	private static final String OUTPUT_DIR = "common.json.outputDir";
 	private static final String SEJMOMETR_URL = "sejmometr.url";
+	private static final String SEJMOMETR_URL_ENDING = "sejmometr.urlEnding";
 	private static final String SEJMOMETR_WYSTAPIENIA = "sejmometr.sejmWystapienia";
 	private static final String SEJMOMETR_KLUBY = "sejmometr.sejmKluby";
 	private static final String SEJMOMETR_ACCEPT_HEADER = "sejmometr.acceptHeader";
 	private static final String SEJMOMETR_ID_LIST = "sejmometr.idList";
+	private static final String SEJMOMETR_DOWNLOADED_DIR="sejmometr.downloaded.dir";
 	private static final String SEJMOMETR_IDS_DELIMETER = ",";
 	private static final String SEJMOMETR_IDS_RANGE_DELIMETER = "-";
 	
@@ -102,6 +104,14 @@ public class Configuration {
 
 	public String getOutputDir() {
 		return properties.getProperty(OUTPUT_DIR);
+	}
+
+	public String getSejmometrUrlEnding() {
+		return properties.getProperty(SEJMOMETR_URL_ENDING, "");
+	}
+
+	public String getSejmometrDownloadedDir() {
+		return properties.getProperty(SEJMOMETR_DOWNLOADED_DIR, "");
 	}
 
 }
