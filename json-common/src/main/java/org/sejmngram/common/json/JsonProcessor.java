@@ -38,6 +38,10 @@ public class JsonProcessor {
 				jsonPojo);
 	}
 
+    public static <T> T transformFromFile( File file, Class<T> clazz) throws IOException {
+        return objectMapper.readValue( file, clazz);
+    }
+
     public static <T> T readFromFile(File file, T jsonPojo)
             throws JsonGenerationException, JsonMappingException, IOException {
         LOG.debug("Reading from file: " + file);

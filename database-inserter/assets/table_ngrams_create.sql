@@ -1,6 +1,14 @@
+USE sejmngram;
+
+DROP TABLE IF EXISTS ngrams;
+
 CREATE TABLE ngrams (
-	id INT,
+	id INT NOT NULL AUTO_INCREMENT,
 	datefrom DATETIME,
 	dateto DATETIME,
-	blog VARCHAR(10)
+	ngram VARCHAR(256),
+	nrOccurences INT,
+	content TEXT,
+	PRIMARY KEY (id)
+
 );
