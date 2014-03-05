@@ -1,5 +1,7 @@
 package org.sejmngram.common;
 
+import com.sun.jmx.snmp.defaults.DefaultPaths;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +27,15 @@ public class Configuration {
 	private Configuration() {
 		properties = new Properties();
 		try {
-			properties.load(new FileInputStream(System.getProperty("prop.file.loc")));
+            String propertyFilePath = System.getProperty("prop.file.loc");
+            if (propertyFilePath == null) {
+                properties.setProperty("common.json.filename.datePattern", "yyyy-MM-dd");
+                properties.setProperty("common.json.filename.ending", ".json");
+                properties.setProperty("common.json.outputDir", "../jsonPrinterDir");
+            } else {
+                properties.load(new FileInputStream(propertyFilePath));
+            }
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
