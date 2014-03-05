@@ -13,6 +13,7 @@ public class RestClient {
 	
 	private static final String acceptHeader = Configuration.getInstance().getSejmometrAcceptHeader(); 
 	private static final String url = Configuration.getInstance().getSejmometrUrl();
+	private static final String urlEnding = Configuration.getInstance().getSejmometrUrlEnding();
 	private final Client client = Client.create();
 	private final String path;
 	
@@ -21,7 +22,7 @@ public class RestClient {
 	}
 	
 	public String get(int id) {
-		String completeUrl = url + path + id;
+		String completeUrl = url + path + id + urlEnding;
 		WebResource webResource = client.resource(completeUrl);
 		LOG.debug("Sent request to: " + completeUrl);
 		ClientResponse response = webResource.accept(acceptHeader).get(ClientResponse.class);
