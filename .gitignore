@@ -40,3 +40,6 @@ sejmometrDownloaded/
 
 # intellij files
 *.iml
+
+# mock file
+ngrams_mocking.txt
