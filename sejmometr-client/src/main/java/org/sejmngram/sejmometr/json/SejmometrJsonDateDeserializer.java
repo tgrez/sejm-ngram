@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.JsonDeserializer;
 public class SejmometrJsonDateDeserializer extends JsonDeserializer<Date> {
 
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
+			"yyyy-MM-dd");
 
 	@Override
 	public Date deserialize(JsonParser jsonParser,

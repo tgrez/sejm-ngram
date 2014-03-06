@@ -12,8 +12,8 @@ import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.sejmometr.client.RestClient;
 import org.sejmngram.sejmometr.json.datamodel.klub.KlubResponse;
-import org.sejmngram.sejmometr.json.datamodel.wystapienie.WystapienieData;
-import org.sejmngram.sejmometr.json.datamodel.wystapienie.WystapienieResponse;
+import org.sejmngram.sejmometr.json.datamodel.wystapienie2.Data;
+import org.sejmngram.sejmometr.json.datamodel.wystapienie2.WystapienieResponse;
 
 public class SejmometrToCommonTransformer {
 
@@ -23,8 +23,7 @@ public class SejmometrToCommonTransformer {
 	
 	public static Wystapienie doTransform(WystapienieResponse sejmometrWystapienie)
 			throws JsonParseException, JsonProcessingException, IOException {
-		WystapienieData dane = sejmometrWystapienie
-				.getDocument().getContent().getData();
+		Data dane = sejmometrWystapienie.get_data();
 		if (dane == null) {
 			return null;
 		}
@@ -34,8 +33,7 @@ public class SejmometrToCommonTransformer {
 		output.setPosel(dane.getLudzie_nazwa());
 		output.setStanowisko(dane.getStanowiska_nazwa());
 		output.setTytul(dane.getTytul());
-		output.setTresc(sejmometrWystapienie.getDocument().getContent()
-				.getLayers().getHtmlText());
+		output.setTresc(sejmometrWystapienie.get_layers().getHtml().getSejmWystapienia().getM_txt());
 		return output;
 	}
 

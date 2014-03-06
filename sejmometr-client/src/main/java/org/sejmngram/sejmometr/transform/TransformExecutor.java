@@ -11,7 +11,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.common.json.print.Printer;
-import org.sejmngram.sejmometr.json.datamodel.wystapienie.WystapienieResponse;
+import org.sejmngram.sejmometr.json.datamodel.wystapienie2.WystapienieResponse;
 
 public class TransformExecutor {
 
