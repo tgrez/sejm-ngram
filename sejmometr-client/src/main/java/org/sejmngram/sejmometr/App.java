@@ -1,9 +1,11 @@
 package org.sejmngram.sejmometr;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.sejmngram.common.Configuration;
@@ -14,12 +16,15 @@ public class App {
 	
 	private static final RestClient sejmometrRestClient = new RestClient(
 			Configuration.getInstance().getSejmometrWystapienia());
+	private static final String downloadedDir = Configuration.getInstance().getSejmometrDownloadedDir();
 	
 	public static void main(String[] args) {
 		try {
 			Map<Integer, String> responses = new HashMap<Integer, String>();
 			for (Integer id : Configuration.getInstance().getSejmometrIds()) {
-				responses.put(id, sejmometrRestClient.get(id));
+				String responseString = sejmometrRestClient.get(id);
+				writeToFile(id, responseString);
+				responses.put(id, responseString);
 			}
 			TransformExecutor.process(responses);
 		} catch (JsonParseException e) {
@@ -29,5 +34,18 @@ public class App {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void writeToFile(Integer id, String responseString) throws IOException {
+		File dir = new File(downloadedDir);
+		if (!dir.exists() || !dir.isDirectory()) {
+			dir.mkdirs();
+		}
+		String tempDownloadDir = downloadedDir;
+		if (!tempDownloadDir.endsWith(File.separator)) {
+			tempDownloadDir += File.separator;
+		}
+		String filename = tempDownloadDir + "wystapienie" + Integer.toString(id) + ".json";
+		FileUtils.writeStringToFile(new File(filename), responseString, "UTF-8", false);
 	}
 }
