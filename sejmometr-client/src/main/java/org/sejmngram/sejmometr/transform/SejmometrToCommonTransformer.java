@@ -11,7 +11,7 @@ import org.sejmngram.common.Configuration;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.sejmometr.client.RestClient;
-import org.sejmngram.sejmometr.json.datamodel.klub.KlubResponse;
+import org.sejmngram.sejmometr.json.datamodel.klub2.KlubResponse;
 import org.sejmngram.sejmometr.json.datamodel.wystapienie2.Data;
 import org.sejmngram.sejmometr.json.datamodel.wystapienie2.WystapienieResponse;
 
@@ -48,7 +48,7 @@ public class SejmometrToCommonTransformer {
 		String jsonString = sejmometrRestClient.get(partyId);
 		KlubResponse sejmometrResponse = JsonProcessor.transform(
 				jsonString, KlubResponse.class);
-		String nazwa = sejmometrResponse.getDocument().getContent().getData().getNazwa();
+		String nazwa = sejmometrResponse.get_data().getNazwa();
 		LOG.debug("Retrieved klub name: " + nazwa + " for klub id: " + klub_id);
 		partyIdToPartyNameMap.put(partyId, nazwa);
 		return nazwa;
