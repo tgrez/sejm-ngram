@@ -1,0 +1,15 @@
+.domain {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+}
+
+
+/* GRID styles*/
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+    stroke-width: 0;
+}
