@@ -15,7 +15,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.sejmngram.common.json.JsonDateSerializer;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonPropertyOrder({ "posel", "tytul", "data", "stanowisko", "partia", "tresc" })
+@JsonPropertyOrder({ "id", "posel", "tytul", "data", "stanowisko", "partia", "tresc" })
 public class Wystapienie {
 
 	@JsonProperty("posel")
@@ -30,6 +30,8 @@ public class Wystapienie {
 	private String partia;
 	@JsonProperty("tresc")
 	private String tresc;
+    @JsonProperty("id")
+    private String id;
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 	@JsonProperty("posel")
@@ -92,13 +94,23 @@ public class Wystapienie {
 	public void setTresc(String tresc) {
 		this.tresc = tresc;
 	}
-	
-	@Override
+
+    @JsonProperty("id")
+    public String getId() {
+        return id;
+    }
+
+    @JsonProperty("id")
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-	@Override
+    @Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}

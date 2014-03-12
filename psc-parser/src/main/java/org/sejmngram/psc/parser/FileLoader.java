@@ -3,6 +3,7 @@ package org.sejmngram.psc.parser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang.SystemUtils;
 import org.joox.JOOX;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
@@ -24,7 +25,7 @@ public class FileLoader {
 
     private static void parsePSC() {
 
-        String basePath = "../psc-data";
+        String basePath = "psc-data";
         File baseDir = FileUtils.getFile(basePath);
         Collection<File> dirs = FileUtils.listFilesAndDirs(baseDir, FileFilterUtils.directoryFileFilter(), TrueFileFilter.INSTANCE);
 
@@ -34,27 +35,44 @@ public class FileLoader {
 
         ArrayList partiesList = null;
         HashMap<String, OpisPoslaHelper> partie = null;
-        HashSet<String> imionaPoslow = null;
+        HashSet<String> imionaPoslow = new HashSet<String>();
+
+        for (int i = 1; i < 7; i++) {
+            partiesList = readPartiesListFile(i);
+            partie = parsePartiesList(partiesList);
+            HashSet<String> imionaPoslowTemp = getImionaPoslow(partie);
+            imionaPoslow.addAll(imionaPoslowTemp);
+        }
+
+        Hashtable<String, String> poslowie = addSpecialPoslowie();
+        for (File dir : dirs) {
+            String header = readHeaderFile(dir);
+            Hashtable<String, String> poslowieTmp = getPoslowie(header);
+            poslowie.putAll(poslowieTmp);
+        }
+
+        System.out.println("Metadata loaded...");
+
+        int j = 0;
 
         for (File dir : dirs) {
+
+            System.out.println("Parsing " + dir.getPath() + " ...");
 
             if (!dir.getPath().startsWith(basePath.concat("/0" + kadencja))) {
                 String substring = dir.getPath().replace(basePath + "/0", "").substring(0, 1);
                 kadencja = Integer.valueOf(substring).intValue();
                 partiesList = readPartiesListFile(kadencja);
                 partie = parsePartiesList(partiesList);
-                imionaPoslow = getImionaPoslow(partie);
             }
 
             String header = readHeaderFile(dir);
             String text = readContentFile(dir);
             Date date = getDate(header);
             String baseTitle = getBaseTitle(header);
-            Hashtable<String, String> poslowie = getPoslowie(header);
-
+            j = 0;
 
             HashSet<PoselStanowiskoHelper> poselStanowiskoHelperHashSet = new HashSet<PoselStanowiskoHelper>();
-            
 
             List<Wystapienie> wystapienies = new ArrayList<Wystapienie>();
             List<Element> wystapienia = JOOX.$(text).find("body").find("div").get();
@@ -63,21 +81,44 @@ public class FileLoader {
                 for (Element wypowiedz : wypowiedzi) {
                     String who = JOOX.$(wypowiedz).attr("who");
                     if (who != null && !who.equalsIgnoreCase("#komentarz")) {
+                        j += 1;
                         String keyForPoslowie = who.replace("#", "");
                         String poselFull = poslowie.get(keyForPoslowie);
                         PoselStanowiskoHelper poselStanowisko = getPoselStanowisko(imionaPoslow, keyForPoslowie, poselFull);
-
+                        poselStanowiskoHelperHashSet.add(poselStanowisko);
                         String tresc = getTresc(wypowiedz);
                         String tytul = getTytul(baseTitle, poselFull);
                         String partia = getPartia(partie, poselStanowisko.posel);
+                        String id = createId(date, j);
                         Wystapienie wystapienie = createWystapienie(date, poselStanowisko.posel,
-                                poselStanowisko.stanowisko, tresc, tytul, partia);
+                                poselStanowisko.stanowisko, tresc, tytul, partia, id);
                         wystapienies.add(wystapienie);
                     }
                 }
             }
+
+            for (PoselStanowiskoHelper helper : poselStanowiskoHelperHashSet) {
+//                System.out.println(helper.posel + " : " + helper.stanowisko);
+            }
             Printer.printCommonJsonsToFiles(wystapienies);
         }
+    }
+
+    private static String createId(Date date, int j) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return j + sdf.format(date);
+    }
+
+    private static Hashtable<String, String> addSpecialPoslowie() {
+        Hashtable<String, String> poslowie = new Hashtable<String, String>();
+        poslowie.put("GlosZSali", "Głos z sali");
+        poslowie.put("SekretarzPoselMarekDomin", "Sekretarz Poseł Marek Domin");
+        poslowie.put("WicemarszalekJacekKurczewski", "Wicemarszałek Jacek Kurczewski");
+        poslowie.put("WicemarszalekJozefZych", "Wicemarszałek Józef Zych");
+        poslowie.put("WicemarszalekDariuszWojcik", "Wicemarszałek Dariusz Wójcik");
+        poslowie.put("MinisterSprawWewnetrznychAntoniMacierewicz", "Minister Spraw Wewnętrznych Antoni Macierewicz");
+        poslowie.put("PoselBarbaraBlida", "Poseł Barbara Blida");
+        return poslowie;
     }
 
     private static PoselStanowiskoHelper getPoselStanowisko(HashSet<String> imionaPoslow, String keyForPoslowie, String poselFull) {
@@ -101,10 +142,10 @@ public class FileLoader {
                     poselStanowisko.posel = poselFull.substring(indexOfName);
                 }
             }
-            System.out.println("posel: " + poselStanowisko.posel + ", stanowisko: " + poselStanowisko.stanowisko);
         } else {
             poselStanowisko.posel = keyForPoslowie;
             poselStanowisko.stanowisko = keyForPoslowie;
+            System.out.println(keyForPoslowie);
         }
         return poselStanowisko;
     }
@@ -132,7 +173,7 @@ public class FileLoader {
         return partia;
     }
 
-    private static Wystapienie createWystapienie(Date date, String posel, String stanowisko, String tresc, String tytul, String partia) {
+    private static Wystapienie createWystapienie(Date date, String posel, String stanowisko, String tresc, String tytul, String partia, String id) {
         Wystapienie wystapienie = new Wystapienie();
         wystapienie.setPosel(posel);
         wystapienie.setData(date);
@@ -140,6 +181,7 @@ public class FileLoader {
         wystapienie.setStanowisko(stanowisko);
         wystapienie.setTresc(tresc);
         wystapienie.setTytul(tytul);
+        wystapienie.setId(id);
         return wystapienie;
     }
 
@@ -220,7 +262,7 @@ public class FileLoader {
     }
 
     private static ArrayList readPartiesListFile(int kadencja) {
-        File partiesFile = FileUtils.getFile("../psc-data/poslowie_" + kadencja + ".json");
+        File partiesFile = FileUtils.getFile("psc-data/poslowie_" + kadencja + ".json");
         ArrayList partiesList = new ArrayList();
         try {
             partiesList = JsonProcessor.readFromFile(partiesFile, partiesList);
@@ -239,6 +281,23 @@ public class FileLoader {
     private static class PoselStanowiskoHelper {
         String stanowisko;
         String posel;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PoselStanowiskoHelper that = (PoselStanowiskoHelper) o;
+            if (!posel.equals(that.posel)) return false;
+            if (!stanowisko.equals(that.stanowisko)) return false;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = stanowisko.hashCode();
+            result = 31 * result + posel.hashCode();
+            return result;
+        }
     }
 
 }
