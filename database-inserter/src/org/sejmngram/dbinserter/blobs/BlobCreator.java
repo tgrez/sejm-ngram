@@ -1,10 +1,13 @@
 package org.sejmngram.dbinserter.blobs;
 
+import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Dokument;
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.dbinserter.model.RowData;
 import org.sejmngram.dbinserter.utils.Toolkit;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,15 +18,29 @@ import java.util.HashMap;
  */
 public class BlobCreator {
 
-    public static HashMap<String, RowData> getMapOfBlobs(ArrayList<Dokument> dokuments){
 
-//        unixtimestamp(seconds)%Cezary Grarczyk%PlatformaObywatelska^unixtimestamp%AleksanderOlechowski%PlatformaObywatelska^
+    /** @param limitFiles 0 for no limit*/
+    public static HashMap<String, RowData> getMapOfBlobs( String path, int limitFiles, boolean randomIntegerDataForIDs) throws IOException {
+        File dirPath = new File( path);
+        File[] files = dirPath.listFiles();
+
         HashMap<String, RowData> blobsMap = new HashMap<String, RowData>();
         int i = 0 ;
-        int nrAllDokuments = dokuments.size();
+        int nrAllDokuments = files.length;
 
-        for ( Dokument d : dokuments ){
+        for ( File f : files ){
+            //check limit
+            if ( i > limitFiles && limitFiles > 0) break;
+
+            //create Dokument out of it
+            Dokument d = JsonProcessor.transformFromFile(f, Dokument.class);
             System.out.println("processing dokument " + i + " of " + nrAllDokuments);
+
+            //for analysis
+            if ( i % 10 == 0 && i > 0){
+                BlobCreator.performAnalysis( blobsMap );
+            }
+
             for ( Wystapienie wyst : d.getWystapienia()){
                 String[] words = wyst.getTresc().split(" ");
                 long unixPosixTimestamp = wyst.getData().getTime() / 1000;
@@ -48,7 +65,8 @@ public class BlobCreator {
                     }
 
                     //rowData.inreaseNrEntries();
-                    rowData.addEntryToBlob( unixPosixTimestamp, posel, partia );
+
+                    rowData.addEntryToBlob( unixPosixTimestamp, posel, partia, randomIntegerDataForIDs );
 
                     //save blob to hashmap
                     blobsMap.put( word, rowData );
@@ -57,11 +75,13 @@ public class BlobCreator {
             i++;
 
         }
-
         return blobsMap;
     }
 
+
     public static void performAnalysis(HashMap<String,RowData> blobsMap) {
+
+        System.out.println("------------ STATISTICS start -----------------------");
         System.out.println( "\nnr different words:" + blobsMap.keySet().size());
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
@@ -87,7 +107,6 @@ public class BlobCreator {
             }
         }
 
-
         System.out.println( "\nblobs in [KB]: "+ blobBytes / 1024 + " in [MB]: " + blobBytes/(1024*1024));
 
         System.out.println( "\nmin nrOccurences" + min + " for : " + keyMin);
@@ -101,6 +120,9 @@ public class BlobCreator {
         for ( int i = 0; i < 10; i++){
             System.out.println( "blob entries:" + entriesSizes.get( i));
         }
+
+        System.out.println("------------ STATISTICS end -----------------------");
+
 
     }
 

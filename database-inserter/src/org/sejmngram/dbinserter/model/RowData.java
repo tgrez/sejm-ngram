@@ -64,16 +64,39 @@ public class RowData {
         /** Add entry to blob and increases nr entries
          * Handles creation of new blob when needed
          * */
-    public void addEntryToBlob(long posixTimestamp, String posel, String partia) {
+
+    private final static int MAX_PARTIES = 10;
+    private final static int MAX_POSLY = 400;
+
+
+
+     public void addEntryToBlob(long posixTimestamp, String posel, String partia, boolean randomizeIds) {
         if ( getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES){
             this.blobs.add( new Row());
         }
 
+
+
+
         StringBuffer sb = new StringBuffer( getLastBlob() );
-        //add timestamp
-        sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
-                .append( posel ).append( BLOB_ENTRY_WORD_SEPARATOR)
-                .append( partia ).append( BLOB_ENTRIES_SEPARATOR);
+
+        if ( randomizeIds ){
+            // THIS IS FOR TESTING ONLY
+            sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
+                    .append(          (int)   (Math.random() * MAX_POSLY ))
+                    .append(BLOB_ENTRY_WORD_SEPARATOR)
+                    .append( (int) ( Math.random() * MAX_PARTIES )).append(BLOB_ENTRIES_SEPARATOR);
+
+        } else {
+            // THIS IS GNERATING TEXT FOR POSEL / PARTIA
+            //add timestamp
+            sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
+                    .append( posel ).append( BLOB_ENTRY_WORD_SEPARATOR)
+                    .append( partia ).append( BLOB_ENTRIES_SEPARATOR);
+        }
+
+
+
 
 
         getLastRow().inreaseNrEntries();

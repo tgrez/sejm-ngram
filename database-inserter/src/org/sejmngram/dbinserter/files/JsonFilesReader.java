@@ -22,7 +22,6 @@ public class JsonFilesReader {
 
         //for maven build use ".."
         File f = new File( path);
-
         File[] files = f.listFiles();
 
         ArrayList<Dokument> dokuments = new ArrayList<Dokument>();
