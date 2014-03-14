@@ -3,9 +3,8 @@ package org.sejmngram.database.fetcher.connection;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,10 +25,9 @@ public class DbConnectorMock implements DbConnector {
 	private static final Logger LOG = Logger.getLogger(DbConnectorMock.class);
 
 	private static final String filename = "ngrams_mocking.txt";
-	private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	private static DateFormat df = new SimpleDateFormat("yyyyMMdd");
 
 	private static final Pattern ROW_SPLIT_PATTERN = Pattern.compile("\\?");
-	private static final Pattern BLOB_SPLIT_PATTERN = Pattern.compile(";");
 
 	@Override
 	public void connect() {
@@ -38,20 +36,20 @@ public class DbConnectorMock implements DbConnector {
 
 	@Override
 	public NgramResponse retrieve(String ngramName, Date from, Date to,
-			int partyId) {
+			int partyId) throws UnsupportedEncodingException {
 		List<Ngram> ngramFromDb = new ArrayList<Ngram>();
 		List<ListDate> result = new ArrayList<ListDate>();
-		String partyIdString = Integer.toString(partyId);
 		LOG.debug("Reading data from file...");
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename),
 					32768);
 			String line;
-			line = br.readLine();
-			while ((line = br.readLine()) != null) {
+			char[] cbuf = new char[65536];
+			while (br.read(cbuf) > 0) {
+				line = new String(cbuf);
 				String[] columns = ROW_SPLIT_PATTERN.split(line);
 				Ngram ngram = new Ngram();
-				ngram.setId(Integer.valueOf(columns[0]));
+//				ngram.setId(Integer.valueOf(columns[0]));
 				ngram.setNgram(columns[1]);
 				ngram.setFrom(df.parse(columns[2]));
 				ngram.setTo(df.parse(columns[3]));
@@ -66,6 +64,11 @@ public class DbConnectorMock implements DbConnector {
 		}
 		LOG.debug("Finished reading data from file.");
 		LOG.debug("Filtering data...");
+		
+		byte[] date = new byte[8];
+		byte [] poselId = new byte[2];
+		byte[] partiaId = new byte[1];
+		
 		long startTime = System.nanoTime();
 		LOG.debug("Filtering start time:\t" + startTime);
 		for (Ngram ngram : ngramFromDb) {
@@ -73,24 +76,15 @@ public class DbConnectorMock implements DbConnector {
 				continue;
 			final byte[] byteArray = ngram.getBlob();
 			if (byteArray != null) {
-				// final ByteBuffer byteBuffer =
-				// ByteBuffer.allocate(byteArray.length);
-				// byteBuffer.put(byteArray);
-				// final CharBuffer charBuffer =
-				// byteBuffer.asCharBuffer().asReadOnlyBuffer();
-				ByteBuffer byteBuffer = ByteBuffer.wrap(byteArray)
-						.asReadOnlyBuffer();
-				CharBuffer charBuffer = StandardCharsets.UTF_8.decode(
-						byteBuffer).asReadOnlyBuffer();
-				String[] tokens = BLOB_SPLIT_PATTERN.split(charBuffer);
-				if (tokens.length % 3 != 0) {
-					throw new AssertionError("invalid length of blob after splitting");
-				}
-				for (int i = 0; i < tokens.length; i += 3) {
-//						LOG.debug("PartyId=" + tokens[i+2]);
-					if (partyIdString.equals(tokens[i + 2])) {
-						addListDate(result, tokens[i], tokens[i + 1],
-								tokens[i + 2]);
+				for (int k = 0; k < 1024; ++k) {
+					System.arraycopy(byteArray, 32 * k, date, 0, 8);
+					System.arraycopy(byteArray, 32 * k + 8, poselId, 0, 2);
+					System.arraycopy(byteArray, 32 * k + 10, partiaId, 0, 1);
+					String dateString = new String(date, "UTF-8");
+					int poselIdInt = ByteBuffer.wrap(poselId).getInt();
+					int partiaIdInt = ByteBuffer.wrap(partiaId).getInt();
+					if (partyId == partiaIdInt) {
+						addListDate(result, dateString, poselIdInt, partiaIdInt);
 					}
 				}
 			}
@@ -108,7 +102,13 @@ public class DbConnectorMock implements DbConnector {
 	}
 
 	private void addListDate(List<ListDate> result, String date,
-			String poselId, String partyId) {
+			int poselId, int partyId) {
 		result.add(new ListDate(date, 1));
+	}
+
+	@Override
+	public void disconnect() {
+		// TODO Auto-generated method stub
+		
 	}
 }
