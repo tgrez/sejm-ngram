@@ -17,11 +17,11 @@ public class Inserter {
 
     public static void main (String[] args){
 
-
         //read dokuemnt
 //        "./scripts/sejmometr/downloadedData/2011-11-19.json"
 //        ArrayList<Dokument> d = ins.getDokumentFromJsonFile("./scripts/sejmometr/downloadedData/");
 //        ArrayList<Dokument> d = JsonFilesReader.getDokumentFromJsonFile("./scripts/sejmometr/dataFromCorpus/", 0);
+
 
         //get map of blobs
         HashMap<String, RowData> blobMap = null;
