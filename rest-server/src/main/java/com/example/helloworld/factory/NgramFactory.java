@@ -1,5 +1,6 @@
 package com.example.helloworld.factory;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,12 @@ public class NgramFactory {
 
 	public NgramResponse generateNgramResponse(String ngramName) {
 		int partyId = 10;
-		return db.retrieve(ngramName, null, null, partyId);
+		try {
+			return db.retrieve(ngramName, null, null, partyId);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
