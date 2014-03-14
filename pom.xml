@@ -18,6 +18,7 @@
         <module>rest-server</module>
         <module>psc-fetcher</module>
         <module>psc-parser</module>
+        <module>json-common-modifier</module>
     </modules>
 
     <build>
