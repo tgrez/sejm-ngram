@@ -27,10 +27,13 @@ public class NgramFactory {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<PartiesNgrams> partiesNgrams = new ArrayList<PartiesNgrams>();
 
-        for (int j = 0; j < RandomUtils.nextInt(20); j++) {
+        for (int j = 0; j < RandomUtils.nextInt(10); j++) {
 
-            for (int i = 0; i < RandomUtils.nextInt(20); i++) {
-                listDates.add(new ListDate(sdf.format(new Date(RandomUtils.nextLong())), RandomUtils.nextInt()));
+            for (int i = 0; i < RandomUtils.nextInt(200); i++) {
+                long beginDate = 689835600000l;
+                long endDate = 1320987600000l;
+                int limit = (int) (endDate - beginDate);
+                listDates.add(new ListDate(sdf.format(new Date(beginDate + RandomUtils.nextInt(limit))), RandomUtils.nextInt(200)));
             }
 
             partiesNgrams.add(new PartiesNgrams("Party" + j, listDates));
