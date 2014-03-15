@@ -51,52 +51,27 @@ public class RowData {
         }
     }
 
-
-
-
     public RowData(){
         blobs = new ArrayList<Row>();
         blobs.add( new Row());
     }
 
-
-
         /** Add entry to blob and increases nr entries
          * Handles creation of new blob when needed
          * */
 
-    private final static int MAX_PARTIES = 10;
-    private final static int MAX_POSLY = 400;
-
-
-
-     public void addEntryToBlob(long posixTimestamp, String posel, String partia, boolean randomizeIds) {
+     public void addEntryToBlob(long posixTimestamp, String poselId, String partiaId ) {
         if ( getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES){
             this.blobs.add( new Row());
         }
 
-
-
-
         StringBuffer sb = new StringBuffer( getLastBlob() );
 
-        if ( randomizeIds ){
-            // THIS IS FOR TESTING ONLY
-            sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
-                    .append(          (int)   (Math.random() * MAX_POSLY ))
-                    .append(BLOB_ENTRY_WORD_SEPARATOR)
-                    .append( (int) ( Math.random() * MAX_PARTIES )).append(BLOB_ENTRIES_SEPARATOR);
-
-        } else {
-            // THIS IS GNERATING TEXT FOR POSEL / PARTIA
-            //add timestamp
-            sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
-                    .append( posel ).append( BLOB_ENTRY_WORD_SEPARATOR)
-                    .append( partia ).append( BLOB_ENTRIES_SEPARATOR);
-        }
-
-
-
+        // THIS IS GNERATING TEXT FOR POSEL / PARTIA
+        //add timestamp
+        sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
+                .append(poselId).append( BLOB_ENTRY_WORD_SEPARATOR)
+                .append(partiaId).append( BLOB_ENTRIES_SEPARATOR);
 
 
         getLastRow().inreaseNrEntries();

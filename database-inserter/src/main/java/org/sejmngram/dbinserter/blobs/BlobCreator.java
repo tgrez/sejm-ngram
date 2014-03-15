@@ -22,7 +22,7 @@ public class BlobCreator {
 
     /** @param limitFiles 0 for no limit*/
     public static HashMap<String, RowData> getMapOfBlobs(
-            String path, int limitFiles, boolean randomIntegerDataForIDs,
+            String path, int limitFiles,
             DualHashBidiMap poselIdNameMap, DualHashBidiMap partiaIdNameMap
     )
 
@@ -50,8 +50,12 @@ public class BlobCreator {
             for (Wystapienie wyst : d.getWystapienia()){
                 String[] words = wyst.getTresc().replaceAll("[^\\p{L}\\p{Nd}]", " ").split(" ");
                 long unixPosixTimestamp = wyst.getData().getTime() / 1000;
-                String posel = wyst.getPosel();
-                String partia = wyst.getPartia();
+                String poselName = wyst.getPosel();
+                String partiaName = wyst.getPartia();
+                String poselId = (String) poselIdNameMap.getKey( poselName );
+                String partiaId = (String) partiaIdNameMap.getKey( partiaName);
+
+
 
                 for (String word : words){
 
@@ -74,7 +78,7 @@ public class BlobCreator {
 
                     //rowData.inreaseNrEntries();
 
-                    rowData.addEntryToBlob( unixPosixTimestamp, posel, partia, randomIntegerDataForIDs );
+                    rowData.addEntryToBlob( unixPosixTimestamp, poselId, partiaId );
 
                     //save blob to hashmap
                     blobsMap.put( word, rowData );

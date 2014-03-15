@@ -30,24 +30,13 @@ public class Inserter {
          DualHashBidiMap pariaIdNameMap = JsonFilesReader.getJsonMapToMap("./scripts/sejmometr/dataFromCorpus/processed/partiaId.json");
          DualHashBidiMap poselIdNameMap = JsonFilesReader.getJsonMapToMap("./scripts/sejmometr/dataFromCorpus/processed/poselId.json");
 
-
-
-//        HashMap<String, String>
-//
-//        for ( String key : partiaIdMap.keySet()){
-//            System.out.println( key + " -> " + partiaIdMap.get(key));
-//        }
-
-
-
         //get map of blobs
         HashMap<String, RowData> blobMap = null;
         try {
-            blobMap = BlobCreator.getMapOfBlobs("./scripts/sejmometr/dataFromCorpus/", 100, true);
+            blobMap = BlobCreator.getMapOfBlobs("./scripts/sejmometr/dataFromCorpus/", 100, poselIdNameMap, pariaIdNameMap);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         BlobCreator.performAnalysis( blobMap );
 
