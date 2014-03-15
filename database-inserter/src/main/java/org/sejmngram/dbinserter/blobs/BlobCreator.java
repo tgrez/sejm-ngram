@@ -37,17 +37,19 @@ public class BlobCreator {
             System.out.println("processing dokument " + i + " of " + nrAllDokuments);
 
             //for analysis
-            if ( i % 10 == 0 && i > 0){
+            if ( i % 10 == 0 && i > 0) {
                 BlobCreator.performAnalysis( blobsMap );
             }
 
             for (Wystapienie wyst : d.getWystapienia()){
-                String[] words = wyst.getTresc().split(" ");
+                String[] words = wyst.getTresc().replaceAll("[^\\p{L}\\p{Nd}]", " ").split(" ");
                 long unixPosixTimestamp = wyst.getData().getTime() / 1000;
                 String posel = wyst.getPosel();
                 String partia = wyst.getPartia();
 
                 for (String word : words){
+
+                    word = word.trim();
 
                     if (skipWord( word )) continue;   //apply skip rules
 
