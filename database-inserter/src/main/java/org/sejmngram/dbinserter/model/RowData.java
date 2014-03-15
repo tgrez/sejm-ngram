@@ -61,14 +61,12 @@ public class RowData {
          * */
 
      public void addEntryToBlob(long posixTimestamp, String poselId, String partiaId ) {
-        if ( getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES){
-            this.blobs.add( new Row());
+        if (getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES){
+            this.blobs.add(new Row());
         }
 
-        StringBuffer sb = new StringBuffer( getLastBlob() );
+        StringBuffer sb = new StringBuffer(getLastBlob());
 
-        // THIS IS GNERATING TEXT FOR POSEL / PARTIA
-        //add timestamp
         sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
                 .append(poselId).append( BLOB_ENTRY_WORD_SEPARATOR)
                 .append(partiaId).append( BLOB_ENTRIES_SEPARATOR);

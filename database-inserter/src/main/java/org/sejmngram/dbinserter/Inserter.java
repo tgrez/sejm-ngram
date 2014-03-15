@@ -19,21 +19,9 @@ public class Inserter {
 
     public static void main (String[] args){
 
-        //read dokuemnt
-//        "./scripts/sejmometr/downloadedData/2011-11-19.json"
-//        ArrayList<Dokument> d = ins.getDokumentFromJsonFile("./scripts/sejmometr/downloadedData/");
-//        ArrayList<Dokument> d = JsonFilesReader.getDokumentFromJsonFile("./scripts/sejmometr/dataFromCorpus/", 0);
-
-
-//
-
-         DualHashBidiMap pariaIdNameMap = JsonFilesReader.getJsonMapToMap("./scripts/sejmometr/dataFromCorpus/processed/partiaId.json");
-         DualHashBidiMap poselIdNameMap = JsonFilesReader.getJsonMapToMap("./scripts/sejmometr/dataFromCorpus/processed/poselId.json");
-
-        //get map of blobs
         HashMap<String, RowData> blobMap = null;
         try {
-            blobMap = BlobCreator.getMapOfBlobs("./scripts/sejmometr/dataFromCorpus/", 100, poselIdNameMap, pariaIdNameMap);
+            blobMap = BlobCreator.getMapOfBlobs("../jsonModifiedData/", 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
