@@ -1,5 +1,6 @@
 package org.sejmngram.dbinserter.blobs;
 
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.sejmngram.common.json.JsonProcessor;
@@ -9,6 +10,8 @@ import org.sejmngram.dbinserter.utils.Toolkit;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +25,8 @@ public class BlobCreator {
         File dirPath = new File( path);
         File[] files = dirPath.listFiles();
         assert files != null;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
         HashMap<String, RowData> blobsMap = new HashMap<String, RowData>();
         int i = 0;
@@ -43,7 +48,8 @@ public class BlobCreator {
 
                 String[] words = wyst.getTresc().replaceAll("[^\\p{L}\\p{Nd}]", " ").toLowerCase().split(" ");
 
-                long unixPosixTimestamp = wyst.getData().getTime() / 1000;
+
+                String unixPosixTimestamp = dateFormat.format(wyst.getData());
 
                 int poselId = Integer.parseInt(wyst.getPosel());
                 int partiaId = Integer.parseInt(wyst.getPartia());

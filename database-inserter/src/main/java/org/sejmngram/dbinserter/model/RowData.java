@@ -5,6 +5,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -65,13 +66,13 @@ public class RowData {
 
     private ByteBuffer buffer = ByteBuffer.allocate(16);
 
-    public void addEntryToBlob(long posixTimestamp, int poselId, int partiaId) {
+    public void addEntryToBlob(String posixTimestamp, int poselId, int partiaId) {
 
         if (getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES) {
             this.blobs.add(new Row());
         }
 
-        buffer.putLong(0, posixTimestamp);
+        buffer.put(posixTimestamp.getBytes(StandardCharsets.UTF_8), 0, 8);
         buffer.putInt(8, poselId);
         buffer.putInt(12, partiaId);
 
