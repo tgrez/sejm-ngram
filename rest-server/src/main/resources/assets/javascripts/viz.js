@@ -1,5 +1,6 @@
 var width=1000;
 var height=1000;
+var selectbarheight=200;
 var border=50;
 
 function visualize(term) {
@@ -140,6 +141,112 @@ function visualize(term) {
          partyselect.append("span")
             .text(function(d) { return d; });
 
+         sbxscale=d3.scale.linear()
+            .domain([mindate,maxdate])
+            .range([border,width-border]);
+
+         sbrscale=d3.scale.linear()
+            .domain([border,width-border])
+            .range([mindate,maxdate]);
+
+         sbyscale=d3.scale.linear()
+            .domain([0,maxcount])
+            .range([selectbarheight,0]);
+
+         sbpath=d3.svg.line()
+            .x(function(d) { return sbxscale(d.date); })
+            .y(function(d) { return sbyscale(d.count); });
+
+         sb=d3.select("#selectbar > svg");
+        
+
+        var setscale=function() {
+            minx=d3.select("#coverleft").attr("width")*1+border;
+            maxx=d3.select("#coverright").attr("x")*1;
+            console.log(minx,maxx);
+            var nscale=d3.scale.linear()
+                .domain([sbrscale(minx),sbrscale(maxx)])
+                .range([border,width-border]);
+
+            dots.attr("cx",function(d) {
+                return nscale(d.date) });
+            var npath=d3.svg.line()
+                    .x(function(d) { return nscale(d.date)})
+                    .y(function(d) { return yscale(d.count)});
+
+            paths.attr("d",function(d) { return npath(d.listDates)});
+            }
+
+        var dragl=d3.behavior.drag()
+            .on("drag",function(d,i) {
+                d.x+=d3.event.dx;
+                if (d.x < border-5 ) {
+                    d.x = border-5; 
+                    }
+                ox=d3.select("#dragr").attr("x")
+                if (d.x > ox ) {
+                    d.x = parseInt(ox);
+                    }
+                d3.select(this).attr("x",d.x); 
+                d3.select("#coverleft")
+                    .attr("width",d.x-border+5);
+                setscale();
+                })
+
+        var dragr=d3.behavior.drag()
+            .on("drag",function(d,i) {
+                d.x+=d3.event.dx;
+                if (d.x > width-border-5 ) {
+                    d.x = width-border-5; 
+                    }
+                ox=d3.select("#dragl").attr("x")
+                if (d.x < ox ) {
+                    d.x = parseInt(ox);
+                    }
+                d3.select(this).attr("x",d.x); 
+                d3.select("#coverright")
+                    .attr("width",width-border-d.x-5)
+                    .attr("x",d.x+5);
+                setscale();
+                })
+
+         
+
+         sb.append("path")
+            .attr("d",sbpath(total));
+         
+         sb.selectAll("rect.cover")
+            .data([{"width": 0, "x": border, "id": "coverleft"},
+                {"width": 0, "x": width-border, "id": "coverright"}])
+            .enter()
+            .append("rect")
+            .attr("class","cover")
+            .attr("y",0)
+            .attr("height",selectbarheight)
+            .attr("x",function(d) {return d.x })
+            .attr("width", function(d) { return d.width })
+            .attr("id",function(d) { return d.id });
+        
+        sb.append("rect")
+            .data([{"x": border-5, "y": selectbarheight/2-10}])
+            .attr("x",border-5)
+            .attr("y",selectbarheight/2-10)
+            .attr("width",10)
+            .attr("height",20)
+            .attr("class","drag")
+            .attr("id","dragl")
+            .call(dragl);
+
+        sb.append("rect")
+            .data([{"x": width-border-5, "y": selectbarheight/2-10}])
+            .attr("x",width-border-5)
+            .attr("y",selectbarheight/2-10)
+            .attr("width",10)
+            .attr("height",20)
+            .attr("id","dragr")
+            .attr("class","drag")
+            .call(dragr);
+
         };
 
     if (term) {
@@ -153,4 +260,16 @@ function setupGraph() {
     var svg=d3.select("#graph").append("svg")
               .attr("viewBox","0 0 "+width+" "+height)
               .attr("perserveAspectRatio","xMidYMid");
+
+    var sb=d3.select("#selectbar").append("svg")
+        .attr("viewBox", "0 0 "+width+" "+selectbarheight)
+        .attr("perserverAspectRatio","xMidYMid");
+
+    sb.append("rect")
+            .attr("x",border)
+            .attr("y",0)
+            .attr("width",width-border*2)
+            .attr("class","frame")
+            .attr("height",selectbarheight);
+     
     }
