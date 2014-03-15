@@ -7,7 +7,7 @@
 	<artifactId>sejm-ngram</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0</version>
-	<name>sejm-ngram-parent</name>
+    <name>sejm-ngram-parent</name>
 
 
 	<profiles>

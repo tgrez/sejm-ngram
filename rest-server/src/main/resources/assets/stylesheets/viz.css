@@ -1,0 +1,26 @@
+
+g.party > path {
+    fill: none;
+    stroke-width: 0px;
+    }
+
+g.party > path.visible {
+    stroke-width: 1px;
+    }
+
+#selectbar > svg > path {
+    fill: none;
+    stroke: black;
+    stroke-width: 1.5px;
+    }
+#selectbar > svg > rect.frame {
+    fill: none;
+    stroke: #CCC;
+    stroke-width: 1px;
+    } 
+
+#selectbar rect.cover  {
+    stroke: #CCC;
+    stroke-width: 1px;
+    fill: rgba(0,0,0,0.2);
+    }
