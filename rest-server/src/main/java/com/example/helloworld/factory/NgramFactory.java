@@ -31,9 +31,9 @@ public class NgramFactory {
 
             for (int i = 0; i < RandomUtils.nextInt(200); i++) {
                 long beginDate = 689835600000l;
-                long endDate = 1320987600000l;
+                long endDate =  1320987600000l;
                 int limit = (int) (endDate - beginDate);
-                listDates.add(new ListDate(sdf.format(new Date(beginDate + RandomUtils.nextInt(limit))), RandomUtils.nextInt(200)));
+                listDates.add(new ListDate(sdf.format(new Date(beginDate + RandomUtils.nextInt())), RandomUtils.nextInt(200)));
             }
 
             partiesNgrams.add(new PartiesNgrams("Party" + j, listDates));
