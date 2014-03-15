@@ -8,17 +8,19 @@ import java.util.List;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.sejmngram.database.fetcher.connection.DbConnector;
+import org.sejmngram.database.fetcher.connection.MySqlDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.ListDate;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
 
-public class NgramFactory {
+public class NgramProvider {
 
     private DbConnector db;
 
-    public NgramFactory(DbConnector dbConnector) {
-        this.db = dbConnector;
-        this.db.connect();
+    public NgramProvider() {
+        db = new MySqlDbConnector();
+        db.readIdFiles("../psc-data/partiaId.json", "../psc-data/poselId.json");
+        db.connect();
     }
 
     public NgramResponse generateDefaultNgramResponse(String ngramName) {

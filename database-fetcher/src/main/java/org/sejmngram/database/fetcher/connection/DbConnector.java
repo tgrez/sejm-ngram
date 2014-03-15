@@ -10,5 +10,6 @@ public interface DbConnector {
 	void connect();
 	NgramResponse retrieve(String ngram, Date from, Date to, int partyId) throws UnsupportedEncodingException;
 	void disconnect();
+	void readIdFiles(String partyFilename, String poselFilename);
 		
 }
