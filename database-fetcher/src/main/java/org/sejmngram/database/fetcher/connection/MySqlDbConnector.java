@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import org.jooq.DSLContext;
@@ -13,7 +12,8 @@ import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.util.maven.example.tables.Ngrams;
-import org.sejmngram.database.fetcher.converter.Converter;
+import org.sejmngram.database.fetcher.converter.IdConverter;
+import org.sejmngram.database.fetcher.converter.NgramConverter;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
 // TODO exception handling
@@ -24,6 +24,8 @@ public class MySqlDbConnector implements DbConnector {
 	private static final String URL = "jdbc:mysql://localhost:3306/sejmngram";
 
 	private Connection conn = null;
+	
+	private NgramConverter ngramConverter = null;
 	
 	@Override
 	public void connect() {
@@ -59,8 +61,14 @@ public class MySqlDbConnector implements DbConnector {
 //        				.and(Ngrams.NGRAMS.DATETO.greaterOrEqual(new Timestamp(from.getTime())))
         				)
         		.fetch();
-        // TODO use party id
-		return Converter.dbRecordsToNgramResponse(ngramName, result);
+		return ngramConverter.dbRecordsToNgramResponse(ngramName, result);
+	}
+
+	@Override
+	public void readIdFiles(String partyFilename, String poselFilename) {
+		ngramConverter = new NgramConverter(
+				new IdConverter(partyFilename),
+				new IdConverter(poselFilename));
 	}
 
 }

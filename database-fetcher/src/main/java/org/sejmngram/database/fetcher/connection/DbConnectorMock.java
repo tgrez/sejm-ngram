@@ -111,4 +111,10 @@ public class DbConnectorMock implements DbConnector {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void readIdFiles(String partyFilename, String poselFilename) {
+		// TODO Auto-generated method stub
+		
+	}
 }

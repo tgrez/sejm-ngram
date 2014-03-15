@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
-import com.example.helloworld.factory.NgramFactory;
+import com.example.helloworld.factory.NgramProvider;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 
@@ -17,10 +17,10 @@ import com.yammer.metrics.annotation.Timed;
 @Produces(MediaType.APPLICATION_JSON)
 public class NgramResource {
 
-	private final NgramFactory ngramFactory;
+	private final NgramProvider ngramProvider;
 	
-	public NgramResource(NgramFactory ngramFactory) {
-		this.ngramFactory = ngramFactory;
+	public NgramResource() {
+		this.ngramProvider = new NgramProvider();
 	}
 	
 	@GET
@@ -28,6 +28,6 @@ public class NgramResource {
     @Timed
 	public NgramResponse sayHello(@PathParam("ngram") String ngramName,
 			@QueryParam("name") Optional<String> name) {
-		return ngramFactory.generateNgramResponse(ngramName);
+		return ngramProvider.generateDefaultNgramResponse(ngramName);
 	}
 }

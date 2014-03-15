@@ -8,7 +8,7 @@ CREATE TABLE ngrams (
 	dateto DATETIME,
 	ngram VARCHAR(256),
 	nrOccurences INT,
-	content MEDIUMTEXT,
+	content BLOB,
 	PRIMARY KEY (id)
 
 );
