@@ -1,5 +1,11 @@
 package org.sejmngram.dbinserter.model;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.ArrayUtils;
+
+import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -25,25 +31,35 @@ public class RowData {
 
 
     public static class Row {
-        private String blob;
+        private byte[] blob;
         private int nrEntries;
 
-        public Row(){
-            this.blob = "";
+        public Row() {
+            this.blob = new byte[]{};
         }
 
-        public String getBlob() { return this.blob;};
+        public byte[] getBlob() {
+            if (blob == null)
+                return null;
+            byte[] result = new byte[blob.length];
+            System.arraycopy(blob, 0, result, 0, blob.length);
+            return result;
+        }
 
         public int getNrEntries() {
             return nrEntries;
         }
 
-        public void inreaseNrEntries(){
+        public void inreaseNrEntries() {
             nrEntries++;
         }
 
-        public void setBlob(String blob) {
-            this.blob = blob;
+        public void setBlob(byte[] blob) {
+            if (blob == null) {
+                this.blob = null;
+                return;
+            }
+            this.blob = ArrayUtils.addAll(this.blob, blob);
         }
 
         public void setNrEntries(int nrEntries) {
@@ -56,33 +72,28 @@ public class RowData {
         blobs.add( new Row());
     }
 
-        /** Add entry to blob and increases nr entries
-         * Handles creation of new blob when needed
-         * */
+    private ByteBuffer buffer = ByteBuffer.allocate(16);
 
-     public void addEntryToBlob(long posixTimestamp, String poselId, String partiaId ) {
-        if ( getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES){
-            this.blobs.add( new Row());
+    public void addEntryToBlob(String posixTimestamp, int poselId, int partiaId) {
+
+        if (getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES) {
+            this.blobs.add(new Row());
         }
 
-        StringBuffer sb = new StringBuffer( getLastBlob() );
-
-        // THIS IS GNERATING TEXT FOR POSEL / PARTIA
-        //add timestamp
-        sb.append( posixTimestamp ).append( BLOB_ENTRY_WORD_SEPARATOR)
-                .append(poselId).append( BLOB_ENTRY_WORD_SEPARATOR)
-                .append(partiaId).append( BLOB_ENTRIES_SEPARATOR);
-
+        buffer.put(posixTimestamp.getBytes(StandardCharsets.UTF_8), 0, 8);
+        buffer.putInt(8, poselId);
+        buffer.putInt(12, partiaId);
 
         getLastRow().inreaseNrEntries();
-        getLastRow().setBlob( sb.toString());
+        getLastRow().setBlob(buffer.array());
+        buffer.clear();
     }
 
     public ArrayList<Row> getAllRows(){
         return  this.blobs;
     }
 
-    public String getLastBlob() {
+    public byte[] getLastBlob() {
         return getLastRow().getBlob();
     }
 

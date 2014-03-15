@@ -1,87 +1,75 @@
 package org.sejmngram.dbinserter.blobs;
 
-import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.sejmngram.common.json.JsonProcessor;
-import org.sejmngram.common.json.datamodel.Dokument;
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.dbinserter.model.RowData;
 import org.sejmngram.dbinserter.utils.Toolkit;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-/**
- * Created by michalsiemionczyk on 05/03/14.
- */
 public class BlobCreator {
 
-
-    /** @param limitFiles 0 for no limit*/
-    public static HashMap<String, RowData> getMapOfBlobs(
-            String path, int limitFiles,
-            DualHashBidiMap poselIdNameMap, DualHashBidiMap partiaIdNameMap
-    )
+    public static HashMap<String, RowData> getMapOfBlobs(String path, int limitFiles)
 
             throws IOException {
         File dirPath = new File( path);
         File[] files = dirPath.listFiles();
+        assert files != null;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
         HashMap<String, RowData> blobsMap = new HashMap<String, RowData>();
-        int i = 0 ;
+        int i = 0;
         int nrAllDokuments = files.length;
 
-        for (File f : files){
-            //check limit
-            if (i > limitFiles && limitFiles > 0) break;
+        for (File f : files) {
 
-            //create Dokument out of it
-            Dokument d = JsonProcessor.transformFromFile(f, Dokument.class);
+            if (i > limitFiles && limitFiles > 0)
+                break;
+
+            ArrayList<Wystapienie> wystapienia = JsonProcessor.transformFromFile(f, new TypeReference<ArrayList<Wystapienie>>() {});
             System.out.println("processing dokument " + i + " of " + nrAllDokuments);
 
-            //for analysis
-            if ( i % 10 == 0 && i > 0) {
+            if (i % 10 == 0 && i > 0) {
                 BlobCreator.performAnalysis( blobsMap );
             }
 
-            for (Wystapienie wyst : d.getWystapienia()){
-                String[] words = wyst.getTresc().replaceAll("[^\\p{L}\\p{Nd}]", " ").split(" ");
-                long unixPosixTimestamp = wyst.getData().getTime() / 1000;
-                String poselName = wyst.getPosel();
-                String partiaName = wyst.getPartia();
-                String poselId = (String) poselIdNameMap.getKey( poselName );
-                String partiaId = (String) partiaIdNameMap.getKey( partiaName);
+            for (Wystapienie wyst : wystapienia){
+
+                String[] words = wyst.getTresc().replaceAll("[^\\p{L}\\p{Nd}]", " ").toLowerCase().split(" ");
 
 
+                String unixPosixTimestamp = dateFormat.format(wyst.getData());
+
+                int poselId = Integer.parseInt(wyst.getPosel());
+                int partiaId = Integer.parseInt(wyst.getPartia());
 
                 for (String word : words){
 
                     word = word.trim();
+                    if (skipWord(word)) continue;
+                    RowData rowData;
 
-                    if (skipWord( word )) continue;   //apply skip rules
-
-                    RowData rowData = null;
-
-                    //check it word exists
-                    if ( blobsMap.containsKey( word )){
-                        rowData = blobsMap.get( word );
+                    if (blobsMap.containsKey(word)) {
+                        rowData = blobsMap.get(word);
                     } else {
                         rowData = new RowData();
-
-                        //sets dateFrom
-                        rowData.setDateFrom( wyst.getData() );
-                        rowData.setDateTo( wyst.getData());
+                        rowData.setDateFrom(wyst.getData());
+                        rowData.setDateTo(wyst.getData());
                     }
 
-                    //rowData.inreaseNrEntries();
-
-                    rowData.addEntryToBlob( unixPosixTimestamp, poselId, partiaId );
-
-                    //save blob to hashmap
-                    blobsMap.put( word, rowData );
+                    rowData.addEntryToBlob(unixPosixTimestamp, poselId, partiaId);
+                    blobsMap.put(word, rowData);
                 }
             }
             i++;
@@ -105,7 +93,7 @@ public class BlobCreator {
         for ( String key :  blobsMap.keySet() ){
             RowData d = blobsMap.get( key );
 
-            blobBytes += Toolkit.getStringSizeInBytes(d.getLastBlob());
+            blobBytes += blobBytes += d.getLastBlob().length;
 
             int keySize = blobsMap.get( key ).getNrAllEntries();
             entriesSizes.add( keySize );
@@ -141,7 +129,7 @@ public class BlobCreator {
     /** Applies rules of skipping word*/
     private static boolean skipWord( String word){
         //cehck if not length of 1
-        if ( word.length() == 1) return true;
+        if (word.length() == 1 || word.length() == 0) return true;
 
         return false;
     }
