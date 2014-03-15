@@ -28,6 +28,6 @@ public class NgramResource {
     @Timed
 	public NgramResponse sayHello(@PathParam("ngram") String ngramName,
 			@QueryParam("name") Optional<String> name) {
-		return ngramFactory.generateNgramResponse(ngramName);
+		return ngramFactory.generateDefaultNgramResponse(ngramName);
 	}
 }

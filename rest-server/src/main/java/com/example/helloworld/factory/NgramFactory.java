@@ -18,9 +18,8 @@ public class NgramFactory {
 		this.db.connect();
 	}
 	
-	public NgramResponse generateDefaultNgramResponse() {
+	public NgramResponse generateDefaultNgramResponse(String ngramName) {
 		List<ListDate> listDates = new ArrayList<ListDate>();
-		String ngramName = "domyślnowyraz";
 		
 		listDates.add(new ListDate("2011-02-08", 21));
 		listDates.add(new ListDate("2011-02-09", 123));
