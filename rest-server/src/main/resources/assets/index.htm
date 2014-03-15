@@ -20,22 +20,11 @@
       <!-- SejmoGram own style-->
       <link href="/stylesheets/main.css" rel="stylesheet">
 
-    <script src="/assets/js/jquery-1.10.2.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/holder.js"></script>
-    <script src="/assets/js/bootstrap-select.js"></script>
-
-
-    <!-- Our own code -->
-    <script type="text/javascript" src="d3/d3.v3.js"></script>
-    <script type="text/javascript" src="javascripts/getData.js"></script>
-    <script type="text/javascript" src="javascripts/visualize.js"></script>
-    <script type="text/javascript" src="javascripts/helper.js"></script>
-    <script type="text/javascript" src="javascripts/jquery.tipsy.js"></script>
-    <script type="text/javascript" src="javascripts/bestNgrams.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/theme.css" rel="stylesheet">
+
+    <link href="/stylesheets/viz.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -56,7 +45,7 @@
 	</style>
   </head>
 
-  <body  onload="loadForms(); buttonGenVizPressed();">
+  <body>
 
     <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -111,7 +100,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+	<!--		<div class="form-group">
 				<div class="col-xs-2">
 					<label class="control-label" for="inputDateFrom">date from:</label>
 				</div>
@@ -127,7 +116,7 @@
 				<div class="col-xs-3">
 					<input id="inputDateTo" class="form-control" placeholder="2011-12-1">
 				</div>
-			</div>
+			</div> -->
 
 <!--			<div class="form-group">
 				<div class="btn-group col-xs-3">
@@ -150,81 +139,14 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-				<div class="col-xs-2">
-		        	<label class="control-label" for="selectField1Grams">popular 1grams:</label>
-				</div>
-				<div class="col-xs-3">
-					<select id="selectField1Grams" class="selectpicker" onChange="ngramSelected(this.options[this.value].text);" />
-					</select>
-		        </div>
-			</div>
-			
-			<div class="form-group">
-				<div class="col-xs-2">
-			    	<label class="control-label" for="selectField2Grams">popular 3grams:</label>
-				</div>
-				<div class="col-xs-3">
-					<select id="selectField2Grams" class="selectpicker" onChange="ngramSelected(this.options[this.value].text);">
-					</select>
-				</div>
-	        </div>
-
-			<div class="form-group">
-				<div class="col-xs-2">
-					<label class="control-label" for="selectField3Grams">popular 3grams:</label>
-				</div>
-				<div class="col-xs-3">					
-					<select id="selectField3Grams" class="selectpicker" onChange="ngramSelected(this.options[this.value].text);">
-					</select>
-		        </div>
-		    </div>
-
 		</form>
 
 	<div id="graph" class="aGraph" style="float:left"></div>
         <!-- That's legend / turning on/off the sets for different parties -->
         <div id="legendDiv" style="margin-top: 50px"> 
-            <div> 
-                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
-                PartyName_1;
-            </div>
-            <div> 
-                <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
-                PartyName_2;
-            </div>
         </div>
         <div style="clear:both">
 
-
-        <h4> viz debug options:</h4>
-
-        <!-- Some more controls for bottom line -->
-        <div style="float:left;" >
-            <label for="inputChkBoxDrawLines">draw lines: </label>
-            <input type="checkbox" id= "inputChkBoxDrawLines" size="25" value="!" onClick="checkBoxDrawLinesPressed(this);"/>  
-        </div>
-
-        <div style="margin-left:110px; float:left">
-            <label for="inputChkBoxIncludeZeros">include 0-s: (needs to generate viz again)</label>
-            <input type="checkbox" id= "inputChkBoxIncludeZeros" size="25" value="!" onClick="console.log('chbox presed! ' + this.checked );"/>  
-        </div>
-
-        <div style="margin-left:550px;">
-            <label for="inputChkBoxLegendChart">show on-chart legend:</label>
-            <input type="checkbox" id= "inputChkBoxLegendChart" size="25" value="!" onClick="checkBoxShowChartLegendPressed(this);"/>  
-        </div>        
-
-        <div style="float:left; " >
-            <label for="inputXRes">x-res: </label>
-            <input id="inputXRes" type="text" size="15" value="12"/>  
-        </div>
-
-        <div style="float:left; margin-left:35px">
-            <label for="inputChkUseAllDataPoints">use all datapoints (needs to regenerate viz again): </label>
-            <input type="checkbox" id= "inputChkUseAllDataPoints" size="25" value="!" onClick="console.log('chbox pressed');" checked />  
-        </div>
-        <div style="clear:both"/>
 
 
         <h1> help </h1>
@@ -283,84 +205,18 @@
 			    </div>-->
 
         <!-- JavaScript - functions for manipulating the GUI (could be in sepearated file though) -->
+        <script src="/assets/js/jquery-1.10.2.js"></script>
+        <script src="/assets/js/bootstrap.min.js"></script>
+        <script src="/assets/js/holder.js"></script>
+        <script src="/assets/js/bootstrap-select.js"></script>
+
+
+        <!-- Our own code -->
+        <script type="text/javascript" src="d3/d3.v3.js"></script>
+        <script type="text/javascript" src="assets/js/underscore-min.js"></script>
+        <script type="text/javascript" src="javascripts/viz.js"></script>
+        <script type="text/javascript" src="javascripts/gui.js"></script>
         <script>
-
-            //here we contain functions maintaining GUI
-            /* After the button "Generate Viz!" was pressed.*/
-            function buttonGenVizPressed(){
-                console.log("button Pressed");
-                var ngram = document.getElementById("inputNgram").value;
-                var dateFrom = document.getElementById("inputDateFrom").value;
-                var dateTo = document.getElementById("inputDateTo").value;  
-                var xRes = document.getElementById("inputXRes").value;  
-                //startVisualization(ngram, dateFrom, dateTo, xRes);
-
-                ngram = "Ala ma Kota";
-                startJsonApiBasedVisualization(ngram, dateFrom, dateTo, xRes)
-            }
-
-            /* Handle "Draw Lines" CheckBox */
-            function checkBoxDrawLinesPressed(chckBox){
-                for(partylines in dataSets){
-                    document.getElementById("idPathPoint" + partylines).style.visibility =
-                        chckBox.checked ? "visible" : "hidden";
-                }
-            }
-
-            /** Handles checkbox for chart legend pressed */
-            function checkBoxShowChartLegendPressed(chkBox){
-                var chartLegendGroup = document.getElementById("legendOnChart");
-                chartLegendGroup.style.visibility = 
-                    chkBox.checked ? "visible" : "hidden";
-            }
-
-            /* Puts chosen ngram to textField. Invoked after selecting ngram from 
-                any of the select fields
-            */
-            function ngramSelected(ngramWord){
-				alert(ngramWord);
-                document.getElementById("inputNgram").value = ngramWord;
-            }
-
-            /* for manipulating*/
-            function partyLegendCheckBoxClicked(checkBox){
-                
-                var divId = checkBox.parentNode.id; //divId = "legendDiv" + "nr"
-                var clickedPartyId = divId.substring(9);
-
-                var lineGroupId = document.getElementById("lineGroupId" + clickedPartyId);
-                // lineGroupId.style.visibility = 
-                //     checkBox.checked ? "visible" : "hidden";
-
-                 lineGroupId.style.display = 
-                    checkBox.checked ? "inline" : "none";
-
-
-                // console.log("legen checkbox clicked!");
-                // console.log(checkBox);
-                // console.log(clickedPartyId);
-            }
-
-            /* Fills the form with necessary data*/
-            function loadForms(){
-                // fill 1grams select form
-                var field1Grams = document.getElementById("selectField1Grams");
-                for(i = 0, x = oneGrams.length;  i < x ; i++){
-                    field1Grams.options[field1Grams.options.length] = new Option(oneGrams[i], i);
-                }
-
-                // fill 2grams select form
-                var field2Grams = document.getElementById("selectField2Grams");
-                for(i = 0, x = twoGrams.length;  i < x ; i++){
-                    field2Grams.options[field2Grams.options.length] = new Option(twoGrams[i], i);
-                }
-
-                // fill 3grams select form
-                var field3Grams = document.getElementById("selectField3Grams");
-                for(i = 0, x = threeGrams.length;  i < x ; i++){
-                    field3Grams.options[field3Grams.options.length] = new Option(threeGrams[i], i);
-                }
-            }
 
 		$(function(){
 
@@ -369,19 +225,11 @@
 			  $(".btn:first-child").val($(this).text());
 
 		   });
+        $(document).ready(function() {
+            setupGraph();
+            });
 		})
         </script>
-
-        <!-- 
-            JavaScript - Main loop of the file - vizualises default ngrams 
-        -->
-        <script>
-        </script>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-
 
 
 
