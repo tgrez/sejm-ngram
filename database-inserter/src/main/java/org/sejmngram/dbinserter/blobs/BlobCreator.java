@@ -34,28 +34,30 @@ public class BlobCreator {
         int i = 0 ;
         int nrAllDokuments = files.length;
 
-        for ( File f : files ){
+        for (File f : files){
             //check limit
-            if ( i > limitFiles && limitFiles > 0) break;
+            if (i > limitFiles && limitFiles > 0) break;
 
             //create Dokument out of it
             Dokument d = JsonProcessor.transformFromFile(f, Dokument.class);
             System.out.println("processing dokument " + i + " of " + nrAllDokuments);
 
             //for analysis
-            if ( i % 10 == 0 && i > 0){
+            if ( i % 10 == 0 && i > 0) {
                 BlobCreator.performAnalysis( blobsMap );
             }
 
-            for ( Wystapienie wyst : d.getWystapienia()){
-                String[] words = wyst.getTresc().split(" ");
+            for (Wystapienie wyst : d.getWystapienia()){
+                String[] words = wyst.getTresc().replaceAll("[^\\p{L}\\p{Nd}]", " ").split(" ");
                 long unixPosixTimestamp = wyst.getData().getTime() / 1000;
                 String posel = wyst.getPosel();
                 String partia = wyst.getPartia();
 
-                for ( String word : words ){
+                for (String word : words){
 
-                    if ( skipWord( word )) continue;;   //apply skip rules
+                    word = word.trim();
+
+                    if (skipWord( word )) continue;   //apply skip rules
 
                     RowData rowData = null;
 
