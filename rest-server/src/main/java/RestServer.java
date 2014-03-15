@@ -1,4 +1,4 @@
-import com.example.helloworld.factory.NgramFactory;
+import com.example.helloworld.factory.NgramProvider;
 import org.sejmngram.database.fetcher.json.datamodel.ListDate;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
@@ -13,7 +13,7 @@ public class RestServer {
 
 
 
-        NgramFactory nF = new NgramFactory();
+        NgramProvider nF = new NgramProvider();
 
         NgramResponse respo = nF.generateDefaultNgramResponse("nie");
 

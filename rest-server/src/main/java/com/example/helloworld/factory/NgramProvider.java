@@ -24,10 +24,6 @@ public class NgramProvider {
     }
 
 
-    public NgramFactory(){
-
-    }
-
     public NgramResponse generateDefaultNgramResponse(String ngramName) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
