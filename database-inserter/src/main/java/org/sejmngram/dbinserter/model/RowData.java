@@ -39,7 +39,11 @@ public class RowData {
         }
 
         public byte[] getBlob() {
-            return this.blob;
+            if (blob == null)
+                return null;
+            byte[] result = new byte[blob.length];
+            System.arraycopy(blob, 0, result, 0, blob.length);
+            return result;
         }
 
         public int getNrEntries() {
@@ -51,7 +55,11 @@ public class RowData {
         }
 
         public void setBlob(byte[] blob) {
-            this.blob = blob;
+            if (blob == null) {
+                this.blob = null;
+                return;
+            }
+            this.blob = ArrayUtils.addAll(this.blob, blob);
         }
 
         public void setNrEntries(int nrEntries) {
