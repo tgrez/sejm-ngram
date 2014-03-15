@@ -16,15 +16,19 @@ public class ResponseBuilder {
 	}
 	
 	public void addOccurance(String partyName, String date) {
+		addOccurances(partyName, date, 1);
+	}
+	
+	public void addOccurances(String partyName, String date, int occurances) {
 		if (!partiesMap.containsKey(partyName)) {
 			partiesMap.put(partyName, new HashMap<String, Integer>());
 		}
-		Integer previousCount = partiesMap.get(partyName).get(date);
-		if (previousCount == null) {
-			previousCount = 0;
+		Integer count = partiesMap.get(partyName).get(date);
+		if (count == null) {
+			count = 0;
 		}
-		++previousCount;
-		partiesMap.get(partyName).put(date, previousCount);
+		count += occurances;
+		partiesMap.get(partyName).put(date, count);
 	}
 	
 	public NgramResponse generateResponse() {
