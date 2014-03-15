@@ -27,7 +27,7 @@ public class NgramFactory {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<PartiesNgrams> partiesNgrams = new ArrayList<PartiesNgrams>();
 
-        for (int j = 0; j < RandomUtils.nextInt(j*10); j++) {
+        for (int j = 0; j < RandomUtils.nextInt((j+1)*10); j++) {
 
             for (int i = 0; i < RandomUtils.nextInt(200); i++) {
                 long beginDate = 689835600000l;
