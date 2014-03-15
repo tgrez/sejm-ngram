@@ -1,5 +1,6 @@
 package org.sejmngram.dbinserter.blobs;
 
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Dokument;
 import org.sejmngram.common.json.datamodel.Wystapienie;
@@ -20,7 +21,12 @@ public class BlobCreator {
 
 
     /** @param limitFiles 0 for no limit*/
-    public static HashMap<String, RowData> getMapOfBlobs( String path, int limitFiles, boolean randomIntegerDataForIDs) throws IOException {
+    public static HashMap<String, RowData> getMapOfBlobs(
+            String path, int limitFiles, boolean randomIntegerDataForIDs,
+            DualHashBidiMap poselIdNameMap, DualHashBidiMap partiaIdNameMap
+    )
+
+            throws IOException {
         File dirPath = new File( path);
         File[] files = dirPath.listFiles();
 

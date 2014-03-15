@@ -1,11 +1,13 @@
 package org.sejmngram.dbinserter.files;
 
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Dokument;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by michalsiemionczyk on 05/03/14.
@@ -18,6 +20,20 @@ public class JsonFilesReader {
      * @param limitFilesRead 0 for no limit
      * @return
      */
+
+    public static DualHashBidiMap getJsonMapToMap( String path){
+        HashMap<String, String> map = null;
+        try {
+            map = JsonProcessor.jsonFileToHashMap( path );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DualHashBidiMap dMap = new DualHashBidiMap( map);
+        return dMap;
+    }
+
+
     public static ArrayList<Dokument> getDokumentFromJsonFile( String path, int limitFilesRead ){
 
         //for maven build use ".."
