@@ -21,19 +21,25 @@ public class NgramFactory {
         this.db.connect();
     }
 
+
+    public NgramFactory(){
+
+    }
+
     public NgramResponse generateDefaultNgramResponse(String ngramName) {
-        List<ListDate> listDates = new ArrayList<ListDate>();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<PartiesNgrams> partiesNgrams = new ArrayList<PartiesNgrams>();
 
-        for (int j = 0; j < RandomUtils.nextInt((j+1)*10); j++) {
+        for (int j = 0; j < RandomUtils.nextInt(9)+ 1 ; j++) {
+
+            List<ListDate> listDates = new ArrayList<ListDate>();
 
             for (int i = 0; i < RandomUtils.nextInt(200); i++) {
                 long beginDate = 689835600000l;
-                long endDate =  1320987600000l;
-                int limit = (int) (endDate - beginDate);
-                listDates.add(new ListDate(sdf.format(new Date(beginDate + RandomUtils.nextInt())), RandomUtils.nextInt(200)));
+//                long endDate =  1320987600000l;
+//                int limit = (int) (endDate - beginDate);
+                listDates.add(new ListDate(sdf.format(new Date(beginDate + RandomUtils.nextInt())), RandomUtils.nextInt((200))));
             }
 
             partiesNgrams.add(new PartiesNgrams("Party" + j, listDates));
