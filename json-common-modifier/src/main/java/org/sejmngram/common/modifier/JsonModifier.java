@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 /**
  * Created by krzysztofsiejkowski on 13/03/14.
@@ -26,8 +27,10 @@ public class JsonModifier {
     }
 
     private static void modifyJson() {
-        String baseInputPath = "../jsonPrinterDir";
-        String baseOutputDir = "../jsonModifiedData";
+//        String baseInputPath = "../jsonPrinterDir";
+        String baseInputPath = "./scripts/sejmometr/dataFromCorpus";
+//        String baseOutputDir = "../jsonModifiedData";
+        String baseOutputDir = baseInputPath + "/processed";
         File dir = new File(baseOutputDir);
         if (!dir.exists()) {
             dir.mkdirs();

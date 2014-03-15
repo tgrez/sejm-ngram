@@ -1,5 +1,6 @@
 package org.sejmngram.dbinserter;
 
+import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Dokument;
 import org.sejmngram.dbinserter.blobs.BlobCreator;
 import org.sejmngram.dbinserter.db.DatabaseRepo;
@@ -21,6 +22,19 @@ public class Inserter {
 //        "./scripts/sejmometr/downloadedData/2011-11-19.json"
 //        ArrayList<Dokument> d = ins.getDokumentFromJsonFile("./scripts/sejmometr/downloadedData/");
 //        ArrayList<Dokument> d = JsonFilesReader.getDokumentFromJsonFile("./scripts/sejmometr/dataFromCorpus/", 0);
+
+        HashMap<String, String> partiaIdMap = null;
+        try {
+            partiaIdMap = JsonProcessor.jsonFileToHashMap(
+                    "./scripts/sejmometr/dataFromCorpus/processed/partiaId.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for ( String key : partiaIdMap.keySet()){
+            System.out.println( key + " -> " + partiaIdMap.get(key));
+        }
+
 
 
         //get map of blobs

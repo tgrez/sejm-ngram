@@ -17,6 +17,8 @@ public class Dokument {
 
 	@JsonProperty("wystapienia")
 	private List<Wystapienie> wystapienia = new ArrayList<Wystapienie>();
+
+
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 	@JsonProperty("wystapienia")

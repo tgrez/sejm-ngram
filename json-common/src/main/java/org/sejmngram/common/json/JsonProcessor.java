@@ -3,6 +3,7 @@ package org.sejmngram.common.json;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
@@ -10,6 +11,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 public class JsonProcessor {
 
@@ -46,6 +48,15 @@ public class JsonProcessor {
             throws JsonGenerationException, JsonMappingException, IOException {
         LOG.debug("Reading from file: " + file);
         return (T) objectMapper.readValue(file, jsonPojo.getClass());
+    }
+
+    public static HashMap<String, String> jsonFileToHashMap( String path) throws IOException {
+
+        HashMap<String, String> map;
+        map = objectMapper.readValue(new File ( path),
+                new TypeReference<HashMap<String,String>>(){});
+
+        return map;
     }
 	
 }
