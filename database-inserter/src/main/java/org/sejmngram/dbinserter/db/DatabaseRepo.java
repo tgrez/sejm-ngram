@@ -44,11 +44,11 @@ public class DatabaseRepo {
                 for ( RowData.Row row :  rowData.getAllRows()){
                     stmt = c.prepareStatement("INSERT INTO sejmngram.ngrams values ( default, ?, ?, ?, ?, ?)");
 
-                    stmt.setDate( 1, new java.sql.Date( rowData.getDateFrom().getTime() ));
-                    stmt.setDate( 2, new java.sql.Date( rowData.getDateTo().getTime() ));
-                    stmt.setString( 3, ngram );
-                    stmt.setInt( 4, row.getNrEntries());
-                    stmt.setString( 5, row.getBlob() );
+                    stmt.setDate(1, new java.sql.Date(rowData.getDateFrom().getTime()));
+                    stmt.setDate(2, new java.sql.Date(rowData.getDateTo().getTime()));
+                    stmt.setString(3, ngram);
+                    stmt.setInt(4, row.getNrEntries());
+                    stmt.setBytes(5, row.getBlob());
 
                     //create table
                     int result =  stmt.executeUpdate();

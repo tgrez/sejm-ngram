@@ -45,17 +45,16 @@ public class BlobCreator {
 
                 long unixPosixTimestamp = wyst.getData().getTime() / 1000;
 
-                String poselId = wyst.getPosel();
-                String partiaId = wyst.getPartia();
+                int poselId = Integer.parseInt(wyst.getPosel());
+                int partiaId = Integer.parseInt(wyst.getPartia());
 
                 for (String word : words){
 
                     word = word.trim();
-                    if (skipWord(word))
-                        continue;
+                    if (skipWord(word)) continue;
                     RowData rowData;
 
-                    if (blobsMap.containsKey(word)){
+                    if (blobsMap.containsKey(word)) {
                         rowData = blobsMap.get(word);
                     } else {
                         rowData = new RowData();
@@ -64,9 +63,7 @@ public class BlobCreator {
                     }
 
                     rowData.addEntryToBlob(unixPosixTimestamp, poselId, partiaId);
-
-                    //save blob to hashmap
-                    blobsMap.put( word, rowData );
+                    blobsMap.put(word, rowData);
                 }
             }
             i++;
@@ -90,7 +87,7 @@ public class BlobCreator {
         for ( String key :  blobsMap.keySet() ){
             RowData d = blobsMap.get( key );
 
-            blobBytes += Toolkit.getStringSizeInBytes(d.getLastBlob());
+            blobBytes += blobBytes += d.getLastBlob().length;
 
             int keySize = blobsMap.get( key ).getNrAllEntries();
             entriesSizes.add( keySize );
@@ -126,7 +123,7 @@ public class BlobCreator {
     /** Applies rules of skipping word*/
     private static boolean skipWord( String word){
         //cehck if not length of 1
-        if ( word.length() == 1) return true;
+        if (word.length() == 1 || word.length() == 0) return true;
 
         return false;
     }
