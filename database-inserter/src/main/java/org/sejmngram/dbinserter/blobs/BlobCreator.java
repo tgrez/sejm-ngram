@@ -64,11 +64,9 @@ public class BlobCreator {
                         rowData = blobsMap.get(word);
                     } else {
                         rowData = new RowData();
-                        rowData.setDateFrom(wyst.getData());
-                        rowData.setDateTo(wyst.getData());
                     }
 
-                    rowData.addEntryToBlob(unixPosixTimestamp, poselId, partiaId);
+                    rowData.addEntryToBlob(unixPosixTimestamp, poselId, partiaId, wyst.getData(), wyst.getData());
                     blobsMap.put(word, rowData);
                 }
             }
