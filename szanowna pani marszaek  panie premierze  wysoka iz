@@ -1,0 +1,41 @@
+szanowna pani marszaek  panie premierze  wysoka izbo  chciabym opowiedziec dzisiaj o autostradowej obwodnicy wrocawia  otoz wrocaw ma juz swoja obwodnice  za tej kadencji sejmu nie tylko rozpoczelismy jej budowe  ale tez ja skonczylismy   
+
+ALTER TABLE ngramsTS ADD FULLTEXT INDEX idx_tresc (tresc);
+
+
+SELECT * FROM ngramsTS WHERE  MATCH (tresc) AGAINST ('aborcja')
+
+
+SELECT 
+	ROUND ((LENGTH(tresc) - LENGTH( REPLACE ( tresc, '"aborcja"', "") )  ) / LENGTH('"aborcja"')) AS count
+ FROM ngramsTS WHERE  MATCH (tresc) AGAINST ('"aborcja"');
+
+  AND MATCH (tresc) AGAINST ('Izbo');
+
+
+     SELECT  ROUND ((LENGTH(tresc) - LENGTH( REPLACE ( tresc, 'aborcja', '') )  ) / LENGTH('aborcja')) AS count, tresc  FROM ngramsTS WHERE  MATCH (tresc) AGAINST ('"aborcja"' IN BOOLEAN MODE);
+
+
+
+     SELECT  ROUND ((LENGTH(tresc) - LENGTH( REPLACE ( tresc, 'wysoka izbo', '') )  ) / LENGTH('wysoka izbo')) AS count, tresc  FROM ngramsTS WHERE  MATCH (tresc) AGAINST ('wysoka')   AND MATCH (tresc) AGAINST ('izbo');
+
+
+     SELECT  ROUND ((LENGTH(tresc) - LENGTH( REPLACE ( tresc, 'wysoka izbo', '') )  ) / LENGTH('wysoka izbo')) AS count, tresc  FROM ngramsTS WHERE  MATCH (tresc) AGAINST ('wysoka')   AND MATCH (tresc) AGAINST ('izbo');
+
+
+
+
+
+SELECT SUM(dbo.fn_CountInNText('aborcja',w.Tresc)), w.Data
+FROM Wystapienia w
+WHERE CONTAINS(w.Tresc, 'aborcja')
+GROUP BY w.Data
+ORDER BY w.Data ASC
+
+
+
+boolean bool = true;
+int intBool = "false".indexOf("" + bool) + 1;
+
+
+ A więc żadna ustawa czy to w Niemczech, czy w Wielkiej Brytanii, czy w Szwajcarii, nie tak dawno zliberalizowana, czy we Francji, czy w Holandii, którą pani posłanka przypomniała, nikomu nie nakazuje przerwania, nikogo nie zmusza ani nie zachęca do przerwania ciąży, ale nie wprowadza absurdalnych zakazów, które są nie do wykonania i które są niewykonywane. Dlatego odstąpiono w demokracjach europejskich od niemądrych, restrykcyjnych przepisów, że one przynosiły więcej szkód. Można nie zgadzać się z aborcją, ale z tego powinien wynikać inny wniosek: to nie znaczy, że jednocześnie trzeba wprowadzać przepisy karne jej zakazujące. Przytoczę piękne słowa, więc proszę to wziąć pod uwagę, z listu od Katolików na rzecz Wyboru. Otóż papież Paweł VI pouczał chrześcijan w społeczności politycznej, aby pokazywali czynem, jak da się pogodzić władzę z wolnością, czyli nie poprzez państwowe prawo karne, tylko w inny sposób, i wtedy będzie możliwy kompromis.    

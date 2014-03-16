@@ -1,10 +1,16 @@
 package org.sejmngram.dbinserter.blobs;
 
+import com.sun.java.swing.plaf.windows.TMSchema;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.type.TypeReference;
+import org.jooq.util.maven.example.tables.Ngrams;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
+import org.sejmngram.database.fetcher.converter.NgramConverter;
+import org.sejmngram.database.fetcher.json.datamodel.ListDate;
+import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
+import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
 import org.sejmngram.dbinserter.model.RowData;
 import org.sejmngram.dbinserter.utils.Toolkit;
 
@@ -12,10 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 public class BlobCreator {
 
@@ -120,6 +123,72 @@ public class BlobCreator {
         }
 
         System.out.println("------------ STATISTICS end -----------------------");
+
+
+    }
+
+    private static final int SINGLE_BLOB_SIZE = 16;
+
+
+
+    public static NgramResponse blobDataToNgramRespons( String ngram,  RowData rowData){
+
+        List<PartiesNgrams> listParties = new ArrayList<PartiesNgrams>();
+
+        //maps part -> map [ date -> nr occurances]
+        HashMap<String, HashMap<String, Integer >> partyNameMap = new HashMap<String, HashMap<String, Integer >>();
+
+
+
+        for ( RowData.Row r : rowData.getAllRows()){
+            byte[] blob = r.getBlob();
+
+            byte[] currentDateByte = new byte[8];
+            byte[] poselIdByte = new byte[4];
+            byte[] partiaIdByte = new byte[4];
+
+            int count = r.getNrEntries();
+
+            for (int i = 0; i < count * SINGLE_BLOB_SIZE; i += SINGLE_BLOB_SIZE) {
+                System.arraycopy(blob, i, currentDateByte, 0, 8);
+                System.arraycopy(blob, i + 8, poselIdByte, 0, 4);
+                System.arraycopy(blob, i + 12, partiaIdByte, 0, 4);
+                String partyId = "" + NgramConverter.fromByteArray(partiaIdByte);
+                String data = new String(currentDateByte, StandardCharsets.UTF_8);
+
+
+
+                if ( !partyNameMap.containsKey( partyId )){
+                    partyNameMap.put( partyId, new HashMap<String, Integer>() );
+                }
+
+                HashMap<String, Integer> dateToNrOccurences = partyNameMap.get( partyId );
+
+                
+
+
+
+
+
+            }
+
+
+            //get poselId
+            NgramConverter.class
+
+
+
+
+
+        }
+
+
+
+
+
+        NgramResponse response = new NgramResponse( "nana", listParties  );
+
+
 
 
     }

@@ -42,7 +42,7 @@ public class NgramConverter {
 		return responesBuilder.generateResponse();
 	}
 	
-	public int fromByteArray(byte[] bytes) {
+	public static int fromByteArray(byte[] bytes) {
 	     return ByteBuffer.wrap(bytes).getInt();
 	}
 }
