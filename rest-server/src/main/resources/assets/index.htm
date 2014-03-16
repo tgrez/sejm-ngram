@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="/assets/ico/favicon.png">
 
-    <title>sejm-ngra 22222 m</title>
+    <title>sejmotrendy.pl - łap posłów za słówka</title>
 
     <!-- SejmoGram own style-->
     <link href="/stylesheets/main.css" rel="stylesheet">
@@ -17,171 +17,185 @@
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
-	<style>
-		.dropdown-menu {
-		  width: 100%; 
-		}
+    <style>
+        .dropdown-menu {
+            width: 100%;
+        }
 
-		.btn{
-		 width: 100%;
-		}
-	</style>
-  </head>
+        .btn{
+            width: 100%;
+        }
+    </style>
+</head>
 
-  <body>
-    <div id="navigation">
-        <div class="panel main-width">
-            <div class="logo">
-                <img src="images/logo.png" />
-            </div>
-            <div class="menu">
-                <span>ABOUT</span>
-                <span class="separator">/</span>
-                <span>HELP</span>
-                <span class="separator">/</span>
-                <span>CONTACT</span>
-            </div>
-            <div class="clear"></div>
+<body>
+<div id="navigation">
+    <div class="panel main-width">
+        <div class="logo">
+            <img src="images/logo.png" />
         </div>
-    </div>
-    <div id="main" class="main-width">
-        <div class="panel">
-            <div class="top">
-                <div class="input">
-                    <img src="images/icon.png" />
-					<label for="inputNgram">ngram:</label>
-                    <input id="inputNgram" type="text" placeholder="tutaj wpisz ngram">
-                </div>
-                <div class="search">
-                    <button type="button" onClick="buttonGenVizPressed();">Generate Viz!</button>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div id="graph" class="aGraph"></div>
-            <div id="selectbar"></div>
-        </div>
-        <div class="right" >
-            <div id="legendDiv" class="legend box" >
-                <div class="top">
-                    LEGEND
-                </div>
-                <div class="items">
-                    <div class="item">
-                        PO
-                    </div>
-                    <div class="item">
-                        PIS
-                    </div>
-                    <div class="item">
-                        SLD
-                    </div>
-                    <div class="item">
-                        PSL
-                    </div>
-                    <div class="item">
-                        TR
-                    </div>
-                    <div class="item">
-                        SP
-                    </div>
-                </div>
-            </div>
-            <div class="popular box">
-                <div class="top">
-                    POPULAR NGRAMS
-                </div>
-                <div class="items">
-                    <div class="item">
-                        "To nie jest możliwe"
-                    </div>
-                    <div class="item">
-                        Polska demokratyczna
-                    </div>
-                    <div class="item">
-                        "wybory"
-                    </div>
-                </div>
-            </div>
+        <div class="menu">
+            <span>ABOUT</span>
+            <span class="separator">/</span>
+            <span>HELP</span>
+            <span class="separator">/</span>
+            <span>CONTACT</span>
         </div>
         <div class="clear"></div>
     </div>
-    <div id="about">
-        <h1>About</h1>
-        <a name="idea"></a>
-        <p> 
-            The sejm-ngram provides a visualization of selected <a href="http://en.wikipedia.org/wiki/N-gram"> ngrams </a> occurences within the speeches of Polish Parliament members. 
-            The project is meant to become an useful tool for a simple, quantitative analysis of what is happening behind the doors of Polish Parliament. Initially we would like to provide simple, ngram analysis, possibly with extending it by sentiment analysis. Sejm-ngram, by being based on open data with public speeches of Polish deputies (provided by http://sejmometr.pl/) aspires to be an example of data journalism - a domain that we believe is emerging right now.
-
-
-            <h4> current features / matters </h4>            
-            <ul id="currentFeaturesList">
-                <li>Works with 1-, 2- and 3grams (you need more!)</a></li>
-                <li>there's not much data yet - the speeches used as sources took place from 2011-11-08 to 2013-03-22</li>
-                <li>is not super-fast</li>
-            </ul>
-
-            <h4> to be done! </h4>            
-            <ul id="todoFeaturesList">
-                <li>use some no-sql db for faster working</li>
-            </ul>
-            <h1> authors </h1>
-                <a name="authors"></a>
-                <ul id="authorsList">
-                    <li>Tomasz Guz</li>
-                    <li>Tomasz Kuśmierczyk</li>
-                    <li>Krzysztof Siejkowski</li>
-                    <li>Michał Siemiończyk</li>
-                </ul>
+</div>
+<div id="main" class="main-width">
+    <div class="panel">
+        <div class="top">
+            <div class="input">
+                <img src="images/icon.png" />
+                <label for="inputNgram">ngram:</label>
+                <input id="inputNgram" type="text" placeholder="tutaj wpisz ngram">
+            </div>
+            <div class="search">
+                <button type="button" onClick="buttonGenVizPressed();">Generate Viz!</button>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div id="graph" class="aGraph"></div>
+        <div id="selectbar"></div>
+    </div>
+    <div class="right" >
+        <div id="legendDiv" class="legend box" >
+            <div class="top">
+                LEGEND
+            </div>
+            <div class="items">
+                <div class="item">
+                    PO
+                </div>
+                <div class="item">
+                    PIS
+                </div>
+                <div class="item">
+                    SLD
+                </div>
+                <div class="item">
+                    PSL
+                </div>
+                <div class="item">
+                    TR
+                </div>
+                <div class="item">
+                    SP
+                </div>
+            </div>
+        </div>
+        <div class="popular box">
+            <div class="top">
+                POPULAR NGRAMS
+            </div>
+            <div class="items">
+                <div class="item">
+                    "Unia Europejska"
+                </div>
+                <div class="item">
+                    "dług publiczny"
+                </div>
+                <div class="item">
+                    "deficyt"
+                </div>
+                <div class="item">
+                    "rodzina"
+                </div>
+                <div class="item">
+                    "kościół prawosławny"
+                </div>
+                <div class="item">
+                    "skandal"
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div id="about" class="bottom-panel">
+    <div class="main-width">
+        <h1>ABOUT</h1>
+        <p>
+            The sejm-ngram provides a visualization of selected ngrams occurences within the speeches of Polish Parliament members. The project is meant to become an useful tool for a simple, quantitative analysis of what is happening behind the doors of Polish Parliament. Initially we would like to provide simple, ngram analysis, possibly with extending it by sentiment analysis.
         </p>
     </div>
-    <div id="help">
-        <h1> help </h1>
-        <a name="help"></a>
-        <p> It's very easy. Simply type some ngram into "ngram" text field, type dates (from / to) in the "yyyy-mm-dd"
-            format and press "Generate Viz!" button. Since we're working on it we have provided some debug options on
-            the bottom of chart. 
+</div>
+<div id="help" class="bottom-panel">
+    <div class="main-width">
+        <h1>HELP</h1>
+        <p>
+            It's very easy. Simply type some ngram into "ngram" text field and press "Generate!" button. Since we're working on it we have provided some debug options on the bottom of chart.
         </p>
-        <ul id="debugOptionsList">
-            <li>draw lines - simply connects the datapoints for each party. does not require generating the chart again.</a></li>
-            <li>include 0-s - showing the datapoints of 0 value for dates / periods (see "use all data points") that don't have any ngrams. requires generating the chart again.</a></li>
-            <li>x-res - when "use all datapoints" is not selected the time scope between "startDate" and "stopDate" is divided into "x-res" number of boxes; the ngrams with dates fitting the single box's (sic!) scope are summarized</a></li>
-            <li>use all datapoints - when selected, the ngrams are summarized per single day, otherwise the whole time scope is divided into a number of boxes specified by "x-res" value. </a></li>
-        </ul>
+        <table class="steps">
+            <tr>
+                <td>
+                    <div class="number">1</div>
+                    <div class="description">
+                        draw lines - simply connects
+                        the datapoints for each party
+                        (does not require
+                        generating the chart again)
+                    </div>
+                </td>
+                <td>
+                    <div class="number">2</div>
+                    <div class="description">
+                        x-res - when "use all datapoints" is not selected
+                        the time scope between "startDate" and
+                        "stopDate" is divided into "x-res" number
+                        of boxes; the ngrams with dates fitting
+                        the single box's (sic!) scope are summarized
+                    </div>
+                </td>
+                <td>
+                    <div class="number">3</div>
+                    <div class="description">
+                        use all datapoints - when selected,
+                        the ngrams are summarized per single
+                        day, otherwise the whole time scope
+                        is divided into a number of boxes
+                        specified by "x-res" value.
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
-    
-	
-	<!-- <div id = "queryDbInfoDiv" style="display:none">
-		<img src="img/loading.gif" style="width:30px"/>
-		querying db...
-	</div>
+</div>
 
-	<div id = "processDataInfoDiv" style="display:none">
-		<img src="img/loading.gif" style="width:30px"/>
-		processing data..
-	</div>-->
 
-    <!-- JavaScript - functions for manipulating the GUI (could be in sepearated file though) -->
-    <script src="/assets/js/jquery-1.10.2.js"></script>
+<!-- <div id = "queryDbInfoDiv" style="display:none">
+    <img src="img/loading.gif" style="width:30px"/>
+    querying db...
+</div>
 
-    <!-- Our own code -->
-    <script type="text/javascript" src="d3/d3.v3.js"></script>
-    <script type="text/javascript" src="assets/js/underscore-min.js"></script>
-    <script type="text/javascript" src="javascripts/viz.js"></script>
-    <script type="text/javascript" src="javascripts/gui.js"></script>
-    <script>
+<div id = "processDataInfoDiv" style="display:none">
+    <img src="img/loading.gif" style="width:30px"/>
+    processing data..
+</div>-->
 
-	$(function(){
+<!-- JavaScript - functions for manipulating the GUI (could be in sepearated file though) -->
+<script src="/assets/js/jquery-1.10.2.js"></script>
 
-		$(".dropdown-menu li a").click(function(){
-			$(".btn:first-child").text($(this).text());
-			$(".btn:first-child").val($(this).text());
+<!-- Our own code -->
+<script type="text/javascript" src="d3/d3.v3.js"></script>
+<script type="text/javascript" src="assets/js/underscore-min.js"></script>
+<script type="text/javascript" src="javascripts/viz.js"></script>
+<script type="text/javascript" src="javascripts/gui.js"></script>
+<script>
 
-		});
-    $(document).ready(function() {
-        setupGraph();
+    $(function () {
+
+        $(".dropdown-menu li a").click(function () {
+            $(".btn:first-child").text($(this).text());
+            $(".btn:first-child").val($(this).text());
+
         });
-	})
-    </script>
-  </body>
+        $(document).ready(function () {
+            setupGraph();
+        });
+    })
+</script>
+</body>
 </html>
-
