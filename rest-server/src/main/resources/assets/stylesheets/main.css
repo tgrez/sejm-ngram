@@ -1,15 +1,112 @@
 
 @import url(http://fonts.googleapis.com/css?family=Ubuntu);
 
+body {
+    margin: 0;
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #E1E3E4;
+}
+
+.main-width {
+    width: 1094px;
+}
+
+#navigation {
+    background-color: #F14949;
+}
+
+#navigation .panel {
+    margin: 0 auto;
+}
+
+#navigation .logo {
+    float: left;
+}
+
+#navigation .menu {
+    float: right;
+    color: white;
+    font-size: 18px;
+    margin-top: 18px;
+}
+
+#navigation .menu .separator {
+    margin: 0 10px;
+}
+
+#main {
+    margin: 23px auto 0;
+}
+
+#main .panel {
+    width: 800px;
+    height:772px;
+    background: white;
+    border: 1px solid #C8C8C8;
+    float: left;
+}
+    #main .panel .top {
+        border-bottom: 1px solid #C8C8C8;
+        height: 58px;
+    }
+
+        #main .panel .top .input {
+            width: 596px;
+            border-right: 1px solid #C8C8C8;
+            float:left;
+            height: 100%;
+        }
+
+        #main .panel .top .search {
+            color: white;
+            background-color: #F14949;
+            float:right;
+        }
+
+
+        #main .right {
+            float: right;
+        }
+
+            #main .right .legend {
+                margin-bottom: 35px;
+            }
+
+            #main .right .box {
+                width: 276px;
+                background-color: white;
+                border: 1px solid #C8C8C8;
+            }
+
+        #main .right .box .top {
+            text-align:center;
+            border-bottom: 1px solid #C8C8C8;
+            line-height: 58px;
+            font-weight: bold;
+            color: #F14949;
+        }
+
+        #main .right .box .items .item{
+            text-align:center;
+            line-height: 30px;
+            font-weight: bold;
+        }
+
+.theme-dropdown .dropdown-menu {
+  display: block;
+  position: static;
+  margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+  margin: 5px 0;
+}
+
 .domain {
     fill: none;
     stroke: black;
     stroke-width: 1;
 }
-
-body {
-    font-family: 'Ubuntu', sans-serif;
-    }
 
 /* GRID styles*/
 .grid .tick {
@@ -23,10 +120,18 @@ body {
 #graph {
     width: 100%;
     height: 500px;
-    }
+}
 
 #selectbar {
     width: 100%;
     height: 100px;
-    }
+}
+
+
+.clear {
+    clear:both;
+    width: 0;
+    height: 0;
+}
+
 
