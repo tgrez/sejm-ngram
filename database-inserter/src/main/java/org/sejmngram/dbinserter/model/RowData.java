@@ -22,17 +22,11 @@ public class RowData {
     /** Each of these blobs is meant to contain max #MAX_BLOB_ENTRIES entries  */
     ArrayList<Row> blobs;
 
-
-    /** Date from */
-    private Date dateFrom;
-
-    private Date dateTo;
-
-
-
     public static class Row {
         private byte[] blob;
         private int nrEntries;
+        private Date dateFrom;
+        private Date dateTo;
 
         public Row() {
             this.blob = new byte[]{};
@@ -65,6 +59,23 @@ public class RowData {
         public void setNrEntries(int nrEntries) {
             this.nrEntries = nrEntries;
         }
+
+        public Date getDateFrom() {
+            return dateFrom;
+        }
+
+
+        public Date getDateTo() {
+            return dateTo;
+        }
+
+        public void setDateFrom(Date dateFrom) {
+            this.dateFrom = dateFrom;
+        }
+
+        public void setDateTo(Date dateTo) {
+            this.dateTo = dateTo;
+        }
     }
 
     public RowData(){
@@ -74,7 +85,7 @@ public class RowData {
 
     private ByteBuffer buffer = ByteBuffer.allocate(16);
 
-    public void addEntryToBlob(String posixTimestamp, int poselId, int partiaId) {
+    public void addEntryToBlob(String posixTimestamp, int poselId, int partiaId, Date fromDate, Date toDate) {
 
         if (getNrEntriesInLastBlob() == MAX_BLOB_ENTRIES) {
             this.blobs.add(new Row());
@@ -86,6 +97,8 @@ public class RowData {
 
         getLastRow().inreaseNrEntries();
         getLastRow().setBlob(buffer.array());
+        getLastRow().setDateFrom(fromDate);
+        getLastRow().setDateTo(toDate);
         buffer.clear();
     }
 
@@ -103,41 +116,19 @@ public class RowData {
 
     public int getNrAllEntries(){
         int nr = 0;
-
         for ( Row r : this.blobs){
             nr += r.getNrEntries();
         }
-
         return nr;
     }
 
     public void inreaseNrEntries(){
-
-        //check whether nr enties in not lo
         if ( getNrEntriesInLastBlob() < MAX_BLOB_ENTRIES){
             getLastRow().inreaseNrEntries();
         } else {
 
         }
 
-    }
-
-
-    public Date getDateFrom() {
-        return dateFrom;
-    }
-
-
-    public Date getDateTo() {
-        return dateTo;
-    }
-
-    public void setDateFrom(Date dateFrom) {
-        this.dateFrom = dateFrom;
-    }
-
-    public void setDateTo(Date dateTo) {
-        this.dateTo = dateTo;
     }
 
     private Row getLastRow(){

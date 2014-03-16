@@ -1,6 +1,7 @@
 package com.example.helloworld;
 
 import com.example.helloworld.health.TemplateHealthCheck;
+import com.example.helloworld.resources.DemoNgramResource;
 import com.example.helloworld.resources.HelloWorldResource;
 import com.example.helloworld.resources.NgramResource;
 import com.yammer.dropwizard.Service;
@@ -16,7 +17,6 @@ public class HelloWorldService extends Service<HelloWorldConfiguration> {
     @Override
     public void initialize(Bootstrap<HelloWorldConfiguration> bootstrap) {
         bootstrap.setName("hello-world");
-        
         bootstrap.addBundle(new AssetsBundle("/assets/", "/"));
     }
 
@@ -30,6 +30,7 @@ public class HelloWorldService extends Service<HelloWorldConfiguration> {
         environment.addHealthCheck(new TemplateHealthCheck(template));
         
         environment.addResource(new NgramResource());
+        environment.addResource(new DemoNgramResource());
     }
 
 }

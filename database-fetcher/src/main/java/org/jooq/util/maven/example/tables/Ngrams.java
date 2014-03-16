@@ -11,7 +11,7 @@ package org.jooq.util.maven.example.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Ngrams extends org.jooq.impl.TableImpl<org.jooq.util.maven.example.tables.records.NgramsRecord> {
 
-	private static final long serialVersionUID = -362593313;
+	private static final long serialVersionUID = -465654267;
 
 	/**
 	 * The singleton instance of <code>sejmngram.ngrams</code>
@@ -54,7 +54,7 @@ public class Ngrams extends org.jooq.impl.TableImpl<org.jooq.util.maven.example.
 	/**
 	 * The column <code>sejmngram.ngrams.content</code>.
 	 */
-	public final org.jooq.TableField<org.jooq.util.maven.example.tables.records.NgramsRecord, java.lang.String> CONTENT = createField("content", org.jooq.impl.SQLDataType.CLOB.length(16777215), this, "");
+	public final org.jooq.TableField<org.jooq.util.maven.example.tables.records.NgramsRecord, byte[]> CONTENT = createField("content", org.jooq.impl.SQLDataType.BLOB.length(65535), this, "");
 
 	/**
 	 * Create a <code>sejmngram.ngrams</code> table reference

@@ -30,4 +30,5 @@ public class NgramResource {
 			@QueryParam("name") Optional<String> name) {
 		return ngramProvider.generateDefaultNgramResponse(ngramName);
 	}
+
 }
