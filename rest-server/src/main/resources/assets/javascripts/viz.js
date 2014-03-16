@@ -5,11 +5,13 @@ var border=40;
 
 function visualize(term) {
     var graph = function(data) {
-        console.log(data);
         var svg=d3.select("#graph > svg");
         
         var colors=d3.scale.category10();
         
+        var slugify=function(s) {
+            return s.toLowerCase().replace(/[^a-z0-9-]/g,"-")
+            }
 
         var colors=function() {
             var cs = [
@@ -37,16 +39,16 @@ function visualize(term) {
         // convert dates to timestamps 
         var ngrams=_.map(data.partiesNgrams,function(d) {
             return {"name": d.name,
-                    listDates: _.map(d.listDates,
+                    listDates: _.sortBy(_.map(d.listDates,
                     function(d) {
                         return {
                             "count": d.count,
                             "date": new Date(d.date).getTime()
-                        }})
+                        }}),function(d) {
+                            return d.date })
                     }
                 });
         
-        console.log(ngrams);
         // apply a function to a specific parameter in the dataset
         // used below to get minimum and maximum dates and counts.
         var gmm= function(d,what,fn) {
@@ -63,19 +65,19 @@ function visualize(term) {
             );
         
         // fill in the empty dates - this might not be needed...
-        ngrams=_.map(ngrams, function(d) {
-            var counts={}
-            _.each(d.listDates, function(d) {
-                counts[d.date]=d.count });
+//        ngrams=_.map(ngrams, function(d) {
+  //          var counts={}
+    //        _.each(d.listDates, function(d) {
+    //            counts[d.date]=d.count });
             
-            return {"name": d.name,
-                     listDates: _.map(
-                        _.range(mindate,maxdate+1,24*60*60*1000),
-                        function(x) {
-                            return {"name": d.name,
-                                "date": x,
-                                "count": counts[x] || 0
-                            }})}});
+    //        return {"name": d.name,
+    //                 listDates: _.map(
+    //                    _.range(mindate,maxdate+1,24*60*60*1000),
+    //                    function(x) {
+    //                        return {"name": d.name,
+    //                            "date": x,
+     //                           "count": counts[x] || 0
+      //                      }})}});
          
          var partynames = _.pluck(ngrams,"name");
 
@@ -113,7 +115,7 @@ function visualize(term) {
             .enter()
             .append("g")
             .attr("class","party")
-            .attr("id",function(d) { return "group-"+d.name })
+            .attr("id",function(d) { return "group-"+slugify(d.name) })
             .attr("style","visibility: hidden;");
         
         d3.select("#group-total")
@@ -149,15 +151,14 @@ function visualize(term) {
             
         partyselect.append("input")
             .attr("type","checkbox")
-            .attr("id",function(d) { return "check-"+d })
+            .attr("id",function(d) { return "check-"+slugify(d) })
             .on("click",function(d) {
-                console.log(d);
-                if ($("#check-"+d)[0].checked) {
-                    d3.select("#group-"+d)
+                if ($("#check-"+slugify(d))[0].checked) {
+                    d3.select("#group-"+slugify(d))
                       .attr("style","visibility: visible;");
                     }
                 else {
-                    d3.select("#group-"+d)
+                    d3.select("#group-"+slugify(d))
                       .attr("style","visibility: hidden;");
                     }
                 });
@@ -209,7 +210,6 @@ function visualize(term) {
         var setscale=function() {
             minx=d3.select("#coverleft").attr("width")*1+border;
             maxx=d3.select("#coverright").attr("x")*1;
-            console.log(minx,maxx);
             var nscale=d3.scale.linear()
                 .domain([sbrscale(minx),sbrscale(maxx)])
                 .range([border,width-border]);
@@ -369,7 +369,7 @@ function setupGraph() {
     var gw=(width-border*2)/gnum;
     var gh=(height-border*2)/gnum;
 
-    _.each(_.range(1,gnum+1),function(i) {
+    _.each(_.range(0,gnum+1),function(i) {
         svg.append("line")
             .attr("class","grid")
             .attr("x2",border+i*gw)

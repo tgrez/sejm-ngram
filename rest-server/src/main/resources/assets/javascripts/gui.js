@@ -1,3 +1,5 @@
 function buttonGenVizPressed() {
-    visualize($("#inputNgram").val())
+    var term=$("#inputNgram").val().toLowerCase().replace(/[ ]+$/,"")
+        .replace(/^[ ]+/,"");
+    visualize(term);
     }
