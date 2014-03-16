@@ -250,7 +250,7 @@ function visualize(term) {
         };
 
     if (term) {
-        d3.json("http://sejmotrendy.pl/service/api/ngram/"+encodeURI(term),
+        d3.json("http://sejmotrendy.pl/service/api2/ngram/"+encodeURI(term),
                 graph 
                 );
         }
