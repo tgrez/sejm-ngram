@@ -112,6 +112,7 @@ font-weight: bold;
     color: #A1A1A1;
     font-size: 14px;
     font-weight: normal;
+    cursor: pointer;
 }
 #about {
     height: 309px;
@@ -158,8 +159,8 @@ font-weight: bold;
 padding: 12px 46px;
 }
 .steps td {
-width: 1px;
-vertical-align: top;
+width: 361px;vertical-align: top;
+
 }
 
 .theme-dropdown .dropdown-menu {

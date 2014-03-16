@@ -320,6 +320,17 @@
             setupGraph();
         });
     })
+
+
+
+    $(function () {
+        $('.popular .item').click(function () {
+
+            $('#inputNgram').val($(this).text().trim());
+
+            buttonGenVizPressed();
+        })
+    });
 </script>
 </body>
 </html>
