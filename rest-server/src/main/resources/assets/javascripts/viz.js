@@ -186,6 +186,14 @@ function visualize(term) {
 
          sb=d3.select("#selectbar > svg");
         
+        sb.selectAll("rect").remove();
+    sb.append("rect")
+            .attr("x",border)
+            .attr("y",0)
+            .attr("width",width-border*2)
+            .attr("class","frame")
+            .attr("height",selectbarheight);
+
         var drawLabels= function(mind,maxd) {
             svg.selectAll("text.label").remove();
 
@@ -312,11 +320,15 @@ function visualize(term) {
             
         drawAxis();
 
+        svg.selectAll("text.ylabel").remove();
         svg.append("text")
+            .attr("class","ylabel")
             .attr("x",border-10)
             .attr("y",border+5)
             .attr("text-anchor","end")
             .text(maxcount);
+        
+
         svg.append("text")
             .attr("x",border-10)
             .attr("y",height-border+5)
