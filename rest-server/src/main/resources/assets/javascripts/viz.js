@@ -151,6 +151,7 @@ function visualize(term) {
             .attr("type","checkbox")
             .attr("id",function(d) { return "check-"+d })
             .on("click",function(d) {
+                console.log(d);
                 if ($("#check-"+d)[0].checked) {
                     d3.select("#group-"+d)
                       .attr("style","visibility: visible;");
@@ -208,6 +209,7 @@ function visualize(term) {
         var setscale=function() {
             minx=d3.select("#coverleft").attr("width")*1+border;
             maxx=d3.select("#coverright").attr("x")*1;
+            console.log(minx,maxx);
             var nscale=d3.scale.linear()
                 .domain([sbrscale(minx),sbrscale(maxx)])
                 .range([border,width-border]);

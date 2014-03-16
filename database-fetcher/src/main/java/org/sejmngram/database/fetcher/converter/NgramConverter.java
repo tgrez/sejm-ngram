@@ -14,7 +14,7 @@ public class NgramConverter {
 	private IdConverter partyConverter;
 	private IdConverter poselConverter;
 	
-	private static final int SINGLE_BLOB_SIZE = 16;
+	private static final int SINGLE_BLOB_SIZE = 18;
 	
 	public NgramConverter(IdConverter partyConverter, IdConverter poselConverter) {
 		this.partyConverter = partyConverter;
@@ -23,16 +23,16 @@ public class NgramConverter {
 	
 	public NgramResponse dbRecordsToNgramResponse(String ngramName, List<Record> records) {
 		ResponseBuilder responesBuilder = new ResponseBuilder(ngramName);
-		byte[] currentDateByte = new byte[8];
+		byte[] currentDateByte = new byte[10];
 		byte[] poselIdByte = new byte[4];
 		byte[] partiaIdByte = new byte[4];
         for (Record r : records) {
         	int count = r.getValue(Ngrams.NGRAMS.NROCCURENCES).intValue();
             byte[] blob = r.getValue(Ngrams.NGRAMS.CONTENT);
             for (int i = 0; i < count * SINGLE_BLOB_SIZE; i += SINGLE_BLOB_SIZE) {
-            	System.arraycopy(blob, i, currentDateByte, 0, 8);
-            	System.arraycopy(blob, i + 8, poselIdByte, 0, 4);
-            	System.arraycopy(blob, i + 12, partiaIdByte, 0, 4);
+            	System.arraycopy(blob, i, currentDateByte, 0, 10);
+            	System.arraycopy(blob, i + 10, poselIdByte, 0, 4);
+            	System.arraycopy(blob, i + 14, partiaIdByte, 0, 4);
             	int partyId = fromByteArray(partiaIdByte);
             	responesBuilder.addOccurance(
             			partyConverter.resolve(partyId),

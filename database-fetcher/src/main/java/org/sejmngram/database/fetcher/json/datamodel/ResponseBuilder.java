@@ -1,9 +1,13 @@
 package org.sejmngram.database.fetcher.json.datamodel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import org.sejmngram.common.json.JsonProcessor;
 
 public class ResponseBuilder {
 
@@ -11,8 +15,23 @@ public class ResponseBuilder {
 	private Map<String, HashMap<String, Integer>> partiesMap = 
 			new HashMap<String, HashMap<String, Integer>>();
 	
+	private HashSet<String> dates = new HashSet<String>();
+	private HashMap<String, Integer> initialDates = new HashMap<String, Integer>();
+	
 	public ResponseBuilder(String ngramName) {
 		this.ngramName = ngramName;
+		readDateFile();
+	}
+	
+	private void readDateFile() {
+		try {
+			dates = JsonProcessor.jsonFileToHashSet("../psc-data/nowe_daty.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (String date : dates) {
+			initialDates.put(date, 0);
+		}
 	}
 	
 	public void addOccurance(String partyName, String date) {
@@ -21,7 +40,7 @@ public class ResponseBuilder {
 	
 	public void addOccurances(String partyName, String date, int occurances) {
 		if (!partiesMap.containsKey(partyName)) {
-			partiesMap.put(partyName, new HashMap<String, Integer>());
+			partiesMap.put(partyName, initialDates);
 		}
 		Integer count = partiesMap.get(partyName).get(date);
 		if (count == null) {

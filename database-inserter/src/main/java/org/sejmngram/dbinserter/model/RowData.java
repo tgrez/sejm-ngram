@@ -83,7 +83,7 @@ public class RowData {
         blobs.add( new Row());
     }
 
-    private ByteBuffer buffer = ByteBuffer.allocate(16);
+    private ByteBuffer buffer = ByteBuffer.allocate(18);
 
     public void addEntryToBlob(String posixTimestamp, int poselId, int partiaId, Date fromDate, Date toDate) {
 
@@ -91,9 +91,9 @@ public class RowData {
             this.blobs.add(new Row());
         }
 
-        buffer.put(posixTimestamp.getBytes(StandardCharsets.UTF_8), 0, 8);
-        buffer.putInt(8, poselId);
-        buffer.putInt(12, partiaId);
+        buffer.put(posixTimestamp.getBytes(StandardCharsets.UTF_8), 0, 10);
+        buffer.putInt(10, poselId);
+        buffer.putInt(14, partiaId);
 
         getLastRow().inreaseNrEntries();
         getLastRow().setBlob(buffer.array());

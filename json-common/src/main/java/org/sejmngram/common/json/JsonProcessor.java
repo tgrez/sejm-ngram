@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
@@ -61,6 +62,13 @@ public class JsonProcessor {
                 new TypeReference<HashMap<String,String>>(){});
 
         return map;
+    }
+    
+    public static HashSet<String> jsonFileToHashSet(String path) throws IOException {
+        HashSet<String> set;
+        set = objectMapper.readValue(new File ( path),
+                new TypeReference<HashSet<String>>(){});
+        return set;
     }
 	
 }
