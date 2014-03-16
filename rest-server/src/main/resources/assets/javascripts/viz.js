@@ -1,7 +1,7 @@
 var width=773;
 var height=547;
 var selectbarheight=75;
-var border=20;
+var border=40;
 
 function visualize(term) {
     var graph = function(data) {
@@ -287,8 +287,33 @@ function visualize(term) {
 
         svg.append("text")
             .attr("x",border-10)
-            .attr("y",border)
+            .attr("y",border+5)
+            .attr("text-anchor","end")
             .text(maxcount);
+        svg.append("text")
+            .attr("x",border-10)
+            .attr("y",height-border+5)
+            .attr("text-anchor","end")
+            .text(0);
+        
+        svg.append("text")
+            .attr("x",border)
+            .attr("y",height-border+23)
+            .attr("class","label")
+            .attr("text-anchor","middle")
+            .text(function() {
+                var d=new Date(mindate);
+                return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
+                })
+        svg.append("text")
+            .attr("x",width-border)
+            .attr("y",height-border+23)
+            .attr("class","label")
+            .attr("text-anchor","middle")
+            .text(function() {
+                var d=new Date(maxdate);
+                return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
+                })
         };
 
     if (term) {
