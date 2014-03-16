@@ -182,7 +182,29 @@ function visualize(term) {
 
          sb=d3.select("#selectbar > svg");
         
+        var drawLabels= function(mind,maxd) {
+            svg.selectAll("text.label").remove();
 
+            svg.append("text")
+                .attr("x",border)
+                .attr("y",height-border+23)
+                .attr("class","label")
+                .attr("text-anchor","middle")
+                .text(function() {
+                    var d=new Date(mind);
+                    return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
+                    })
+            svg.append("text")
+                .attr("x",width-border)
+                .attr("y",height-border+23)
+                .attr("class","label")
+                .attr("text-anchor","middle")
+                .text(function() {
+                    var d=new Date(maxd);
+                    return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
+                    })
+        }            
+        
         var setscale=function() {
             minx=d3.select("#coverleft").attr("width")*1+border;
             maxx=d3.select("#coverright").attr("x")*1;
@@ -197,6 +219,7 @@ function visualize(term) {
                     .y(function(d) { return yscale(d.count)});
 
             paths.attr("d",function(d) { return npath(d.listDates)});
+            drawLabels(sbrscale(minx),sbrscale(maxx));
             }
 
         var dragl=d3.behavior.drag()
@@ -295,25 +318,8 @@ function visualize(term) {
             .attr("y",height-border+5)
             .attr("text-anchor","end")
             .text(0);
+        drawLabels(mindate,maxdate);
         
-        svg.append("text")
-            .attr("x",border)
-            .attr("y",height-border+23)
-            .attr("class","label")
-            .attr("text-anchor","middle")
-            .text(function() {
-                var d=new Date(mindate);
-                return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
-                })
-        svg.append("text")
-            .attr("x",width-border)
-            .attr("y",height-border+23)
-            .attr("class","label")
-            .attr("text-anchor","middle")
-            .text(function() {
-                var d=new Date(maxdate);
-                return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
-                })
         };
 
     if (term) {
