@@ -30,7 +30,7 @@ public class ResponseBuilder {
 			e.printStackTrace();
 		}
 		for (String date : dates) {
-			initialDates.put(date, 0);
+			initialDates.put(date.substring(0, 7), 0);
 		}
 	}
 	
@@ -42,6 +42,7 @@ public class ResponseBuilder {
 		if (!partiesMap.containsKey(partyName)) {
 			partiesMap.put(partyName, initialDates);
 		}
+		date = date.substring(0, 7);
 		Integer count = partiesMap.get(partyName).get(date);
 		if (count == null) {
 			count = 0;
