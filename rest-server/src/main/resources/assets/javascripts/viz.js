@@ -1,13 +1,36 @@
-var width=1000;
-var height=1000;
-var selectbarheight=200;
-var border=50;
+var width=773;
+var height=547;
+var selectbarheight=75;
+var border=40;
 
 function visualize(term) {
     var graph = function(data) {
+        console.log(data);
         var svg=d3.select("#graph > svg");
-
+        
         var colors=d3.scale.category10();
+        
+
+        var colors=function() {
+            var cs = [
+                '#63A6B3',
+                '#F7BB03',
+                '#00BCD8',
+                '#40152A'
+                ]
+            var cdict={};
+            return function(d) {
+                if (d == 'total')
+                    { return '#f14949' }
+                else {
+                    var t=cdict[d]
+                    if (!t) {
+                        var i=_.keys(cdict).length+1;
+                        t=cs[i%4];
+                        cdict[d]=t;
+                        }
+                    return t;
+                }}}()
 
         svg.selectAll("g.party").remove();
 
@@ -23,6 +46,7 @@ function visualize(term) {
                     }
                 });
         
+        console.log(ngrams);
         // apply a function to a specific parameter in the dataset
         // used below to get minimum and maximum dates and counts.
         var gmm= function(d,what,fn) {
@@ -105,7 +129,7 @@ function visualize(term) {
                         .append("circle")
                         .attr("cx",function(d) { return xscale(d.date) })
                         .attr("cy", height-border)
-                        .attr("r", 5)
+                        .attr("r", 4)
                         .attr("style", function(d) { return "fill: "+
                         colors(d.name); });
                         
@@ -180,8 +204,8 @@ function visualize(term) {
         var dragl=d3.behavior.drag()
             .on("drag",function(d,i) {
                 d.x+=d3.event.dx;
-                if (d.x < border-5 ) {
-                    d.x = border-5; 
+                if (d.x < border-2 ) {
+                    d.x = border-2; 
                     }
                 ox=d3.select("#dragr").attr("x")
                 if (d.x > ox ) {
@@ -189,15 +213,15 @@ function visualize(term) {
                     }
                 d3.select(this).attr("x",d.x); 
                 d3.select("#coverleft")
-                    .attr("width",d.x-border+5);
+                    .attr("width",d.x-border+2);
                 setscale();
                 })
 
         var dragr=d3.behavior.drag()
             .on("drag",function(d,i) {
                 d.x+=d3.event.dx;
-                if (d.x > width-border-5 ) {
-                    d.x = width-border-5; 
+                if (d.x > width-border-2 ) {
+                    d.x = width-border-2; 
                     }
                 ox=d3.select("#dragl").attr("x")
                 if (d.x < ox ) {
@@ -205,13 +229,14 @@ function visualize(term) {
                     }
                 d3.select(this).attr("x",d.x); 
                 d3.select("#coverright")
-                    .attr("width",width-border-d.x-5)
-                    .attr("x",d.x+5);
+                    .attr("width",width-border-d.x-2)
+                    .attr("x",d.x+2);
                 setscale();
                 })
 
          
-
+         
+         sb.select("path").remove();
          sb.append("path")
             .attr("d",sbpath(total));
          
@@ -228,42 +253,136 @@ function visualize(term) {
             .attr("id",function(d) { return d.id });
         
         sb.append("rect")
-            .data([{"x": border-5, "y": selectbarheight/2-10}])
-            .attr("x",border-5)
-            .attr("y",selectbarheight/2-10)
-            .attr("width",10)
-            .attr("height",20)
+            .data([{"x": border-2, "y": selectbarheight/2-10}])
+            .attr("x",border-2)
+            .attr("y",selectbarheight/2-5)
+            .attr("width",4)
+            .attr("height",10)
             .attr("class","drag")
             .attr("id","dragl")
             .call(dragl);
 
         sb.append("rect")
-            .data([{"x": width-border-5, "y": selectbarheight/2-10}])
-            .attr("x",width-border-5)
-            .attr("y",selectbarheight/2-10)
-            .attr("width",10)
-            .attr("height",20)
+            .data([{"x": width-border-2, "y": selectbarheight/2-10}])
+            .attr("x",width-border-2)
+            .attr("y",selectbarheight/2-5)
+            .attr("width",4)
+            .attr("height",10)
             .attr("id","dragr")
             .attr("class","drag")
             .call(dragr);
+        var bboxes=[
+            [0,0,border-5,height],
+            [width-border+5,0,border-5,height]]
 
+        svg.selectAll("rect")
+            .data(bboxes)
+            .enter()
+            .append("rect")
+            .attr("x",function(d) {return d[0]})
+            .attr("y",function(d) {return d[1]})
+            .attr("width",function(d) {return d[2]})
+            .attr("height",function(d) {return d[3]})
+            .attr("style","fill: #ffffff; stroke: none;");
+            
+        drawAxis();
+
+        svg.append("text")
+            .attr("x",border-10)
+            .attr("y",border+5)
+            .attr("text-anchor","end")
+            .text(maxcount);
+        svg.append("text")
+            .attr("x",border-10)
+            .attr("y",height-border+5)
+            .attr("text-anchor","end")
+            .text(0);
+        
+        svg.append("text")
+            .attr("x",border)
+            .attr("y",height-border+23)
+            .attr("class","label")
+            .attr("text-anchor","middle")
+            .text(function() {
+                var d=new Date(mindate);
+                return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
+                })
+        svg.append("text")
+            .attr("x",width-border)
+            .attr("y",height-border+23)
+            .attr("class","label")
+            .attr("text-anchor","middle")
+            .text(function() {
+                var d=new Date(maxdate);
+                return d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()
+                })
         };
 
     if (term) {
-        d3.json("http://sejmotrendy.pl/service/api2/ngram/"+encodeURI(term),
+        d3.json("http://54.72.65.182/service/api/ngram/"+encodeURI(term),
                 graph 
                 );
         }
     };
 
+function drawAxis() {
+    var svg=d3.select("#graph > svg");
+    
+    svg.select("g.axis").remove();
+
+    var axis=svg.append("g")
+            .attr("class","axis");
+    
+    var lines=[[border-5,height-border, border-5, border],
+        [border,height-border+5, width-border, height-border+5],
+        [border-5, height-border, border-10, height-border],
+        [border-5, border, border-10, border],
+        [border,height-border+5, border, height-border+10],
+        [width-border,height-border+5, width-border, height-border+10]
+        ]
+
+    axis.selectAll("line")
+        .data(lines)
+        .enter()
+        .append("line")
+        .attr("x1",function(d) { return d[0] })
+        .attr("y1",function(d) { return d[1] })
+        .attr("x2",function(d) { return d[2] })
+        .attr("y2", function(d) { return d[3] });
+    }
+
 function setupGraph() {
     var svg=d3.select("#graph").append("svg")
-              .attr("viewBox","0 0 "+width+" "+height)
-              .attr("perserveAspectRatio","xMidYMid");
+              .attr("width",width)
+              .attr("height",height);
+    
+    drawAxis();
 
+    var gnum=10;
+
+    var gw=(width-border*2)/gnum;
+    var gh=(height-border*2)/gnum;
+
+    _.each(_.range(1,gnum+1),function(i) {
+        svg.append("line")
+            .attr("class","grid")
+            .attr("x2",border+i*gw)
+            .attr("x1",border+i*gw)
+            .attr("y2",border)
+            .attr("y1",height-border);
+        
+        svg.append("line")
+            .attr("class","grid")
+            .attr("x1",border)
+            .attr("x2",width-border)
+            .attr("y1",border+i*gh)
+            .attr("y2",border+i*gh);
+        })
+
+            
     var sb=d3.select("#selectbar").append("svg")
-        .attr("viewBox", "0 0 "+width+" "+selectbarheight)
-        .attr("perserverAspectRatio","xMidYMid");
+        .attr("width",width)
+        .attr("height",selectbarheight);
 
     sb.append("rect")
             .attr("x",border)
