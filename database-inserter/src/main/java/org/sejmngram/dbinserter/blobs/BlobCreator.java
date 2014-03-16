@@ -24,7 +24,7 @@ public class BlobCreator {
         File[] files = FileUtils.listFiles(dirPath, new String[]{"json"}, false).toArray(new File[]{});
         assert files != null;
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         HashMap<String, RowData> blobsMap = new HashMap<String, RowData>();
         int i = 0;
@@ -153,7 +153,15 @@ public class BlobCreator {
                     "jeszcze polska nie zginęła",
                     "ofe",
                     "reforma",
-                    "nfz"
+                    "nfz",
+                    "unia europejska",
+                    "dramatyczna sytuacja",
+                    "trendy",
+                    "sejmowe trendy",
+                    "miłość",
+                    "ratujmy rodziny",
+                    "zboże na tory",
+                    "kgb"
             };
 
     public static void performAnalysis(HashMap<String,RowData> blobsMap) {
