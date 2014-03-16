@@ -1,6 +1,5 @@
 package org.sejmngram.dbinserter.blobs;
 
-import com.sun.java.swing.plaf.windows.TMSchema;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jackson.type.TypeReference;
@@ -164,34 +163,19 @@ public class BlobCreator {
 
                 HashMap<String, Integer> dateToNrOccurences = partyNameMap.get( partyId );
 
-                
-
-
-
-
-
             }
 
 
-            //get poselId
-            NgramConverter.class
-
-
-
-
+//            //get poselId
+//            NgramConverter.class
 
         }
 
-
-
-
-
         NgramResponse response = new NgramResponse( "nana", listParties  );
 
-
-
-
+        return null;
     }
+
 
     /** Applies rules of skipping word*/
     private static boolean skipWord( String word){
