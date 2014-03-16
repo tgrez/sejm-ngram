@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.logging.Logger;
 
 /**
@@ -36,10 +38,13 @@ public class DatabaseRepo {
 
         try {
             int nrInsertedRows = 0;
-            for ( String ngram :  blobMap.keySet()){
+            for (String ngram :  blobMap.keySet()) {
                 RowData rowData = blobMap.get( ngram );
-                for ( RowData.Row row :  rowData.getAllRows()){
+                Iterator<RowData.Row> rowIterator = rowData.getAllRows().iterator();
+                for (;rowIterator.hasNext();) {
                     stmt = c.prepareStatement("INSERT INTO sejmngram.ngrams values ( default, ?, ?, ?, ?, ?)");
+
+                    RowData.Row row = rowIterator.next();
 
                     stmt.setDate(1, new java.sql.Date(row.getDateFrom().getTime()));
                     stmt.setDate(2, new java.sql.Date(row.getDateTo().getTime()));
@@ -49,14 +54,13 @@ public class DatabaseRepo {
 
                     int result =  stmt.executeUpdate();
                     nrInsertedRows++;
-                    if ( nrInsertedRows % 500 == 0){
+                    if ( nrInsertedRows % 500 == 0) {
                         Logger.getAnonymousLogger().info( "inserted rows :" + nrInsertedRows);
                     }
 
+                    rowIterator.remove();
                 }
-
             }
-
             Logger.getAnonymousLogger().info( "nrAllInsertedRows: " + nrInsertedRows);
         } catch (SQLException e) {
             e.printStackTrace();
