@@ -56,10 +56,30 @@ body {
     height: 100%;
 }
 
+#main .panel .top .input table td {
+}
+
+#main .panel .top .input table .icon {
+    padding: 18px;
+}
+
+#main .panel .top .input table .label {
+    color: #F14949;
+    padding-right:30px;
+}
+
+#main .panel .top .input table .textbox {
+}
+
 #main .panel .top .search {
-    color: white;
-    background-color: #F14949;
-    float:right;
+color: white;
+background-color: #F14949;
+float: right;
+line-height: 58px;
+width: 203px;
+text-align: center;
+cursor: pointer;
+font-weight: bold;
 }
 
 
@@ -86,15 +106,24 @@ body {
 }
 
 #main .right .box .items .item{
-    text-align:center;
-    line-height: 30px;
+    text-align: center;
+    line-height: 31px;
     font-weight: bold;
+    color: #A1A1A1;
+    font-size: 14px;
+    font-weight: normal;
 }
 #about {
     height: 309px;
     border-top: 1px solid #C8C8C8;
     border-bottom: 1px solid #C8C8C8;
     background-color:white;
+}
+
+#inputNgram {
+    padding: 5px;
+    padding-left: 10px;
+    width: 415px;
 }
 
 #help {
@@ -117,6 +146,20 @@ body {
 
 .bottom-panel > div {
     margin: 0 auto;
+}
+
+#help .number {
+color: #F14949;
+font-size: 30px;
+font-weight: bold;
+}
+
+#help .description {
+padding: 12px 46px;
+}
+.steps td {
+width: 1px;
+vertical-align: top;
 }
 
 .theme-dropdown .dropdown-menu {

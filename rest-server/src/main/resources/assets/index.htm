@@ -48,12 +48,16 @@
     <div class="panel">
         <div class="top">
             <div class="input">
-                <img src="images/icon.png" />
-                <label for="inputNgram">ngram:</label>
-                <input id="inputNgram" type="text" placeholder="tutaj wpisz ngram">
+                <table>
+                    <tr>
+                        <td class="icon"><img src="images/icon.png" /></td>
+                        <td class="label"><label for="inputNgram">ngram:</label></td>
+                        <td class="textbox"><input id="inputNgram" type="text" placeholder="type ngram here"></td>
+                    </tr>
+                </table>
             </div>
-            <div class="search">
-                <button type="button" onClick="buttonGenVizPressed();">Generate Viz!</button>
+            <div class="search" onClick="buttonGenVizPressed();">
+                <div >GENERATE</div>
             </div>
             <div class="clear"></div>
         </div>
