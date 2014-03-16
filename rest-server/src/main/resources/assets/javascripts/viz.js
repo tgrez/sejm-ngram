@@ -319,10 +319,13 @@ function visualize(term) {
             [0,0,border-5,height],
             [width-border+5,0,border-5,height]]
 
+        svg.selectAll("rect.bbox").remove();
+        
         svg.selectAll("rect")
             .data(bboxes)
             .enter()
             .append("rect")
+            .attr("class","bbox")
             .attr("x",function(d) {return d[0]})
             .attr("y",function(d) {return d[1]})
             .attr("width",function(d) {return d[2]})
