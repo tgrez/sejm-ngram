@@ -404,7 +404,10 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
     }
 
         //adding the tooltips to be shown on top of data points  (using jquery tipsy)
-  /*   $('svg circle').tipsy({
+  /*
+
+
+    $('svg circle').tipsy({
      gravity: 'w',
      html: true,
      title: function() {
@@ -413,7 +416,9 @@ function visualize(partiesIdsNames, startDate, stopDate, step, ngram){
      pDate = formatDate(pDate, true);
      return 'Year: ' + pDate + '<br>Value: ' + d.value;
      }
-     });*/
+     })
+
+     */
 
     /*    //add title
      graph.append("svg:text")
