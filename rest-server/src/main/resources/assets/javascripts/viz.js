@@ -87,11 +87,12 @@ function visualize(term) {
                     return x;} , {})
 
         total=_.sortBy(_.map(_.zip(_.keys(t),_.values(t)), function(d) {
-            return {"date": d[0],
+            return {"date": parseInt(d[0]),
                 "count": d[1],
                 "name": "total"}}),
                     function(d) { return d.date });
         
+        console.log(total);
 
         ngrams.push({"name":"total",
             "listDates": total});
@@ -108,7 +109,8 @@ function visualize(term) {
         
         var path=d3.svg.line()
                 .x(function(d) { return xscale(d.date)})
-                .y(function(d) { return yscale(d.count)});
+                .y(function(d) { return yscale(d.count)})
+                .interpolate("linear");
          
         var parties=svg.selectAll("g.party")
             .data(ngrams)
