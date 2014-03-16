@@ -21,7 +21,7 @@ public class Inserter {
 
         HashMap<String, RowData> blobMap = null;
         try {
-            blobMap = BlobCreator.getMapOfBlobs("../jsonModifiedData/", 150);
+            blobMap = BlobCreator.getMapOfBlobs("../jsonModifiedData/jsonModifiedData/", 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
