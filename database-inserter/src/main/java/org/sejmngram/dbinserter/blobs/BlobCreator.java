@@ -128,7 +128,6 @@ public class BlobCreator {
     private static boolean skipWord( String word){
         //cehck if not length of 1
         if (word.length() == 1 || word.length() == 0) return true;
-
         return false;
     }
 }

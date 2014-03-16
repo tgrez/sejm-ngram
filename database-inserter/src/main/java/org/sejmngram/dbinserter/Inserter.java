@@ -28,8 +28,12 @@ public class Inserter {
 
         BlobCreator.performAnalysis( blobMap );
 
-        DatabaseRepo dbRepo = new DatabaseRepo();
-        dbRepo.insertToDb(blobMap);
+//        DatabaseRepo dbRepo = new DatabaseRepo( "ngrams");
+//        dbRepo.insertToDb(blobMap);
+
+
+
+
     }
 
 }
