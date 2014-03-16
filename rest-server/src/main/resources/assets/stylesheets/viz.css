@@ -24,3 +24,15 @@ g.party > path.visible {
     stroke-width: 1px;
     fill: rgba(0,0,0,0.2);
     }
+
+line.grid {
+    stroke: #dddddd;
+    stroke-weight: 1px;
+    }
+
+line.axis {
+    stroke:  #968f8f
+    stroke-weight: 1px;
+    }
+
+    
