@@ -1,6 +1,5 @@
 package com.example.helloworld.factory;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,12 +46,6 @@ public class NgramProvider {
 
     public NgramResponse generateNgramResponse(String ngramName) {
         int partyId = 10;
-        try {
-            return db.retrieve(ngramName, null, null, partyId);
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
+        return db.retrieve(ngramName, null, null, partyId);
     }
 }
