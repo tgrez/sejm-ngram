@@ -36,7 +36,7 @@ public class DbConnectorMock implements DbConnector {
 
 	@Override
 	public NgramResponse retrieve(String ngramName, Date from, Date to,
-			int partyId) throws UnsupportedEncodingException {
+			int partyId) {
 		List<Ngram> ngramFromDb = new ArrayList<Ngram>();
 		List<ListDate> result = new ArrayList<ListDate>();
 		LOG.debug("Reading data from file...");
@@ -49,7 +49,7 @@ public class DbConnectorMock implements DbConnector {
 				line = new String(cbuf);
 				String[] columns = ROW_SPLIT_PATTERN.split(line);
 				Ngram ngram = new Ngram();
-//				ngram.setId(Integer.valueOf(columns[0]));
+				// ngram.setId(Integer.valueOf(columns[0]));
 				ngram.setNgram(columns[1]);
 				ngram.setFrom(df.parse(columns[2]));
 				ngram.setTo(df.parse(columns[3]));
@@ -64,30 +64,36 @@ public class DbConnectorMock implements DbConnector {
 		}
 		LOG.debug("Finished reading data from file.");
 		LOG.debug("Filtering data...");
-		
+
 		byte[] date = new byte[8];
-		byte [] poselId = new byte[2];
+		byte[] poselId = new byte[2];
 		byte[] partiaId = new byte[1];
-		
+
 		long startTime = System.nanoTime();
 		LOG.debug("Filtering start time:\t" + startTime);
-		for (Ngram ngram : ngramFromDb) {
-			if (!ngramName.equals(ngram.getNgram()))
-				continue;
-			final byte[] byteArray = ngram.getBlob();
-			if (byteArray != null) {
-				for (int k = 0; k < 1024; ++k) {
-					System.arraycopy(byteArray, 32 * k, date, 0, 8);
-					System.arraycopy(byteArray, 32 * k + 8, poselId, 0, 2);
-					System.arraycopy(byteArray, 32 * k + 10, partiaId, 0, 1);
-					String dateString = new String(date, "UTF-8");
-					int poselIdInt = ByteBuffer.wrap(poselId).getInt();
-					int partiaIdInt = ByteBuffer.wrap(partiaId).getInt();
-					if (partyId == partiaIdInt) {
-						addListDate(result, dateString, poselIdInt, partiaIdInt);
+		try {
+			for (Ngram ngram : ngramFromDb) {
+				if (!ngramName.equals(ngram.getNgram()))
+					continue;
+				final byte[] byteArray = ngram.getBlob();
+				if (byteArray != null) {
+					for (int k = 0; k < 1024; ++k) {
+						System.arraycopy(byteArray, 32 * k, date, 0, 8);
+						System.arraycopy(byteArray, 32 * k + 8, poselId, 0, 2);
+						System.arraycopy(byteArray, 32 * k + 10, partiaId, 0, 1);
+						String dateString;
+						dateString = new String(date, "UTF-8");
+						int poselIdInt = ByteBuffer.wrap(poselId).getInt();
+						int partiaIdInt = ByteBuffer.wrap(partiaId).getInt();
+						if (partyId == partiaIdInt) {
+							addListDate(result, dateString, poselIdInt,
+									partiaIdInt);
+						}
 					}
 				}
 			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 		long endTime = System.nanoTime();
 		long duration = endTime - startTime;
@@ -101,20 +107,20 @@ public class DbConnectorMock implements DbConnector {
 		return new NgramResponse(ngramName, partiesNgrams);
 	}
 
-	private void addListDate(List<ListDate> result, String date,
-			int poselId, int partyId) {
+	private void addListDate(List<ListDate> result, String date, int poselId,
+			int partyId) {
 		result.add(new ListDate(date, 1));
 	}
 
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void readIdFiles(String partyFilename, String poselFilename) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

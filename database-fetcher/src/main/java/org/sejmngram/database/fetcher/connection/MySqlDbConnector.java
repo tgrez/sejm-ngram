@@ -1,6 +1,5 @@
 package org.sejmngram.database.fetcher.connection;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,6 +14,8 @@ import org.jooq.util.maven.example.tables.Ngrams;
 import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramConverter;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
+
+import com.yammer.metrics.annotation.Timed;
 
 // TODO exception handling
 public class MySqlDbConnector implements DbConnector {
@@ -51,8 +52,13 @@ public class MySqlDbConnector implements DbConnector {
 	}
 
 	@Override
-	public NgramResponse retrieve(String ngramName, Date from, Date to, int partyId)
-			throws UnsupportedEncodingException {
+	public NgramResponse retrieve(String ngramName, Date from, Date to, int partyId) {
+        Result<Record> result = queryDatabase(ngramName, from, to);
+		return ngramConverter.dbRecordsToNgramResponse(ngramName, result);
+	}
+
+	@Timed
+	private Result<Record> queryDatabase(String ngramName, Date from, Date to) {
         DSLContext context = DSL.using(conn, SQLDialect.MYSQL);
         Result<Record> result = context.select()
         		.from(Ngrams.NGRAMS)
@@ -61,9 +67,9 @@ public class MySqlDbConnector implements DbConnector {
 //        				.and(Ngrams.NGRAMS.DATETO.greaterOrEqual(new Timestamp(from.getTime())))
         				)
         		.fetch();
-		return ngramConverter.dbRecordsToNgramResponse(ngramName, result);
+        return result;
 	}
-
+	
 	@Override
 	public void readIdFiles(String partyFilename, String poselFilename) {
 		ngramConverter = new NgramConverter(
