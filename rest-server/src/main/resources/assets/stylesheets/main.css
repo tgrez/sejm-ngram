@@ -29,6 +29,11 @@ body {
     margin-top: 18px;
 }
 
+#navigation .menu a {
+    color: white;
+    text-decoration: none;
+}
+
 #navigation .menu .separator {
     margin: 0 10px;
 }
