@@ -120,7 +120,6 @@ font-weight: bold;
     cursor: pointer;
 }
 #about {
-    height: 309px;
     border-top: 1px solid #C8C8C8;
     border-bottom: 1px solid #C8C8C8;
     background-color:white;
@@ -140,6 +139,7 @@ font-weight: bold;
 .bottom-panel {
     text-align: center;
     color: #969696;
+    padding-bottom: 116px;
 }
 
 .bottom-panel h1 {
@@ -167,6 +167,42 @@ padding: 12px 46px;
 width: 361px;vertical-align: top;
 
 }
+
+#team {
+
+}
+
+    #team .team-table {
+        width: 100%;
+    }
+
+        #team .team-table .image {
+            margin-bottom: 20px;
+        }
+
+            #team .team-table .image img {
+                width: 150px;
+                border-radius: 50%;
+            }
+
+        #team .team-table .description .first-name {
+            color: #F14949;
+            font-weight: bold;
+            letter-spacing: 3px;
+            font-size: 18px;
+        }
+        #team .team-table .description .separator {
+            border-bottom: 2px solid #F14949;
+            margin: 12px 35% 8px;
+        }
+        #team .team-table .description .role {
+            font-style:italic
+        }
+
+
+
+
+
 
 .theme-dropdown .dropdown-menu {
     display: block;
