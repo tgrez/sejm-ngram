@@ -1,0 +1,25 @@
+## do ustalenia:  
+
+* hosting  
+* Koduj dla Polski  
+* data następnego spotkania  
+
+* fts  
+* przeanalizować czas wyświetlania (ukraść kody: http://kbkranten.politicalmashup.nl/)  
+* cachowanie na poziomie nginxa (varnish)
+* loading indicator (Iryna projekt)  
+* rozdzielenie modułu db-fetcher na api i implementacje  
+* Lucene  
+* Elastic Search  
+* Sejmometr to file  
+* nginx odpowiada jsonami (bez serwera javowego)
+
+## ustalone:  
+
+* hosting: Siemion mail do MS, Siemion mail do Krzyska  
+* Koduj dla Polski: tak  
+* data następnego sppotkania: 24.04.
+* Siemion: fts, stworzenie jsonów dla cache'a
+* Tomek: rozdzielenie modułów db, Sejmometr to file
+* Siejas: Lucene, nginx odpowiada jsonami (bez serwera javowego)
+* Maciek: loading indicator, fts
