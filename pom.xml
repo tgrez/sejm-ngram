@@ -16,7 +16,7 @@
 			<modules>
 				<module>json-common</module>
                 <module>database-fetcher-api</module>
-				<module>database-fetcher</module>
+				<module>db-fetcher-mysql</module>
 				<module>rest-server</module>
 			</modules>
 		</profile>
@@ -30,7 +30,7 @@
 				<module>json-common</module>
 				<module>sejmometr-client</module>
                 <module>database-fetcher-api</module>
-				<module>database-fetcher</module>
+				<module>db-fetcher-mysql</module>
 				<module>database-inserter</module>
 				<module>rest-server</module>
 				<module>psc-fetcher</module>
