@@ -353,7 +353,7 @@ function visualize(term) {
         };
 
     if (term) {
-        d3.json("http://54.72.65.182/service/api2/ngram/"+encodeURI(term),
+        d3.json("service/api2/ngram/"+encodeURI(term),
                     graph
                     );
                     }
