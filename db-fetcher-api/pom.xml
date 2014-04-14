@@ -9,10 +9,10 @@
 	</parent>
 
 	<groupId>sejm-ngram</groupId>
-	<artifactId>database-fetcher-api</artifactId>
+	<artifactId>db-fetcher-api</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>database-fetcher-api</name>
+	<name>db-fetcher-api</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>

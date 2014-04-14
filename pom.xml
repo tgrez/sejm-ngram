@@ -15,7 +15,7 @@
 			<id>server</id>
 			<modules>
 				<module>json-common</module>
-                <module>database-fetcher-api</module>
+                <module>db-fetcher-api</module>
 				<module>db-fetcher-mysql</module>
 				<module>rest-server</module>
 			</modules>
@@ -29,7 +29,7 @@
 			<modules>
 				<module>json-common</module>
 				<module>sejmometr-client</module>
-                <module>database-fetcher-api</module>
+                <module>db-fetcher-api</module>
 				<module>db-fetcher-mysql</module>
 				<module>database-inserter</module>
 				<module>rest-server</module>
