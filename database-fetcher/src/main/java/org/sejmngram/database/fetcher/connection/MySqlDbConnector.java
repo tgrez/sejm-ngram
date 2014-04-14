@@ -23,6 +23,9 @@ public class MySqlDbConnector implements DbConnector {
 	private static final String USERNAME = "db-fetcher";
 	private static final String PASSWORD = "sejmngram2";
 	private static final String URL = "jdbc:mysql://localhost:3306/sejmngram";
+	
+	private static final String poselIdFilename = "../psc-data/partiaId.json";
+	private static final String partiaIdFilename = "../psc-data/poselId.json";
 
 	private Connection conn = null;
 	
@@ -33,6 +36,7 @@ public class MySqlDbConnector implements DbConnector {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			readIdFiles(partiaIdFilename, poselIdFilename);
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			e.printStackTrace();
@@ -70,8 +74,7 @@ public class MySqlDbConnector implements DbConnector {
         return result;
 	}
 	
-	@Override
-	public void readIdFiles(String partyFilename, String poselFilename) {
+	private void readIdFiles(String partyFilename, String poselFilename) {
 		ngramConverter = new NgramConverter(
 				new IdConverter(partyFilename),
 				new IdConverter(poselFilename));

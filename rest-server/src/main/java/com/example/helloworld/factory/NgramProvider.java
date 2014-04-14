@@ -18,7 +18,6 @@ public class NgramProvider {
 
     public NgramProvider() {
         db = new MySqlDbConnector();
-        db.readIdFiles("../psc-data/partiaId.json", "../psc-data/poselId.json");
         db.connect();
     }
 
@@ -34,8 +33,6 @@ public class NgramProvider {
 
             for (int i = 0; i < RandomUtils.nextInt(200); i++) {
                 long beginDate = 689835600000l;
-//                long endDate =  1320987600000l;
-//                int limit = (int) (endDate - beginDate);
                 listDates.add(new ListDate(sdf.format(new Date(beginDate + RandomUtils.nextInt())), RandomUtils.nextInt((200))));
             }
 
@@ -45,7 +42,6 @@ public class NgramProvider {
     }
 
     public NgramResponse generateNgramResponse(String ngramName) {
-        int partyId = 10;
-        return db.retrieve(ngramName, null, null, partyId);
+        return db.retrieve(ngramName, null, null, -1);
     }
 }

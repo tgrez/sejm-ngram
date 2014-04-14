@@ -9,6 +9,5 @@ public interface DbConnector {
 	void connect();
 	NgramResponse retrieve(String ngram, Date from, Date to, int partyId);
 	void disconnect();
-	void readIdFiles(String partyFilename, String poselFilename);
 		
 }
