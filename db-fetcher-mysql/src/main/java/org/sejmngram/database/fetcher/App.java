@@ -33,10 +33,9 @@ public class App {
 	}
 
 	private static void testBlobReading() throws UnsupportedEncodingException {
-		int partyId = 10;
 		long startTime = System.nanoTime();
 		LOG.debug("Start time:\t" + startTime);
-		new DbConnectorMock().retrieve("whatever", null, null, partyId);
+		new DbConnectorMock().retrieve("whatever");
 		long endTime = System.nanoTime();
 		long duration = endTime - startTime;
 		LOG.debug("End time:\t" + endTime);

@@ -42,6 +42,6 @@ public class NgramProvider {
     }
 
     public NgramResponse generateNgramResponse(String ngramName) {
-        return db.retrieve(ngramName, null, null, -1);
+        return db.retrieve(ngramName);
     }
 }

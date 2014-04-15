@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -35,8 +34,7 @@ public class DbConnectorMock implements DbConnector {
 	}
 
 	@Override
-	public NgramResponse retrieve(String ngramName, Date from, Date to,
-			int partyId) {
+	public NgramResponse retrieve(String ngramName) {
 		List<Ngram> ngramFromDb = new ArrayList<Ngram>();
 		List<ListDate> result = new ArrayList<ListDate>();
 		LOG.debug("Reading data from file...");
@@ -85,10 +83,8 @@ public class DbConnectorMock implements DbConnector {
 						dateString = new String(date, "UTF-8");
 						int poselIdInt = ByteBuffer.wrap(poselId).getInt();
 						int partiaIdInt = ByteBuffer.wrap(partiaId).getInt();
-						if (partyId == partiaIdInt) {
-							addListDate(result, dateString, poselIdInt,
+						addListDate(result, dateString, poselIdInt,
 									partiaIdInt);
-						}
 					}
 				}
 			}
@@ -118,8 +114,15 @@ public class DbConnectorMock implements DbConnector {
 
 	}
 
-	public void readIdFiles(String partyFilename, String poselFilename) {
+	@Override
+	public NgramResponse retrieveByParty(String ngram, int partyId) {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public NgramResponse retrieveByPosel(String ngram, int poselId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

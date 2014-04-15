@@ -3,7 +3,6 @@ package org.sejmngram.database.fetcher.connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -56,13 +55,13 @@ public class MySqlDbConnector implements DbConnector {
 	}
 
 	@Override
-	public NgramResponse retrieve(String ngramName, Date from, Date to, int partyId) {
-        Result<Record> result = queryDatabase(ngramName, from, to);
+	public NgramResponse retrieve(String ngramName) {
+        Result<Record> result = queryDatabase(ngramName);
 		return ngramConverter.dbRecordsToNgramResponse(ngramName, result);
 	}
 
 	@Timed
-	private Result<Record> queryDatabase(String ngramName, Date from, Date to) {
+	private Result<Record> queryDatabase(String ngramName) {
         DSLContext context = DSL.using(conn, SQLDialect.MYSQL);
         Result<Record> result = context.select()
         		.from(Ngrams.NGRAMS)
@@ -78,6 +77,18 @@ public class MySqlDbConnector implements DbConnector {
 		ngramConverter = new NgramConverter(
 				new IdConverter(partyFilename),
 				new IdConverter(poselFilename));
+	}
+
+	@Override
+	public NgramResponse retrieveByParty(String ngram, int partyId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public NgramResponse retrieveByPosel(String ngram, int poselId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
