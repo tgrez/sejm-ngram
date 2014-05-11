@@ -21,6 +21,16 @@
 			</modules>
 		</profile>
 
+        <profile>
+            <id>server-fts</id>
+            <modules>
+                <module>json-common</module>
+                <module>db-fetcher-api</module>
+                <module>db-fetcher-mysql-fts</module>
+                <module>rest-server</module>
+            </modules>
+        </profile>
+
 		<profile>
 			<id>default</id>
 			<activation>
@@ -31,6 +41,7 @@
 				<module>sejmometr-client</module>
                 <module>db-fetcher-api</module>
 				<module>db-fetcher-mysql</module>
+				<module>db-fetcher-mysql-fts</module>
 				<module>database-inserter</module>
 				<module>rest-server</module>
 				<module>psc-fetcher</module>
