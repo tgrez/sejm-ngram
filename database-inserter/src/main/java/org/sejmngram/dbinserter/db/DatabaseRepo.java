@@ -1,5 +1,6 @@
 package org.sejmngram.dbinserter.db;
 
+import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.dbinserter.model.RowData;
 
 import java.sql.Connection;
@@ -26,6 +27,28 @@ public class DatabaseRepo {
     public DatabaseRepo(){
         initDB();
         this.c = getConnection();
+
+    }
+
+    public void insertToDb(Wystapienie wystapienie){
+        Connection c = getConnection();
+        PreparedStatement stmt;
+
+        try{
+            stmt = c.prepareStatement("INSERT INTO sejmngram.wystapienia values (default, ?, ?, ?, ?, ?)");
+
+            stmt.setLong(1, Long.parseLong(wystapienie.getId()));
+            stmt.setDate(2, new java.sql.Date(wystapienie.getData().getTime()));
+            stmt.setInt(3, Integer.parseInt(wystapienie.getPartia()));
+            stmt.setInt(4, Integer.parseInt(wystapienie.getPosel()));
+            stmt.setString(5, wystapienie.getTresc());
+
+            stmt.executeUpdate();
+
+        }catch( SQLException e){
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -67,7 +90,6 @@ public class DatabaseRepo {
         }
     }
 
-
     private void initDB(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -76,7 +98,7 @@ public class DatabaseRepo {
         }
     }
 
-    private Connection getConnection(){
+    private Connection initializeConnection(){
         String url = "jdbc:mysql://" + db_host  + "/" + db_base;
         Connection con = null;
         try {
@@ -86,5 +108,17 @@ public class DatabaseRepo {
         }
 
         return con;
+    }
+
+    private Connection getConnection(){
+        try {
+            if (c == null || c.isClosed()){
+                c = initializeConnection();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return c;
+
     }
 }

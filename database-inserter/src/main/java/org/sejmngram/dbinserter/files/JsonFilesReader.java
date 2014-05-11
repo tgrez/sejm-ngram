@@ -1,8 +1,10 @@
 package org.sejmngram.dbinserter.files;
 
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import org.codehaus.jackson.type.TypeReference;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Dokument;
+import org.sejmngram.common.json.datamodel.Wystapienie;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +34,19 @@ public class JsonFilesReader {
         DualHashBidiMap dMap = new DualHashBidiMap( map);
         return dMap;
     }
+
+
+
+    public static ArrayList<Wystapienie> getWystapieniesFromJsonFile( File jsonFile){
+        ArrayList<Wystapienie> wystapienia = null;
+        try {
+             wystapienia = JsonProcessor.transformFromFile(jsonFile, new TypeReference<ArrayList<Wystapienie>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return wystapienia;
+    }
+
 
 
     public static ArrayList<Dokument> getDokumentFromJsonFile( String path, int limitFilesRead ){

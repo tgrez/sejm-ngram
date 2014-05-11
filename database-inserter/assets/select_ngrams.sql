@@ -1,0 +1,1 @@
+SELECT * FROM wystapienia WHERE MATCH (text) AGAINST ('"od wielu"' IN BOOLEAN MODE);
