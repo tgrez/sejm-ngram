@@ -2,6 +2,7 @@ package org.sejmngram.dbinserter.db;
 
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.dbinserter.model.RowData;
+import org.sejmngram.dbinserter.utils.Toolkit;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,22 +36,23 @@ public class DatabaseRepo {
         PreparedStatement stmt;
 
         try{
-            stmt = c.prepareStatement("INSERT INTO sejmngram.wystapienia values (default, ?, ?, ?, ?, ?)");
+            stmt = c.prepareStatement("INSERT INTO sejmngram.wystapienia values (default, ?, ?, ?, ?, ?, ?)");
 
             stmt.setLong(1, Long.parseLong(wystapienie.getId()));
             stmt.setDate(2, new java.sql.Date(wystapienie.getData().getTime()));
             stmt.setInt(3, Integer.parseInt(wystapienie.getPartia()));
             stmt.setInt(4, Integer.parseInt(wystapienie.getPosel()));
             stmt.setString(5, wystapienie.getTresc());
+            stmt.setString(6, Toolkit.replaceDiacrytics(wystapienie.getTresc()));
 
             stmt.executeUpdate();
 
         }catch( SQLException e){
             e.printStackTrace();
         }
-
-
     }
+
+
 
     public  void insertToDb( HashMap<String, RowData> blobMap) {
 

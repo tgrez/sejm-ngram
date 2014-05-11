@@ -30,7 +30,7 @@ public class ProcessedWystapieniaInserter {
         DatabaseRepo dbRepo = new DatabaseRepo();
 
         int insertedRows = 0;
-        int limitROws = 6000;
+        int limitROws = 20;
         long startTime = System.currentTimeMillis();
         for (File f : files){
             if (filesToDiscard.contains(f.getName())) continue;

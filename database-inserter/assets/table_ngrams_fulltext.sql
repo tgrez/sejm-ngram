@@ -13,4 +13,6 @@ CREATE TABLE wystapienia (
 
 )  ENGINE = MYISAM;
 
-/* ALTER  TABLE wystapienia ADD FULLTEXT INDEX idx_text (text); */
+ALTER TABLE sejmngram.wystapienia ADD textNormalized TEXT;
+
+/* ALTER  TABLE wystapienia ADD FULLTEXT INDEX idx_text (textNormalized); */
