@@ -353,7 +353,7 @@ function visualize(term) {
         };
 
     if (term) {
-        d3.json("service/api2/ngram/"+encodeURI(term),
+        d3.json("service/api/ngramfts/"+encodeURI(term),
                     graph
                     );
                     }

@@ -48,4 +48,5 @@ public class DemoNgramResource {
 		return ngramProvider.generateNgramResponse(ngramURLdecoded);
 	}
 
+
 }
