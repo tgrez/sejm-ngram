@@ -5,8 +5,8 @@ DELIMITER $$
 USE `sejmngram`$$
 CREATE DEFINER=`lisu`@`%` PROCEDURE `GetWystapienia`(term TEXT)
 BEGIN
-	SELECT date, SUM(term_count(text, term))
-		FROM wystapienia WHERE MATCH (text) AGAINST ( concat('"', term, '"') IN BOOLEAN MODE)
+	SELECT date, SUM(term_count(textNormalized, term)) AS count 
+		FROM wystapienia WHERE MATCH (textNormalized) AGAINST ('"'+term+'"' IN BOOLEAN MODE)
 		GROUP BY date;
 END$$
 
