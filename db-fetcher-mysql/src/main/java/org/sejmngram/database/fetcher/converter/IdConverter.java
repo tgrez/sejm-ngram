@@ -22,13 +22,14 @@ public class IdConverter {
 		}
 		if (tmpMap == null) {
 			LOG.error("Could not read file: '" + filename + "'");
-		}
-		for (String idString : tmpMap.keySet()) {
-			Integer id = Integer.valueOf(idString);
-			if (idToNameMap.containsKey(id)) {
-				LOG.error("Id: " + id + " appears more than once in file: '" + filename + "'");
+		} else {
+			for (String idString : tmpMap.keySet()) {
+				Integer id = Integer.valueOf(idString);
+				if (idToNameMap.containsKey(id)) {
+					LOG.error("Id: " + id + " appears more than once in file: '" + filename + "'");
+				}
+				idToNameMap.put(id, tmpMap.get(idString));
 			}
-			idToNameMap.put(id, tmpMap.get(idString));
 		}
 	}
 	
