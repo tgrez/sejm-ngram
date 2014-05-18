@@ -26,6 +26,7 @@
             <modules>
                 <module>json-common</module>
                 <module>db-fetcher-api</module>
+                <module>db-fetcher-mysql</module>
                 <module>db-fetcher-mysql-fts</module>
                 <module>rest-server</module>
             </modules>
