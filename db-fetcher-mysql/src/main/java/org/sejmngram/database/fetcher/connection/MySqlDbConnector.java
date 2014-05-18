@@ -21,7 +21,9 @@ public class MySqlDbConnector implements DbConnector {
 
 	private static final String USERNAME = "db-fetcher";
 	private static final String PASSWORD = "sejmngram2";
-	private static final String URL = "jdbc:mysql://localhost:3306/sejmngram?autoReconnect=true";
+	private static final String URL = "jdbc:mysql://localhost:3306/sejmngram" +
+										 "?autoReconnect=true&characterEncoding=utf-8" +
+										 "&useUnicode=true";
 	
 	private static final String poselIdFilename = "../psc-data/partiaId.json";
 	private static final String partiaIdFilename = "../psc-data/poselId.json";
