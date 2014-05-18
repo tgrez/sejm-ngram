@@ -68,7 +68,3 @@ END$$
 DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE `GetWystapienia` TO `db-fetcher`@`localhost`;
-
-
-
---INSERT SOME FAKE DATA
