@@ -59,9 +59,9 @@ public class MySqlFtsDbConnector implements DbConnector {
 		ArrayList<Record> results = new ArrayList<Record>();
 
 		try {
-			String query = "CALL GetWystapienia('?')";
+			String query = "CALL GetWystapienia( ? )";
 			PreparedStatement pstmt = conn.prepareStatement( query );
-			pstmt.setString( 1, ngramName);
+			pstmt.setString(1, ngramName);
 			ResultSet resultSet = pstmt.executeQuery(query);
 
 			while (resultSet.next()) {
