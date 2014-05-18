@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `GetWystapienia`;
 
 DELIMITER $$
 USE `sejmngram`$$
-CREATE DEFINER=`lisu`@`%` PROCEDURE `GetWystapienia`(term TEXT)
+CREATE DEFINER=`db-fetcher`@`%` PROCEDURE `GetWystapienia`(term TEXT)
 BEGIN
 	SELECT date, SUM(term_count(textNormalized, term)) AS count
 		FROM wystapienia WHERE MATCH (textNormalized) AGAINST ( concat('"', term, '"') IN BOOLEAN MODE)
