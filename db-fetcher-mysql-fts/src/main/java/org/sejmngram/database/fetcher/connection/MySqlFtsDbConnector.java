@@ -14,17 +14,17 @@ public class MySqlFtsDbConnector implements DbConnector {
 
 	private static final String USERNAME = "db-fetcher";
 	private static final String PASSWORD = "sejmngram2";
-	private static final String URL = "jdbc:mysql://localhost:3306/sejmngram" +
-			 							 "?autoReconnect=true&characterEncoding=utf-8" +
-			 							 "&useUnicode=true";
-	
+	private static final String URL = "jdbc:mysql://localhost:3306/sejmngram"
+			+ "?autoReconnect=true&characterEncoding=utf-8"
+			+ "&useUnicode=true";
+
 	private static final String poselIdFilename = "../psc-data/partiaId.json";
 	private static final String partiaIdFilename = "../psc-data/poselId.json";
 
 	private Connection conn = null;
-	
+
 	private NgramFtsConverter ngramFtsConverter = null;
-	
+
 	@Override
 	public void connect() {
 		try {
@@ -37,55 +37,49 @@ public class MySqlFtsDbConnector implements DbConnector {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-    }
-	
+	}
+
 	@Override
 	public void disconnect() {
 		if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException ignore) {
-            }
-        }
+			try {
+				conn.close();
+			} catch (SQLException ignore) {
+			}
+		}
 	}
 
 	@Override
 	public NgramResponse retrieve(String ngramName) {
-        ArrayList<Record> result = queryDatabase(ngramName);
+		ArrayList<Record> result = queryDatabase(ngramName);
 		return ngramFtsConverter.dbRecordsToNgramResponse(ngramName, result);
 	}
 
-    private ArrayList<Record> queryDatabase(String ngramName){
-        ArrayList<Record> results = new ArrayList<Record>();
+	private ArrayList<Record> queryDatabase(String ngramName) {
+		ArrayList<Record> results = new ArrayList<Record>();
 
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "CALL GetWystapienia('" + ngramName + " ')";
+			ResultSet rs = stmt.executeQuery(sql);
 
+			while (rs.next()) {
+				Record r = new Record(rs.getDate("date"), rs.getInt("count"));
+				results.add(r);
+			}
 
-        try {
-            Statement stmt = conn.createStatement();
-//            String sql = "SELECT * FROM wystapienia WHERE MATCH (text) AGAINST ('\"" + ngramName +  "\"' IN BOOLEAN MODE);";
-            String sql = "CALL GetWystapienia('" + ngramName  +" ')";
-            ResultSet rs = stmt.executeQuery(sql);
+			rs.close();
 
-            while (rs.next()){
-                Record r = new Record(rs.getDate("date"), rs.getInt("count"));
-                results.add(r);
-            }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
-            rs.close();
+		return results;
+	}
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return results;
-    }
-
-
-	
 	private void readIdFiles(String partyFilename, String poselFilename) {
 		ngramFtsConverter = new NgramFtsConverter(
-				new IdConverter(partyFilename),
-				new IdConverter(poselFilename));
+				new IdConverter(partyFilename), new IdConverter(poselFilename));
 	}
 
 	@Override

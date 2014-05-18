@@ -1,17 +1,8 @@
 package com.example.helloworld.factory;
 
-import org.apache.commons.lang.math.RandomUtils;
 import org.sejmngram.database.fetcher.connection.DbConnector;
-import org.sejmngram.database.fetcher.connection.MySqlDbConnector;
 import org.sejmngram.database.fetcher.connection.MySqlFtsDbConnector;
-import org.sejmngram.database.fetcher.json.datamodel.ListDate;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
-import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class NgramFTSProvider {
 
