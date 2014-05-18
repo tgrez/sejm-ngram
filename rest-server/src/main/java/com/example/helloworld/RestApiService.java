@@ -1,6 +1,5 @@
 package com.example.helloworld;
 
-import com.example.helloworld.health.TemplateHealthCheck;
 import com.example.helloworld.resources.DemoNgramResource;
 import com.example.helloworld.resources.NgramFTSResource;
 import com.example.helloworld.resources.NgramResource;

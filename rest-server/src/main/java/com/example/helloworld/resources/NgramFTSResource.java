@@ -1,13 +1,17 @@
 package com.example.helloworld.resources;
 
-import com.example.helloworld.factory.NgramFTSProvider;
-import com.example.helloworld.factory.NgramProvider;
-import com.google.common.base.Optional;
-import com.yammer.metrics.annotation.Timed;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import com.example.helloworld.factory.NgramFTSProvider;
+import com.google.common.base.Optional;
+import com.yammer.metrics.annotation.Timed;
 
 @Path("/api/ngramfts")
 @Produces(MediaType.APPLICATION_JSON)
