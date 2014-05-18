@@ -13,6 +13,7 @@
     <!-- SejmoGram own style-->
     <link href="/stylesheets/main.css" rel="stylesheet">
     <link href="/stylesheets/viz.css" rel="stylesheet">
+    <link href="/stylesheets/spinner.css" rel="stylesheet" />
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -22,7 +23,7 @@
             width: 100%;
         }
 
-        .btn{
+        .btn {
             width: 100%;
         }
     </style>
@@ -57,7 +58,14 @@
                 </table>
             </div>
             <div class="search" onClick="buttonGenVizPressed();">
-                <div >GENERATE</div>
+                <div id="generate">GENERATE</div>
+                <div id="generate-spinner" class="spinner" style="display:none">
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                </div>
             </div>
             <div class="clear"></div>
         </div>
