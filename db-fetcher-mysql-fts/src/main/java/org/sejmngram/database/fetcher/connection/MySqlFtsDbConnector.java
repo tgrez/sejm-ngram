@@ -1,12 +1,16 @@
 package org.sejmngram.database.fetcher.connection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramFtsConverter;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
-
 import org.sejmngram.database.fetcher.model.Record;
 
 // TODO exception handling
@@ -59,22 +63,20 @@ public class MySqlFtsDbConnector implements DbConnector {
 		ArrayList<Record> results = new ArrayList<Record>();
 
 		try {
-			String query = "CALL GetWystapienia( ? )";
-			PreparedStatement pstmt = conn.prepareStatement( query );
+			String query = "SELECT date, SUM(term_count(textNormalized, ?)) AS count " +
+					"FROM wystapienia WHERE MATCH (textNormalized) AGAINST ( concat('\"', ?, '\"') IN BOOLEAN MODE) " +
+					"GROUP BY date";
+			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, ngramName);
-			ResultSet resultSet = pstmt.executeQuery(query);
-
+			pstmt.setString(2, ngramName);
+			ResultSet resultSet = pstmt.executeQuery();
 			while (resultSet.next()) {
-				Record r = new Record(resultSet.getDate("date"), resultSet.getInt("count"));
-				results.add(r);
+				results.add(new Record(resultSet.getDate("date"), resultSet.getInt("count")));
 			}
-
 			resultSet.close();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return results;
 	}
 
