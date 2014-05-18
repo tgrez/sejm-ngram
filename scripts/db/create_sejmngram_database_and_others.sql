@@ -12,7 +12,7 @@ GRANT ALL PRIVILEGES ON sejmngram.* TO 'db-inserter'@'localhost';
 GRANT SELECT ON sejmngram.* TO 'db-fetcher'@'localhost';
 
 
--- CREATE TABLE WYSTAPIENIA
+-- CREATE TABLE WYSTAPIENIA WITH FTS
 DROP TABLE IF EXISTS wystapienia;
 
 CREATE TABLE wystapienia (
@@ -28,6 +28,12 @@ CREATE TABLE wystapienia (
 )  ENGINE = MYISAM;
 
 
+-- APPLY FULL TEXT SEARCH
+ALTER  TABLE wystapienia ADD FULLTEXT INDEX idx_text (textNormalized);
+
+
+
+
 -- CREATE FUNCTION term count
 USE `sejmngram`;
 DROP function IF EXISTS `term_count`;
@@ -41,6 +47,8 @@ BEGIN
 END$$
 
 DELIMITER ;
+GRANT EXECUTE ON FUNCTION `term_count` TO `db-fetcher`@`localhost`;
+
 
 
 -- CREATE PROCEDURE GET WYSTAPIENIA
@@ -57,4 +65,7 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+GRANT EXECUTE ON PROCEDURE `GetWystapienia` TO `db-fetcher`@`localhost`;
+
 
