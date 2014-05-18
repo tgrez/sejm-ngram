@@ -349,8 +349,8 @@ function visualize(term) {
             .attr("text-anchor","end")
             .text(0);
         drawLabels(mindate,maxdate);
-        
-        };
+        hideSpinner();
+    };
 
     if (term) {
         d3.json("service/api/ngramfts/"+encodeURI(term),
@@ -426,3 +426,11 @@ function setupGraph() {
             .attr("height",selectbarheight);
      
     }
+
+
+function hideSpinner() {
+    var generateButton = $('#generate');
+    var generateSpinner = $('#generate-spinner');
+    generateSpinner.hide();
+    generateButton.show();
+}
