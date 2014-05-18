@@ -122,18 +122,28 @@ function onAjaxSuccessVisualize(json) {
     var endDate = getMaxDateFromDataSet( dataSets );
 
     visualize(null, startDate, endDate, null, null);
+    hideSpinner();
 }
 
-function startJsonApiBasedVisualization( nGramToVisualize){
+function startJsonApiBasedVisualization(nGramToVisualize) {
     $.ajax({
         url: "service/api/ngram/" + nGramToVisualize,
         cache: false,
         success: onAjaxSuccessVisualize,
         fail: function (json) {
             console.log("error occured!");
+            hideSpinner();
+
             return console.warn(error);
         }
     });
+}
+
+function hideSpinner() {
+    var generateButton = $('#generate');
+    var generateSpinner = $('#generate-spinner');
+    generateSpinner.hide();
+    generateButton.show();
 }
 
 /* 
