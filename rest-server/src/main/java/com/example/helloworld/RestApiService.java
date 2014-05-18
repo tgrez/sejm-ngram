@@ -25,7 +25,7 @@ public class RestApiService extends Service<RestApiConfiguration> {
 
 //        environment.addHealthCheck(new TemplateHealthCheck(template)); TODO
         
-        environment.addResource(new NgramResource());
+//        environment.addResource(new NgramResource());
         environment.addResource(new NgramFTSResource());
         environment.addResource(new DemoNgramResource());
     }
