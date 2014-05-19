@@ -8,6 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
+import org.skife.jdbi.v2.DBI;
 
 import com.example.helloworld.factory.NgramFTSProvider;
 import com.google.common.base.Optional;
@@ -19,8 +20,8 @@ public class NgramFTSResource {
 
 	private final NgramFTSProvider ngramProvider;
 
-	public NgramFTSResource() {
-		this.ngramProvider = new NgramFTSProvider();
+	public NgramFTSResource(DBI jdbi, String partyFilename, String poselFilename) {
+		this.ngramProvider = new NgramFTSProvider(jdbi, partyFilename, poselFilename);
 	}
 	
 	@GET
