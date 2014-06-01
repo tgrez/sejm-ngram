@@ -1,4 +1,4 @@
-package com.example.helloworld;
+package org.sejmngram.server;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

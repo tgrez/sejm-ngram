@@ -1,4 +1,4 @@
-package com.example.helloworld.resources;
+package org.sejmngram.server.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -8,20 +8,19 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
-import org.skife.jdbi.v2.DBI;
+import org.sejmngram.server.factory.NgramProvider;
 
-import com.example.helloworld.factory.NgramFTSProvider;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 
-@Path("/api/ngramfts")
+@Path("/api/ngram")
 @Produces(MediaType.APPLICATION_JSON)
-public class NgramFTSResource {
+public class NgramResource {
 
-	private final NgramFTSProvider ngramProvider;
-
-	public NgramFTSResource(DBI jdbi, String partyFilename, String poselFilename) {
-		this.ngramProvider = new NgramFTSProvider(jdbi, partyFilename, poselFilename);
+	private final NgramProvider ngramProvider;
+	
+	public NgramResource() {
+		this.ngramProvider = new NgramProvider();
 	}
 	
 	@GET
@@ -29,7 +28,7 @@ public class NgramFTSResource {
     @Timed
 	public NgramResponse sayHello(@PathParam("ngram") String ngramName,
 			@QueryParam("name") Optional<String> name) {
-		return ngramProvider.generateNgramResponse(ngramName);
+		return ngramProvider.generateRandomNgramResponse(ngramName);
 	}
 
 }

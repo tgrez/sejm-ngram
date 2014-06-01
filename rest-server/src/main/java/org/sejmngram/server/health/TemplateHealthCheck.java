@@ -1,4 +1,4 @@
-package com.example.helloworld.health;
+package org.sejmngram.server.health;
 
 import com.yammer.metrics.core.HealthCheck;
 

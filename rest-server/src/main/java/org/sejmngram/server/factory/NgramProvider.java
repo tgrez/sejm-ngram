@@ -1,4 +1,4 @@
-package com.example.helloworld.factory;
+package org.sejmngram.server.factory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

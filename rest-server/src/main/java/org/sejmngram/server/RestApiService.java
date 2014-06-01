@@ -1,9 +1,11 @@
-package com.example.helloworld;
+package org.sejmngram.server;
 
+import org.sejmngram.server.resources.DemoNgramResource;
+import org.sejmngram.server.resources.NgramFTSResource;
 import org.skife.jdbi.v2.DBI;
 
-import com.example.helloworld.resources.DemoNgramResource;
-import com.example.helloworld.resources.NgramFTSResource;
+import com.example.helloworld.RestApiConfiguration;
+import com.example.helloworld.RestApiService;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;

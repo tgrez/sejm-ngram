@@ -1,4 +1,4 @@
-package com.example.helloworld.resources;
+package org.sejmngram.server.resources;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -11,12 +11,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
+import org.sejmngram.server.factory.NgramProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
 
-import com.example.helloworld.factory.NgramProvider;
+import com.example.helloworld.resources.DemoNgramResource;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 

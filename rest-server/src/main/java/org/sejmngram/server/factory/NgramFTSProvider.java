@@ -1,4 +1,4 @@
-package com.example.helloworld.factory;
+package org.sejmngram.server.factory;
 
 import org.sejmngram.database.fetcher.connection.DbConnector;
 import org.sejmngram.database.fetcher.connection.MySqlFtsDbConnector;
