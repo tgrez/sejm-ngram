@@ -22,8 +22,9 @@ public class NgramFtsConverter {
 	
 	public NgramResponse dbRecordsToNgramResponse(String ngramName, List<Record> records) {
 		ResponseBuilder responesBuilder = new ResponseBuilder(ngramName);
+
         for (Record r : records){
-            responesBuilder.addOccurances("Default Party", r.getDate().toString(), r.getCount());
+            responesBuilder.addOccurances(Integer.toString(r.getPartyId()), r.getDate().toString(), r.getCount());
         }
 
         return responesBuilder.generateResponse();

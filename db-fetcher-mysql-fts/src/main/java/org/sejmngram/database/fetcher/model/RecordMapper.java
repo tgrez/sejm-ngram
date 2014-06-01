@@ -9,6 +9,6 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 public class RecordMapper implements ResultSetMapper<Record> {
 	public Record map(int index, ResultSet resultSet, StatementContext ctx)
 			throws SQLException {
-		return new Record(resultSet.getDate("date"), resultSet.getInt("count"));
+		return new Record(resultSet.getDate("date"), resultSet.getInt("count"), resultSet.getInt("partyId"));
 	}
 }

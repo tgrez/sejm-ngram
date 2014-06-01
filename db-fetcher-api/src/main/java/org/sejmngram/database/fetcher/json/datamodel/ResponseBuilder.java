@@ -40,7 +40,7 @@ public class ResponseBuilder {
 	
 	public void addOccurances(String partyName, String date, int occurances) {
 		if (!partiesMap.containsKey(partyName)) {
-			partiesMap.put(partyName, initialDates);
+			partiesMap.put(partyName, new HashMap(initialDates));
 		}
 		date = date.substring(0, 7);
 		Integer count = partiesMap.get(partyName).get(date);

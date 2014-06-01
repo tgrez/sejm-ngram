@@ -10,6 +10,8 @@ public class Record {
 
     private int count;
 
+    private int partyId;
+
     public Date getDate() {
         return date;
     }
@@ -18,9 +20,14 @@ public class Record {
         return count;
     }
 
+    public int getPartyId() {
+        return partyId;
+    }
 
-    public Record(Date date, int count) {
+
+    public Record(Date date, int count, int partyId) {
         this.date = date;
         this.count = count;
+        this.partyId = partyId;
     }
 }
