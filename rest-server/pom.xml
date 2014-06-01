@@ -80,7 +80,7 @@
 									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.example.helloworld.RestApiService</mainClass>
+									<mainClass>org.sejmngram.server.RestApiService</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
