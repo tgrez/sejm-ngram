@@ -4,8 +4,8 @@ import org.sejmngram.server.resources.DemoNgramResource;
 import org.sejmngram.server.resources.NgramFTSResource;
 import org.skife.jdbi.v2.DBI;
 
-import com.example.helloworld.RestApiConfiguration;
-import com.example.helloworld.RestApiService;
+import org.sejmngram.server.RestApiConfiguration;
+import org.sejmngram.server.RestApiService;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
 
-import com.example.helloworld.resources.DemoNgramResource;
+import org.sejmngram.server.resources.DemoNgramResource;
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 
