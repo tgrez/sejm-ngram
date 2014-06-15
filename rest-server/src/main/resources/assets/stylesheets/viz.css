@@ -11,6 +11,7 @@ g.party > path.visible {
 g.party > circle {
     stroke: #ffffff;
     stroke-width: 1px;
+    visibility: hidden;
     }
 
 #selectbar > svg > path {
@@ -74,4 +75,9 @@ g.axis > line {
     margin: -1px 0 0 0;
     top: 100%;
     left: 0;
+}
+
+/* hover on screen */
+#graph:hover  circle {
+    visibility: visible;
 }

@@ -118,10 +118,10 @@ function visualize(term) {
             .append("g")
             .attr("class","party")
             .attr("id",function(d) { return "group-"+slugify(d.name) })
-            .attr("style","visibility: hidden;");
-        
-        d3.select("#group-total")
             .attr("style","visibility: visible;");
+        
+//        d3.select("#group-total")
+//            .attr("style","visibility: visible;");
 
         var paths=parties.append("path").attr("d",function(d) { return path(d.listDates)})
             .attr("stroke",function(d) { return colors(d.name) });
@@ -353,7 +353,8 @@ function visualize(term) {
     };
 
     if (term) {
-        d3.json("service/api/ngramfts/"+encodeURI(term),
+//        d3.json("http://localhost:8080/service/api/ngramfts/"+encodeURI(term),
+        d3.json("/service/api/ngramfts/"+encodeURI(term),
                     graph
                     );
                     }
