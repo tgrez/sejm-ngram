@@ -1,5 +1,6 @@
 package org.sejmngram.server;
 
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.sejmngram.server.resources.DemoNgramResource;
 import org.sejmngram.server.resources.NgramFTSResource;
 import org.skife.jdbi.v2.DBI;
@@ -45,6 +46,13 @@ public class RestApiService extends Service<RestApiConfiguration> {
         		config.getPartiaIdFilename(),
         		config.getPoselIdFilename()));
         environment.addResource(new DemoNgramResource());
+
+
+        //add filters for cors
+        environment.addFilter(CrossOriginFilter.class, "/*")
+                .setInitParam("allowedOrigins", "*")
+                .setInitParam("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin")
+                .setInitParam("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
     }
 
 }
