@@ -431,8 +431,8 @@ function visualize(term) {
     };
 
     if (term) {
-        d3.json("http://localhost:8080/service/api/ngramfts/" + encodeURI(term),
-//        d3.json("/service/api/ngramfts/" + encodeURI(term),
+//        d3.json("http://localhost:8080/service/api/ngramfts/" + encodeURI(term),
+        d3.json("/service/api/ngramfts/" + encodeURI(term),
             graph
         );
     }
