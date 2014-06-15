@@ -2,12 +2,9 @@ http:
   rootPath: /service/*  # Default is /*
   port: 8080
 
-
-poselIdFilename: ../psc-data/partiaId.json
-partiaIdFilename: ../psc-data/poselId.json
+partiaIdFilename: ../psc-data/partiaId.json
+poselIdFilename: ../psc-data/poselId.json
   
-
-
 database:
   # the name of your JDBC driver
   driverClass: com.mysql.jdbc.Driver
