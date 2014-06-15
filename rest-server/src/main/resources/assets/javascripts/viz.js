@@ -10,7 +10,6 @@ function visualize(term) {
         var colors = d3.scale.category10();
 
         var slugify = function (s) {
-            if (!s) return "";
             return s.toLowerCase().replace(/[^a-z0-9-]/g, "-")
         }
 
