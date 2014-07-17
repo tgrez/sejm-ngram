@@ -1,0 +1,189 @@
+﻿@import "/css/common.less";
+
+body {
+    .ubuntu-light-font;
+    font-size: 16px;
+    color: @primary-white;
+    cursor: default;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+
+    list-style-type: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clearfix {
+  display: block;
+  zoom: 1;
+
+  &:after {
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+strong {
+    .ubuntu-bold-font;
+}
+
+.container-wrapper {
+    width: 100%;
+
+    > .container-sub-wrapper {
+        position: relative;
+    }
+}
+
+@media only screen and (max-width: 1023px) {
+    .container-wrapper {
+        > .container-sub-wrapper {
+            margin-left: 3%;
+            margin-right: 3%;
+        }
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .container-wrapper {
+        > .container-sub-wrapper {
+            width: 964px;
+            margin: 0 auto;
+        }
+    }
+}
+
+header {
+    min-height: 70px;
+
+    background-color: @primary-white;
+
+    > .logo {
+        margin-top: 19px;
+
+        cursor: pointer;
+    }
+    
+    > nav {
+        float: right;
+
+        margin-top: 30px;
+        margin-bottom: 18px;
+
+        ul > li {
+            display: inline-block;
+
+            &:not(:last-child) {
+                margin-right: 44px;
+            }
+
+            a {
+                .ubuntu-bold-font;
+                font-size: 14px;
+                color: @primary-black;
+            }
+        }
+    }
+}
+
+#main-container {
+    background-color: @primary-red;
+}
+
+
+tags-input {
+    > .host {
+        > .tags {
+            background-color: transparent;
+            border: 1px solid @primary-white;
+            box-shadow: none;
+
+            -moz-appearance: initial;
+            -webkit-appearance: initial;
+
+            .tag-item {
+                padding: 0 7px 4px;
+                
+                .ubuntu-light-font;
+                font-size: 16px;
+
+                background: @secondary-red;
+                border: 0;
+
+                > .remove-button {
+                    vertical-align: top;
+                }
+            }
+
+            .input {
+                color: @primary-white;
+                 .ubuntu-font;
+                font-size: 16px;
+
+                background-color: transparent;
+            }
+        }
+    }
+}
+
+.outated-browser {
+    padding: 0.2em 0;
+    margin: 0.2em 0;
+
+    background: #ccc;
+    color: #000;
+}
+
+.fade {
+
+    &.ng-enter,
+    &.ng-leave {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+    &.ng-enter {
+        position: relative;
+        left: 30px;
+
+        opacity: 0;
+    }
+
+    &.ng-enter-active {
+        left: 0px;
+        
+        opacity: 1;
+    }
+
+    &.ng-leave {
+        display: none;
+    }
+
+    &.ng-leave-active {
+        opacity: 0;
+    }
+}

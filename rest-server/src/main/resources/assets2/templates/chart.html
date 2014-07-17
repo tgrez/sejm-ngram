@@ -1,0 +1,37 @@
+﻿<div id="chartView">
+    <h1 class="slogan" ng-show="!wasSearchTriggered">
+        ŁAP POSŁÓW<br />
+        ZA SŁÓWKA
+    </h1>
+    <div class="search-description">
+        Sprawdź na jakie tematy rozmawiali w sejmie polscy posłowie.<br />
+        Wpisz maksymalnie pięć interesujących Cię słów do poniższego pola.<br />
+        Aby porównać kilka wyrażeń oddziel je przecinkiem.<br />
+    </div>
+    <div class="search-bar">
+        <tags-input ng-model="tagsWrapper.tags" replace-spaces-with-dashes="false" ></tags-input>
+        <div class="button" ng-click="search()">
+            <span ng-show="!isSearchInProgress">SZUKAJ</span>
+            <div class="button spinner" ng-show="isSearchInProgress">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+    <div class="most-popular">
+        <div class="description" ng-show="!wasSearchTriggered">
+            Możesz również wybrać spośród <strong>NAJBARDZIEJ POPULARNYCH</strong>.
+        </div>
+        <div class="tags">
+            <div class="tag" ng-click="tagsWrapper.addTag(tag)" ng-repeat="tag in mostPopularTags">
+                {{tag}}
+            </div>
+        </div>
+    </div>
+    <div class="chart" ng-show="wasSearchTriggered">
+        SDFASEF
+    </div>
+</div>

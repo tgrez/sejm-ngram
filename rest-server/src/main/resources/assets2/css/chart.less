@@ -1,0 +1,174 @@
+﻿@import "/css/common.less";
+
+#chartView {
+    padding-bottom: 112px;
+
+    h1.slogan {
+        padding-top: 76px;
+        margin-bottom: 35px;
+
+        .ubuntu-bold-font;
+        font-size: 62px;
+        line-height: 66px;
+        color: @primary-white;
+        
+        &.ng-hide {
+            display: block !important;
+
+            margin: 0;
+            padding: 0;
+
+            font-size: 0px;
+            line-height: 0px;
+
+            opacity: 0;
+            transition: all 1s, font-size 0s cubic-bezier(1,0,1,0) 1s;
+        }
+    }
+
+    .search-description {
+        margin-top: 35px;
+        margin-bottom: 10px;
+
+        line-height: 20px;
+    }
+
+    .search-bar {
+        @search-bar-height: 39px;
+
+        height: @search-bar-height;
+        margin-bottom: 10px;
+
+        font-size: 0;
+
+        > tags-input {
+            > .host {
+                display: inline-block;
+                margin: 0;
+
+                width: 527px;
+
+                > .tags {
+                    height: @search-bar-height;
+                    padding-top: 3px;
+                    padding-left: 3px;
+
+                    .border-radiuses(0, 0, 4px, 4px);
+                }
+            }
+        }
+
+        > .button {
+            vertical-align: top;
+
+            display: inline-block;
+            height: 100%;
+            width: 124px;
+
+            .ubuntu-bold-font;
+            line-height: @search-bar-height;
+            font-size: 22px;
+            text-align: center;
+            color: @primary-red;
+
+            .border-radiuses(4px, 4px, 0, 0);
+            background-color: @primary-white;
+
+            cursor: pointer;
+        }
+    }
+
+    .most-popular {
+        width: 651px;
+
+        .description {
+            margin-top: 28px;
+            margin-bottom: 13px;
+
+            &.ng-hide {
+                display: block !important;
+
+                margin: 0;
+                padding: 0;
+
+                font-size: 0px;
+                line-height: 0px;
+
+                opacity: 0;
+                transition: all 1s, font-size 0s cubic-bezier(1,0,1,0) 1s;
+            }
+        }
+
+        .tag {
+            display: inline-block;
+
+            padding: 0 7px 4px;
+            margin-bottom: 10px;
+
+            .ubuntu-font;
+
+            background-color: @secondary-red;
+            .border-radius(4px);
+
+            cursor: pointer;
+
+            &:not(:last-child) {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+.spinner {
+    margin: 5px auto;
+    width: 50px;
+    height: 30px;
+
+    text-align: center;
+    font-size: 10px;
+
+    > div {
+        background-color: @primary-red;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+  
+        -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+        animation: stretchdelay 1.2s infinite ease-in-out;
+    }
+
+    .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+    }
+
+    .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+
+    .rect4 {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+
+    .rect5 {
+        -webkit-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+    }
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
