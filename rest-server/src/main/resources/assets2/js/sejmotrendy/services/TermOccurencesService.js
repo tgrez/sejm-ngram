@@ -3,8 +3,10 @@
 
 'use strict';
 
-module.service('termOccurencesChartService', function () {
+module.service('termOccurencesService', function () {
     var svg = d3.select('#term-occurences-chart'),
+        defs = svg.select('defs'),
+        lineTrimRegion = defs.select('#lineTrimRegion'),
         chart = svg.select('.chart'),
         line = chart.select('.line'),
         axisX = chart.select('.axisX'),
@@ -27,30 +29,27 @@ module.service('termOccurencesChartService', function () {
         axisYFunction;
 
     this.initialize = function(chartData) {
-        setSizes();
-        setScaleRanges();
-        setData(chartData);
-        setScaleDomain();
-        setDataGenerationFunctions();
-        setDataGenerationFunctions();
-        draw();
+        setSizes.call(this);
+        setScaleRanges.call(this);
+        setData.call(this, chartData);
+        setScaleDomain.call(this);
+        setDataGenerationFunctions.call(this);
+        draw.call(this);
     };
 
     this.updateSize = function () {
-        setSizes();
-        setScaleRanges();
-        setData();
-        setScaleDomain();
-        setDataGenerationFunctions();
-        setDataGenerationFunctions();
-        draw();
+        setSizes.call(this);
+        setScaleRanges.call(this);
+        setData.call(this);
+        setScaleDomain.call(this);
+        setDataGenerationFunctions.call(this);
+        draw.call(this);
     };
 
     this.updateRange = function (xRange) {
-        setScaleDomain(xRange);
-        setDataGenerationFunctions();
-        setDataGenerationFunctions();
-        draw();
+        setScaleDomain.call(this, xRange);
+        setDataGenerationFunctions.call(this);
+        draw.call(this);
     };
     
     function setSizes() {
@@ -66,6 +65,10 @@ module.service('termOccurencesChartService', function () {
         });
         axisX.attr({
             'transform': 'translate(' + 0 + ', ' + chartHeight + ')'
+        });
+        lineTrimRegion.select('rect').attr({
+            'width': chartWidth,
+            'height': chartHeight,
         });
     };
 
@@ -92,7 +95,8 @@ module.service('termOccurencesChartService', function () {
             .y(function (d, i) { return scaleY(d.termOccurrences); });
         axisXFunction = d3.svg.axis()
             .scale(scaleX)
-            .orient('bottom').ticks(4);
+            .orient('bottom')
+            .ticks(4);
         axisYFunction = d3.svg.axis()
             .scale(scaleY)
             .orient('left');

@@ -3,7 +3,7 @@
 
 'use strict';
 
-module.service('rangeFilterChartService', function () {
+module.service('rangeFilterService', function () {
     var _this = this,
         svg = d3.select('#range-filter-chart'),
         chart = svg.select('.chart'),
@@ -12,8 +12,8 @@ module.service('rangeFilterChartService', function () {
         axisY = chart.select('.axisY'),
         brush = chart.select('.brush'),
         margin = {
-            top: 40,
-            bottom: 40,
+            top: 20,
+            bottom: 30,
             left: 40,
             right: 40
         },
@@ -27,31 +27,30 @@ module.service('rangeFilterChartService', function () {
         data,
         lineFunction,
         axisXFunction,
-        axisYFunction,
-        brushedCallback;
+        axisYFunction;
 
     this.brushFunction = null;
 
-    this.initialize = function(chartData, brushedCallbackFunction) {
-        brushedCallback = brushedCallbackFunction;
-
-        setSizes();
-        setScaleRanges();
-        setData(chartData);
-        setScaleDomain();
-        setDataGenerationFunctions();
-        setDataGenerationFunctions();
-        draw();
+    this.initialize = function(chartData) {
+        setSizes.call(this);
+        setScaleRanges.call(this);
+        setData.call(this, chartData);
+        setScaleDomain.call(this);
+        setDataGenerationFunctions.call(this);
+        draw.call(this);
     };
 
     this.updateSize = function() {
-        setSizes();
-        setScaleRanges();
-        setData();
-        setScaleDomain();
-        setDataGenerationFunctions();
-        setDataGenerationFunctions();
-        draw();
+        setSizes.call(this);
+        setScaleRanges.call(this);
+        setData.call(this);
+        setScaleDomain.call(this);
+        setDataGenerationFunctions.call(this);
+        draw.call(this);
+    };
+
+    this.onChange = function (brushedCallback) {
+        this.brushFunction.on('brush', brushedCallback);
     };
 
     function setSizes() {
@@ -92,20 +91,22 @@ module.service('rangeFilterChartService', function () {
             .y(function (d, i) { return scaleY(d.termOccurrences); });
         axisXFunction = d3.svg.axis()
             .scale(scaleX)
-            .orient('bottom').ticks(4);
+            .orient('bottom')
+            .ticks(4);
         axisYFunction = d3.svg.axis()
             .scale(scaleY)
-            .orient('left');
-        _this.brushFunction = d3.svg.brush()
-            .x(scaleX)
-            .on('brush', brushedCallback);
+            .orient('left')
+            .ticks(2);
+        this.brushFunction = d3.svg.brush()
+            .x(scaleX);
     };
 
     function draw() {
         line.attr('d', lineFunction(data));
         axisX.call(axisXFunction);
         axisY.call(axisYFunction);
-        brush.call(_this.brushFunction).selectAll("rect")
-      .attr("height", chartHeight);
+        brush.call(this.brushFunction)
+            .selectAll("rect")
+            .attr("height", chartHeight);
     };
 });

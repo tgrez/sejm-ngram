@@ -32,8 +32,13 @@
         </div>
     </div>
     <svg id="term-occurences-chart" width="600" height="300">
+        <defs>
+            <clipPath id="lineTrimRegion">
+                <rect></rect>
+            </clipPath>
+        </defs>
         <g class="chart">
-            <path class="line"></path>
+            <path class="line" clip-path="url(#lineTrimRegion)"></path>
             <g class="axis axisX"></g>
             <g class="axis axisY"></g>
         </g>
