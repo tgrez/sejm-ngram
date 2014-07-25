@@ -6,3 +6,4 @@
 /// <reference path="vendor/modernizr-2.7.2.js" />
 /// <reference path="vendor/ng-tags-input.js" />
 /// <reference path="vendor/underscore-min.js" />
+/// <reference path="vendor/d3.min.js" />

@@ -9,7 +9,7 @@
         Aby porównać kilka wyrażeń oddziel je przecinkiem.<br />
     </div>
     <div class="search-bar">
-        <tags-input ng-model="tagsWrapper.tags" replace-spaces-with-dashes="false" ></tags-input>
+        <tags-input ng-model="tagsService.tags" replace-spaces-with-dashes="false"></tags-input>
         <div class="button" ng-click="search()">
             <span ng-show="!isSearchInProgress">SZUKAJ</span>
             <div class="button spinner" ng-show="isSearchInProgress">
@@ -26,12 +26,24 @@
             Możesz również wybrać spośród <strong>NAJBARDZIEJ POPULARNYCH</strong>.
         </div>
         <div class="tags">
-            <div class="tag" ng-click="tagsWrapper.addTag(tag)" ng-repeat="tag in mostPopularTags">
+            <div class="tag" ng-click="tagsService.addTag(tag)" ng-repeat="tag in mostPopularTags">
                 {{tag}}
             </div>
         </div>
     </div>
-    <div class="chart" ng-show="wasSearchTriggered">
-        SDFASEF
-    </div>
+    <svg id="term-occurences-chart" width="600" height="300">
+        <g class="chart">
+            <path class="line"></path>
+            <g class="axis axisX"></g>
+            <g class="axis axisY"></g>
+        </g>
+    </svg>
+    <svg id="range-filter-chart" width="600" height="100">
+        <g class="chart">
+            <path class="line"></path>
+            <g class="axis axisX"></g>
+            <g class="axis axisY"></g>
+            <g class="brush"></g>
+        </g>
+    </svg>
 </div>
