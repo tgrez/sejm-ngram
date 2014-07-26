@@ -1,12 +1,12 @@
 package org.sejmngram.server;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.sejmngram.server.cache.RedisProvider;
 import org.sejmngram.server.resources.DemoNgramResource;
 import org.sejmngram.server.resources.NgramFTSResource;
+import org.sejmngram.server.resources.NgramHitCountResource;
 import org.skife.jdbi.v2.DBI;
 
-import org.sejmngram.server.RestApiConfiguration;
-import org.sejmngram.server.RestApiService;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
 import com.yammer.dropwizard.config.Bootstrap;
@@ -41,12 +41,16 @@ public class RestApiService extends Service<RestApiConfiguration> {
 //        environment.addHealthCheck(new TemplateHealthCheck(template)); TODO
         
 //        environment.addResource(new NgramResource());
+        final RedisProvider redis = new RedisProvider();
+        
         environment.addResource(new NgramFTSResource(
         		jdbi,
+        		redis,
         		config.getPartiaIdFilename(),
         		config.getPoselIdFilename()));
         environment.addResource(new DemoNgramResource());
 
+        environment.addResource(new NgramHitCountResource(redis));
 
         //add filters for cors
         environment.addFilter(CrossOriginFilter.class, "/*")
