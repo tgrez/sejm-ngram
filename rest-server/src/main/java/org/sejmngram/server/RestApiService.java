@@ -46,11 +46,12 @@ public class RestApiService extends Service<RestApiConfiguration> {
         		redis,
         		config.getPartiaIdFilename(),
         		config.getPoselIdFilename()));
+
         environment.addResource(new DemoNgramResource());
 
         environment.addResource(new NgramHitCountResource(redis));
 
-        //add filters for cors
+
         environment.addFilter(CrossOriginFilter.class, "/*")
                 .setInitParam("allowedOrigins", "*")
                 .setInitParam("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin")

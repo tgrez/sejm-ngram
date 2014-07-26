@@ -18,6 +18,9 @@ public interface NgramFtsDao {
 
 
 
+
+
+
 	
 	void close();
 }
