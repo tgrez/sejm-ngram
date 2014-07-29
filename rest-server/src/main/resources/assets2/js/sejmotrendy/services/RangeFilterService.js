@@ -27,7 +27,8 @@ module.service('rangeFilterService', function () {
         data,
         lineFunction,
         axisXFunction,
-        axisYFunction;
+        axisYFunction,
+        cachedBrushExtent;
 
     this.brushFunction = null;
 
@@ -43,14 +44,18 @@ module.service('rangeFilterService', function () {
     this.updateSize = function() {
         setSizes.call(this);
         setScaleRanges.call(this);
-        setData.call(this);
         setScaleDomain.call(this);
         setDataGenerationFunctions.call(this);
         draw.call(this);
     };
 
     this.onChange = function (brushedCallback) {
-        this.brushFunction.on('brush', brushedCallback);
+        var _this = this;
+
+        this.brushFunction.on('brush', function () {
+            cachedBrushExtent = _this.brushFunction.extent();
+            brushedCallback();
+        });
     };
 
     function setSizes() {
@@ -70,10 +75,10 @@ module.service('rangeFilterService', function () {
     };
 
     function setScaleRanges() {
-        scaleX = d3.time.scale()
-            .range([0, chartWidth]);
-        scaleY = d3.scale.linear()
-            .range([chartHeight, 0]);
+        scaleX = scaleX || d3.time.scale();
+        scaleY = scaleY || d3.scale.linear();
+        scaleX.range([0, chartWidth]);
+        scaleY.range([chartHeight, 0]);
     };
 
     function setData(chartData) {
@@ -86,6 +91,8 @@ module.service('rangeFilterService', function () {
     };
 
     function setDataGenerationFunctions() {
+        this.brushFunction = this.brushFunction || d3.svg.brush();
+
         lineFunction = d3.svg.line()
             .x(function (d, i) { return scaleX(d.date); })
             .y(function (d, i) { return scaleY(d.termOccurrences); });
@@ -97,14 +104,16 @@ module.service('rangeFilterService', function () {
             .scale(scaleY)
             .orient('left')
             .ticks(2);
-        this.brushFunction = d3.svg.brush()
-            .x(scaleX);
+        this.brushFunction.x(scaleX);
     };
 
     function draw() {
         line.attr('d', lineFunction(data));
         axisX.call(axisXFunction);
         axisY.call(axisYFunction);
+        
+        if (cachedBrushExtent !== undefined)
+            this.brushFunction.extent(cachedBrushExtent);
         brush.call(this.brushFunction)
             .selectAll("rect")
             .attr("height", chartHeight);

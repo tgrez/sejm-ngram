@@ -7,6 +7,10 @@ var module = angular.module('sejmotrendyApp', ['ngTagsInput', 'ngRoute', 'ngAnim
                 templateUrl: '/templates/chart.html',
                 controller: 'ChartCtrl'
             })
+            .when('/chart/:phrasesString', {
+                templateUrl: '/templates/chart.html',
+                controller: 'ChartCtrl'
+            })
             .when('/howitworks', {
                 templateUrl: '/templates/howitworks.html'
             })

@@ -1,13 +1,20 @@
 ﻿/// <reference path="../app.js" />
+/// <reference path="../services/PhrasesService.js" />
+/// <reference path="../services/TermOccurencesService.js" />
+/// <reference path="../services/RangeFilterService.js" />
 
 'use strict';
 
-module.controller('ChartCtrl', function ($scope, $http, tagsService, termOccurencesService, rangeFilterService) {
+module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, phrasesService, termOccurencesService, rangeFilterService) {
     $scope.wasSearchTriggered = false;
     $scope.isSearchInProgres = false;
-    $scope.tagsService = tagsService;
 
-    $scope.mostPopularTags = [
+    var phrasesString = $routeParams.phrasesString;
+    $scope.phrasesService = phrasesService;
+    if (phrasesString !== undefined)
+        phrasesService.addPhrasesFromString(phrasesString);
+
+    $scope.mostPopularPhrases = [
         'aborcja',
         'Tusk',
         'Unia Europejska',
@@ -18,31 +25,21 @@ module.controller('ChartCtrl', function ($scope, $http, tagsService, termOccuren
         'PIS',
         'TVN'
     ];
-
+    $scope.log = function () {
+        console.log('event triggered')
+    };
     $scope.search = function () {
         $scope.wasSearchTriggered = true;
         $scope.isSearchInProgress = true;
     };
+    $scope.onTermOccurencesChartResize = function () {
+        termOccurencesService.updateSize();
+    }
+    $scope.onRangeFilterChartResize = function () {
+        rangeFilterService.updateSize();
+    }
 
-    var d3PolishLocale = {
-        "decimal": ",",
-        "thousands": " ",
-        "grouping": [3],
-        "currency": ["", "zł"],
-        "dateTime": "%e %b %Y %X",
-        "date": "%Y-%m-%d",
-        "time": "%H:%M:%S",
-        "periods": ["", ""], // AM,PM
-        "days": ["niedziela", "poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota"],
-        "shortDays": ["N", "Pn", "Wt", "Śr", "Cz", "Pt", "So"],
-        "months": ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"],
-        "shortMonths": ["sty", "lut", "mar", "kwi", "maj", "cze", "lip", "sie", "wrz", "paź", "lis", "gru"]
-    };
-    var polishLocale = d3.locale(d3PolishLocale);
-    d3.format = polishLocale.numberFormat;
-    d3.time.format = polishLocale.timeFormat;
-
-    var dateFormat = polishLocale.timeFormat('%Y-%m-%d');
+    var dateFormat = d3.time.format('%Y-%m-%d');
     var chartData = [
             { date: '2000-01-01', termOccurrences: 1 },
             { date: '2000-01-02', termOccurrences: 3 },
@@ -168,7 +165,7 @@ module.controller('ChartCtrl', function ($scope, $http, tagsService, termOccuren
 
     termOccurencesService.initialize(chartData);
     rangeFilterService.initialize(chartData);
-    rangeFilterService.onChange(onRangeFilterChange)
+    rangeFilterService.onChange(onRangeFilterChange);
 
     function onRangeFilterChange() {
         var xRange = rangeFilterService.brushFunction.extent();

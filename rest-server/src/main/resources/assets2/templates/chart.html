@@ -9,7 +9,7 @@
         Aby porównać kilka wyrażeń oddziel je przecinkiem.<br />
     </div>
     <div class="search-bar">
-        <tags-input ng-model="tagsService.tags" replace-spaces-with-dashes="false"></tags-input>
+        <tags-input ng-model="phrasesService.phrases" replace-spaces-with-dashes="false"></tags-input>
         <div class="button" ng-click="search()">
             <span ng-show="!isSearchInProgress">SZUKAJ</span>
             <div class="button spinner" ng-show="isSearchInProgress">
@@ -25,13 +25,13 @@
         <div class="description" ng-show="!wasSearchTriggered">
             Możesz również wybrać spośród <strong>NAJBARDZIEJ POPULARNYCH</strong>.
         </div>
-        <div class="tags">
-            <div class="tag" ng-click="tagsService.addTag(tag)" ng-repeat="tag in mostPopularTags">
-                {{tag}}
+        <div class="phrases">
+            <div class="phrase" ng-click="phrasesService.addPhrase(phrase)" ng-repeat="phrase in mostPopularPhrases">
+                {{phrase}}
             </div>
         </div>
     </div>
-    <svg id="term-occurences-chart" width="600" height="300">
+    <svg id="term-occurences-chart" width="100%" height="300" on-size-changed="onTermOccurencesChartResize">
         <defs>
             <clipPath id="lineTrimRegion">
                 <rect></rect>
@@ -43,7 +43,7 @@
             <g class="axis axisY"></g>
         </g>
     </svg>
-    <svg id="range-filter-chart" width="600" height="100">
+    <svg id="range-filter-chart" width="100%" height="100" on-size-changed="onRangeFilterChartResize">
         <g class="chart">
             <path class="line"></path>
             <g class="axis axisX"></g>

@@ -40,13 +40,11 @@ module.service('termOccurencesService', function () {
     this.updateSize = function () {
         setSizes.call(this);
         setScaleRanges.call(this);
-        setData.call(this);
-        setScaleDomain.call(this);
         setDataGenerationFunctions.call(this);
         draw.call(this);
     };
 
-    this.updateRange = function (xRange) {
+    this.updateRange = function(xRange) {
         setScaleDomain.call(this, xRange);
         setDataGenerationFunctions.call(this);
         draw.call(this);
@@ -73,10 +71,10 @@ module.service('termOccurencesService', function () {
     };
 
     function setScaleRanges() {
-        scaleX = d3.time.scale()
-            .range([0, chartWidth]);
-        scaleY = d3.scale.linear()
-            .range([chartHeight, 0]);
+        scaleX = scaleX || d3.time.scale();
+        scaleY = scaleY || d3.scale.linear();
+        scaleX.range([0, chartWidth]);
+        scaleY.range([chartHeight, 0]);
     };
 
     function setData(chartData) {
