@@ -8,6 +8,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
+import org.sejmngram.server.cache.Counter;
 import org.sejmngram.server.factory.NgramFTSProvider;
 import org.skife.jdbi.v2.DBI;
 
@@ -19,16 +20,20 @@ import com.yammer.metrics.annotation.Timed;
 public class NgramFTSResource {
 
 	private final NgramFTSProvider ngramProvider;
+	private final Counter counter;
 
-	public NgramFTSResource(DBI jdbi, String partyFilename, String poselFilename) {
+	public NgramFTSResource(DBI jdbi, Counter counter,
+			String partyFilename, String poselFilename) {
 		this.ngramProvider = new NgramFTSProvider(jdbi, partyFilename, poselFilename);
+		this.counter = counter;
 	}
 	
 	@GET
 	@Path("{ngram}")
     @Timed
-	public NgramResponse sayHello(@PathParam("ngram") String ngramName,
+	public NgramResponse getNgram(@PathParam("ngram") String ngramName,
 			@QueryParam("name") Optional<String> name) {
+		counter.increment(ngramName);
 		return ngramProvider.generateNgramResponse(ngramName);
 	}
 
