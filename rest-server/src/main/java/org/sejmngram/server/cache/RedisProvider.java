@@ -1,8 +1,6 @@
 package org.sejmngram.server.cache;
 
 import java.util.Set;
-import java.util.SortedSet;
-
 import redis.clients.jedis.Jedis;
 
 public class RedisProvider implements Counter {

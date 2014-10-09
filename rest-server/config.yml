@@ -4,7 +4,7 @@ http:
 
 partiaIdFilename: ../psc-data/partiaId.json
 poselIdFilename: ../psc-data/poselId.json
-  
+
 database:
   # the name of your JDBC driver
   driverClass: com.mysql.jdbc.Driver
