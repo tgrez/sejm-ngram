@@ -45,7 +45,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
         var phrases = phrasesService.getPhrases();
 
-        d3.json("/service/api/ngramfts/" + phrases[0],
+        d3.json("/service/api/ngramfts/" + phrases[0].text,
             function (error, data) {
                 var chartData = data.partiesNgrams[0].listDates;
                 var dateFormat = d3.time.format('%Y-%m-%d');
