@@ -1,5 +1,5 @@
 ﻿<div id="chartView">
-    <h1 class="slogan" ng-show="!wasSearchTriggered">
+    <h1 class="slogan" ng-show="!search.wasTriggered">
         ŁAP POSŁÓW<br />
         ZA SŁÓWKA
     </h1>
@@ -9,10 +9,10 @@
         Aby porównać kilka wyrażeń oddziel je przecinkiem.<br />
     </div>
     <div class="search-bar">
-        <tags-input ng-model="phrasesService.phrases" replace-spaces-with-dashes="false"></tags-input>
-        <div class="button" ng-click="search()">
-            <span ng-show="!isSearchInProgress">SZUKAJ</span>
-            <div class="button spinner" ng-show="isSearchInProgress">
+        <tags-input ng-model="search.phrasesService.phrases" replace-spaces-with-dashes="false"></tags-input>
+        <div class="button" ng-click="search.run()">
+            <span ng-show="!search.isInProgress">SZUKAJ</span>
+            <div class="button spinner" ng-show="search.isInProgress">
                 <div class="rect1"></div>
                 <div class="rect2"></div>
                 <div class="rect3"></div>
@@ -22,33 +22,35 @@
         </div>
     </div>
     <div class="most-popular">
-        <div class="description" ng-show="!wasSearchTriggered">
+        <div class="description" ng-show="!search.wasTriggered">
             Możesz również wybrać spośród <strong>NAJBARDZIEJ POPULARNYCH</strong>.
         </div>
         <div class="phrases">
-            <div class="phrase" ng-click="phrasesService.addPhrase(phrase)" ng-repeat="phrase in mostPopularPhrases">
+            <div class="phrase" ng-click="search.phrasesService.addPhrase(phrase)" ng-repeat="phrase in mostPopularPhrases.phrases">
                 {{phrase}}
             </div>
         </div>
     </div>
-    <svg id="term-occurences-chart" width="100%" height="300" on-size-changed="onTermOccurencesChartResize">
-        <defs>
-            <clipPath id="lineTrimRegion">
-                <rect></rect>
-            </clipPath>
-        </defs>
-        <g class="chart">
-            <path class="line" clip-path="url(#lineTrimRegion)"></path>
-            <g class="axis axisX"></g>
-            <g class="axis axisY"></g>
-        </g>
-    </svg>
-    <svg id="range-filter-chart" width="100%" height="100" on-size-changed="onRangeFilterChartResize">
-        <g class="chart">
-            <path class="line"></path>
-            <g class="axis axisX"></g>
-            <g class="axis axisY"></g>
-            <g class="brush"></g>
-        </g>
-    </svg>
+    <div class="chart-wrapper">
+        <svg id="term-occurences-chart" width="100%" height="300" on-size-changed="onTermOccurencesChartResize" ng-show="search.wasTriggered && !search.isInProgress">
+            <defs>
+                <clipPath id="lineTrimRegion">
+                    <rect></rect>
+                </clipPath>
+            </defs>
+            <g class="chart">
+                <path class="line" clip-path="url(#lineTrimRegion)"></path>
+                <g class="axis axisX"></g>
+                <g class="axis axisY"></g>
+            </g>
+        </svg>
+        <svg id="range-filter-chart" width="100%" height="100" on-size-changed="onRangeFilterChartResize" ng-show="search.wasTriggered && !search.isInProgress">
+            <g class="chart">
+                <path class="line"></path>
+                <g class="axis axisX"></g>
+                <g class="axis axisY"></g>
+                <g class="brush"></g>
+            </g>
+        </svg>
+    </div>
 </div>

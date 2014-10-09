@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "assets2", "http://localhost:51730", "{AC8DBC25-A165-4516-B8F7-F0F8BD732C77}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -22,6 +22,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "assets2", "http://localhost
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		SlnRelativePath = "..\assets2\"
+		StartServerOnDebug = "true"
 	EndProjectSection
 EndProject
 Global

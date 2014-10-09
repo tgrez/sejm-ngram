@@ -29,12 +29,23 @@ module.service('phrasesService', function () {
         return this.phrases;
     };
 
-    this.addPhrasesFromString = function(phrasesString) {
-        var rawPhrases = phrasesString.split(',');
+    this.importFromString = function(phrasesString) {
+        var rawPhrases = phrasesString.replace(/\+/g, ' ').split(',');
         var phrases = _.map(rawPhrases, function (rp) { return rp.trim(); });
 
         _.each(phrases, function (p) {
             this.addPhrase.call(this, p);
         }, this);
+    };
+
+    this.exportToString = function () {
+        var rawPhrases = _.map(this.phrases, function (d, i) { return d.text; });
+        var phrasesCsv = rawPhrases.join(',').replace(/\s/g, '+');
+
+        return phrasesCsv;
+    };
+
+    this.empty = function () {
+        this.phrases = [];
     };
 })

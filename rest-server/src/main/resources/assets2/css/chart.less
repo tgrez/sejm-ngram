@@ -6,21 +6,17 @@
     h1.slogan {
         padding-top: 76px;
         margin-bottom: 35px;
-
         .ubuntu-bold-font;
         font-size: 62px;
         line-height: 66px;
         color: @primary-white;
-        
+
         &.ng-hide {
             display: block !important;
-
             margin: 0;
             padding: 0;
-
             font-size: 0px;
             line-height: 0px;
-
             opacity: 0;
             transition: all 1s, font-size 0s cubic-bezier(1,0,1,0) 1s;
         }
@@ -29,57 +25,67 @@
     .search-description {
         margin-top: 35px;
         margin-bottom: 10px;
-
         line-height: 20px;
     }
 
     .search-bar {
         @search-bar-height: 39px;
+        @search-bar-border-width: 2px;
 
+        display: table;
         height: @search-bar-height;
         margin-bottom: 10px;
-
+        width: 100%;
+        max-width: 651px;
         font-size: 0;
 
         > tags-input {
-            > .host {
-                display: inline-block;
-                margin: 0;
+            display: table-cell;
 
-                width: 527px;
+            > .host {
+                margin: 0;
 
                 > .tags {
                     height: @search-bar-height;
                     padding-top: 3px;
                     padding-left: 3px;
-
                     .border-radiuses(0, 0, 4px, 4px);
+
+                    > input {
+                        width: 10px;
+                    }
                 }
             }
         }
 
         > .button {
             vertical-align: top;
-
-            display: inline-block;
+            display: table-cell;
             height: 100%;
             width: 124px;
-
             .ubuntu-bold-font;
-            line-height: @search-bar-height;
+            line-height: @search-bar-height - 2*@search-bar-border-width;
             font-size: 22px;
             text-align: center;
-            color: @primary-red;
-
+            color: @primary-white;
+            border: @search-bar-border-width solid @primary-white;
+            border-left-width: 0;
             .border-radiuses(4px, 4px, 0, 0);
-            background-color: @primary-white;
-
+            background-color: transparent;
             cursor: pointer;
+
+            transition: all .2s ease;
+            transition-property: color, background-color;
+
+            &:hover {
+                color: @primary-red;
+                background-color: @primary-white;
+            }
         }
     }
 
     .most-popular {
-        width: 651px;
+        max-width: 651px;
 
         .description {
             margin-top: 28px;
@@ -87,13 +93,10 @@
 
             &.ng-hide {
                 display: block !important;
-
                 margin: 0;
                 padding: 0;
-
                 font-size: 0px;
                 line-height: 0px;
-
                 opacity: 0;
                 transition: all 1s, font-size 0s cubic-bezier(1,0,1,0) 1s;
             }
@@ -101,15 +104,11 @@
 
         .phrase {
             display: inline-block;
-
             padding: 0 7px 4px;
             margin-bottom: 10px;
-
             .ubuntu-font;
-
             background-color: @secondary-red;
             .border-radius(4px);
-
             cursor: pointer;
 
             &:not(:last-child) {
@@ -117,10 +116,68 @@
             }
         }
     }
+
+    .chart-wrapper {
+        @chart-border: #D4D4D4;
+        @chart-grey: #E0E0E0;
+        @chart-text-color: #B1B1B1;
+
+        background-color: @primary-white;
+        border: 1px solid @chart-border;
+        box-shadow: #360000 0px 0px 12px -3px;
+        border-radius: 4px;
+
+        #term-occurences-chart {
+            .chart {
+                .line {
+                    stroke: @primary-red;
+                    stroke-width: 2px;
+                    fill: none;
+                }
+                .axis path {
+                    stroke: @chart-grey;
+                    stroke-width: 1px;
+                    fill: none;
+                }
+                .axis text {
+                    fill: @chart-text-color;
+                }
+            }
+        }
+        #range-filter-chart {
+             .chart {
+                .line {
+                    stroke: @primary-red;
+                    stroke-width: 2px;
+                    fill: #FDD6D1;
+                }
+                .axis path {
+                    stroke: @chart-grey;
+                    stroke-width: 1px;
+                    fill: none;
+                }
+                .axis text {
+                    fill: @chart-text-color;
+                }
+
+                .brush {
+                    .extent {
+                        fill:none;
+                        stroke: @primary-red;
+                    }
+                    .resize rect {
+                        visibility: visible !important;
+                        transform: translate(0, 13px) scale(0.6, 0.5);
+                        fill: @primary-red;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .spinner {
-    margin: 5px auto;
+    margin: 5px auto 0;
     width: 50px;
     height: 30px;
 

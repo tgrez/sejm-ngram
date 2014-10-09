@@ -93,9 +93,10 @@ module.service('rangeFilterService', function () {
     function setDataGenerationFunctions() {
         this.brushFunction = this.brushFunction || d3.svg.brush();
 
-        lineFunction = d3.svg.line()
+        lineFunction = d3.svg.area()
             .x(function (d, i) { return scaleX(d.date); })
-            .y(function (d, i) { return scaleY(d.termOccurrences); });
+            .y0(chartHeight)
+            .y1(function (d, i) { return scaleY(d.termOccurrences); });
         axisXFunction = d3.svg.axis()
             .scale(scaleX)
             .orient('bottom')

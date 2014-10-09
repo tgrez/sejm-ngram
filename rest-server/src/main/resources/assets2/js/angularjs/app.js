@@ -5,11 +5,12 @@ var module = angular.module('sejmotrendyApp', ['ngTagsInput', 'ngRoute', 'ngAnim
         $routeProvider
             .when('/chart', {
                 templateUrl: '/templates/chart.html',
-                controller: 'ChartCtrl'
+                controller: 'ChartCtrl',
+                reloadOnSearch: false
             })
-            .when('/chart/:phrasesString', {
+            .when('/chart#:phrasesString', {
                 templateUrl: '/templates/chart.html',
-                controller: 'ChartCtrl'
+                controller: 'ChartCtrl',
             })
             .when('/howitworks', {
                 templateUrl: '/templates/howitworks.html'

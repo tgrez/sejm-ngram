@@ -5,32 +5,48 @@
 
 'use strict';
 
-module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, phrasesService, termOccurencesService, rangeFilterService) {
-    $scope.wasSearchTriggered = false;
-    $scope.isSearchInProgres = false;
-
-    var phrasesString = $routeParams.phrasesString;
-    $scope.phrasesService = phrasesService;
-    if (phrasesString !== undefined)
-        phrasesService.addPhrasesFromString(phrasesString);
-
-    $scope.mostPopularPhrases = [
-        'aborcja',
-        'Tusk',
-        'Unia Europejska',
-        'deficyt',
-        'Rosja',
-        'Putin',
-        'Platforma Obywatelska',
-        'PIS',
-        'TVN'
-    ];
-    $scope.log = function () {
-        console.log('event triggered')
+module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService, termOccurencesService, rangeFilterService) {
+    $scope.phrasesService = {};
+    $scope.search = {
+        phrasesService: null,
+        wasTriggered: false,
+        isInProgress: false,
+        run: null
     };
-    $scope.search = function () {
-        $scope.wasSearchTriggered = true;
-        $scope.isSearchInProgress = true;
+    $scope.mostPopularPhrases = {
+        phrases: []
+    };
+
+    initialize();
+
+    function initialize() {
+        $scope.search.phrasesService = phrasesService;
+        $scope.search.phrasesService.empty();
+        $scope.search.wasTriggered = false;
+        $scope.search.isInProgress = false;
+
+        $scope.mostPopularPhrases.phrases = [
+            'aborcja',
+            'Tusk',
+            'Unia Europejska',
+            'deficyt',
+            'Rosja',
+            'Putin',
+            'Platforma Obywatelska',
+            'PIS',
+            'TVN'
+        ];
+    }
+
+    $scope.search.run = function () {
+        $scope.search.wasTriggered = true;
+        $scope.search.isInProgress = false;
+        $scope.$apply();
+
+        termOccurencesService.initialize(chartData);
+        rangeFilterService.initialize(chartData);
+        rangeFilterService.onChange(onRangeFilterChange);
+        $location.hash($scope.search.phrasesService.exportToString());
     };
     $scope.onTermOccurencesChartResize = function () {
         termOccurencesService.updateSize();
@@ -163,13 +179,17 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, p
     ];
     chartData.forEach(function (d, i) { d.date = dateFormat.parse(d.date); });
 
-    termOccurencesService.initialize(chartData);
-    rangeFilterService.initialize(chartData);
-    rangeFilterService.onChange(onRangeFilterChange);
 
     function onRangeFilterChange() {
         var xRange = rangeFilterService.brushFunction.extent();
         termOccurencesService.updateRange(xRange);
+    }
+
+    var phrasesString = $location.hash();
+    var isPhrasesStringEmpty = !phrasesString;
+    if (!isPhrasesStringEmpty) {
+        $scope.search.phrasesService.importFromString(phrasesString);
+        $scope.search.run();
     }
 });
 

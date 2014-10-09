@@ -102,7 +102,13 @@ header {
             a {
                 .ubuntu-bold-font;
                 font-size: 14px;
-                color: @primary-black;
+                color: @secondary-black;
+
+                transition: color .2s ease;
+
+                &:hover {
+                    color: @primary-red;
+                }
             }
         }
     }
@@ -117,7 +123,7 @@ tags-input {
     > .host {
         > .tags {
             background-color: transparent;
-            border: 1px solid @primary-white;
+            border: 2px solid @primary-white;
             box-shadow: none;
 
             -moz-appearance: initial;
@@ -139,7 +145,7 @@ tags-input {
 
             .input {
                 color: @primary-white;
-                 .ubuntu-font;
+                .ubuntu-font;
                 font-size: 16px;
 
                 background-color: transparent;
