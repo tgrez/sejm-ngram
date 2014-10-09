@@ -87,7 +87,7 @@ module.service('rangeFilterService', function () {
 
     function setScaleDomain() {
         scaleX.domain([data[0].date, data[data.length - 1].date]);
-        scaleY.domain([d3.min(data, function (d) { return d.termOccurrences; }), d3.max(data, function (d) { return d.termOccurrences; })]);
+        scaleY.domain([d3.min(data, function (d) { return d.count; }), d3.max(data, function (d) { return d.count; })]);
     };
 
     function setDataGenerationFunctions() {
@@ -96,7 +96,7 @@ module.service('rangeFilterService', function () {
         lineFunction = d3.svg.area()
             .x(function (d, i) { return scaleX(d.date); })
             .y0(chartHeight)
-            .y1(function (d, i) { return scaleY(d.termOccurrences); });
+            .y1(function (d, i) { return scaleY(d.count); });
         axisXFunction = d3.svg.axis()
             .scale(scaleX)
             .orient('bottom')

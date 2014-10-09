@@ -84,13 +84,13 @@ module.service('termOccurencesService', function () {
     function setScaleDomain(xRange) {
         xRange = xRange || [data[0].date, data[data.length - 1].date];
         scaleX.domain(xRange);
-        scaleY.domain([d3.min(data, function (d) { return d.termOccurrences; }), d3.max(data, function (d) { return d.termOccurrences; })]);
+        scaleY.domain([d3.min(data, function (d) { return d.count; }), d3.max(data, function (d) { return d.count; })]);
     };
 
     function setDataGenerationFunctions() {
         lineFunction = d3.svg.line()
             .x(function (d, i) { return scaleX(d.date); })
-            .y(function (d, i) { return scaleY(d.termOccurrences); });
+            .y(function (d, i) { return scaleY(d.count); });
         axisXFunction = d3.svg.axis()
             .scale(scaleX)
             .orient('bottom')
