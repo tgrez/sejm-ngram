@@ -24,6 +24,9 @@ public class RestApiConfiguration extends Configuration {
     @JsonProperty
 	private String partiaIdFilename;
 
+	@JsonProperty
+	private String redisAddress;
+
     public String getPoselIdFilename() {
     	return poselIdFilename;
     }
@@ -35,4 +38,8 @@ public class RestApiConfiguration extends Configuration {
     public DatabaseConfiguration getDatabaseConfiguration() {
         return database;
     }
+
+	public String getRedisAddress() {
+		return redisAddress;
+	}
 }

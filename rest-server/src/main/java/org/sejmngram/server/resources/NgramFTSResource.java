@@ -33,8 +33,14 @@ public class NgramFTSResource {
     @Timed
 	public NgramResponse getNgram(@PathParam("ngram") String ngramName,
 			@QueryParam("name") Optional<String> name) {
-		counter.increment(ngramName);
+		incrementHitCount(ngramName);
 		return ngramProvider.generateNgramResponse(ngramName);
+	}
+
+	private void incrementHitCount(String ngramName) {
+		if (counter != null) {
+			counter.increment(ngramName);
+		}
 	}
 
 }

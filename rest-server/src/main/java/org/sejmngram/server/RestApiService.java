@@ -34,29 +34,36 @@ public class RestApiService extends Service<RestApiConfiguration> {
     @Override
     public void run(RestApiConfiguration config,
                     Environment environment) throws ClassNotFoundException {
-    	final DBIFactory factory = new DBIFactory();
-        final DBI jdbi = factory.build(environment, 
+        final DBI jdbi = new DBIFactory().build(environment, 
         		config.getDatabaseConfiguration(), "mysql");
     	
 //        environment.addHealthCheck(new TemplateHealthCheck(template)); TODO
         
-//        environment.addResource(new NgramResource());
-        final RedisProvider redis = new RedisProvider();
+        RedisProvider redis = createRedisProvider(config);
         
         environment.addResource(new NgramFTSResource(
         		jdbi,
         		redis,
         		config.getPartiaIdFilename(),
         		config.getPoselIdFilename()));
+
         environment.addResource(new DemoNgramResource());
 
         environment.addResource(new NgramHitCountResource(redis));
 
-        //add filters for cors
+
         environment.addFilter(CrossOriginFilter.class, "/*")
                 .setInitParam("allowedOrigins", "*")
                 .setInitParam("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin")
                 .setInitParam("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
     }
 
+	private RedisProvider createRedisProvider(RestApiConfiguration config) {
+		String redisAddress = config.getRedisAddress();
+		if (redisAddress != null) {
+			return new RedisProvider(redisAddress);
+		} else {
+			return null;
+		}
+	}
 }

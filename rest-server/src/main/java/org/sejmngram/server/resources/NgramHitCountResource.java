@@ -1,5 +1,6 @@
 package org.sejmngram.server.resources;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.DefaultValue;
@@ -28,6 +29,10 @@ public class NgramHitCountResource {
 	@Path("/top")
 	@Timed
 	public Set<String> getTopNgram(@QueryParam("limit") @DefaultValue("10") IntParam limit) {
-		return counter.getTop(limit.get());
+		if (counter != null) {
+			return counter.getTop(limit.get());
+		} else {
+			return new HashSet<String>();
+		}
 	}
 }
