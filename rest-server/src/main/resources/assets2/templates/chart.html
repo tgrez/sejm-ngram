@@ -31,8 +31,8 @@
             </div>
         </div>
     </div>
-    <div class="chart-wrapper">
-        <svg id="term-occurences-chart" width="100%" height="300" on-size-changed="onTermOccurencesChartResize" ng-show="search.wasTriggered && !search.isInProgress">
+    <div class="chart-wrapper" ng-show="search.wasTriggered && !search.isInProgress">
+        <svg id="term-occurences-chart" width="100%" height="300" on-size-changed="onTermOccurencesChartResize">
             <defs>
                 <clipPath id="lineTrimRegion">
                     <rect></rect>
@@ -44,7 +44,7 @@
                 <g class="axis axisY"></g>
             </g>
         </svg>
-        <svg id="range-filter-chart" width="100%" height="100" on-size-changed="onRangeFilterChartResize" ng-show="search.wasTriggered && !search.isInProgress">
+        <svg id="range-filter-chart" width="100%" height="100" on-size-changed="onRangeFilterChartResize">
             <g class="chart">
                 <path class="line"></path>
                 <g class="axis axisX"></g>
