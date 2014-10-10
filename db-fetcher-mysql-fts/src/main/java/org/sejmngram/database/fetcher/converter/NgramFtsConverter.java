@@ -1,7 +1,5 @@
 package org.sejmngram.database.fetcher.converter;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
@@ -12,8 +10,6 @@ public class NgramFtsConverter {
 	
 	private IdConverter partyConverter;
 	private IdConverter poselConverter;
-	
-	private static final int SINGLE_BLOB_SIZE = 18;
 	
 	public NgramFtsConverter(IdConverter partyConverter, IdConverter poselConverter) {
 		this.partyConverter = partyConverter;
@@ -29,9 +25,5 @@ public class NgramFtsConverter {
         }
 
         return responesBuilder.generateResponse();
-	}
-	
-	public int fromByteArray(byte[] bytes) {
-	     return ByteBuffer.wrap(bytes).getInt();
 	}
 }

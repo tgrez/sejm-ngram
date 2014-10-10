@@ -1,425 +1,74 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html class="no-js" ng-app="sejmotrendyApp" ng-controller="IndexCtrl" lang="pl">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="/assets/ico/favicon.png">
 
-    <title>sejmotrendy.pl - łap posłów za słówka</title>
+    <title>[TODO]</title>
 
-    <!-- SejmoGram own style-->
-    <link href="stylesheets/main.css" rel="stylesheet">
-    <link href="stylesheets/viz.css" rel="stylesheet">
-    <link href="stylesheets/spinner.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="/css/vendor/normalize.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic">
+    <link rel="stylesheet" href="/css/vendor/ng-tags-input.css" />
+    <link rel="stylesheet/less" href="/css/index.less" type="text/css">
+    <link rel="stylesheet/less" href="/css/chart.less" type="text/css">
 
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <style>
-        .dropdown-menu {
-            width: 100%;
-        }
-
-        .btn {
-            width: 100%;
-        }
-    </style>
+    <script src="/js/less/less-config.js"></script>
+    <script src="/js/vendor/less-1.7.3.min.js"></script>
+    <script src="/js/vendor/modernizr-2.7.2.js"></script>
 </head>
-
-<body>
-<div id="navigation">
-    <div class="panel main-width">
-        <div class="logo">
-            <img src="images/logo.png" />
-        </div>
-        <div class="menu">
-            <span><a class="smooth-scroll" href="#about">ABOUT</a></span>
-            <span class="separator">/</span>
-            <span><a class="smooth-scroll" href="#help">HELP</a></span>
-            <span class="separator">/</span>
-            <span><a class="smooth-scroll" href="#team">TEAM</a></span>
-        </div>
-        <div class="clear"></div>
-    </div>
-</div>
-<div id="main" class="main-width">
-    <div class="panel">
-        <div class="top">
-            <div class="input">
-                <table>
-                    <tr>
-                        <td class="icon"><img src="images/icon.png" /></td>
-                        <td class="label"><label for="inputNgram">term:</label></td>
-                        <td class="textbox"><input id="inputNgram" type="text" placeholder="type ngram here"></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="search" onClick="buttonGenVizPressed();">
-                <div id="generate">GENERATE</div>
-                <div id="generate-spinner" class="spinner" style="display:none">
-                    <div class="rect1"></div>
-                    <div class="rect2"></div>
-                    <div class="rect3"></div>
-                    <div class="rect4"></div>
-                    <div class="rect5"></div>
-                </div>
-            </div>
-            <div class="clear"></div>
-        </div>
-        <div id="graph" class="aGraph"></div>
-        <div id="selectbar"></div>
-    </div>
-    <div class="right" >
-        <div id="legend2Div" class="legend box" >
-            <div class="top">
-                LEGEND
-            </div>
-            <div class="items">
-                <div class="item">
-                    PO
-                </div>
-                <div class="item">
-                    PIS
-                </div>
-                <div class="item">
-                    SLD
-                </div>
-                <div class="item">
-                    PSL
-                </div>
-                <div class="item">
-                    TR
-                </div>
-                <div class="item">
-                    SP
-                </div>
-            </div>
-        </div>
-        <div class="popular box">
-            <div class="top">
-                POPULAR NGRAMS
-            </div>
-            <div class="items">
-                <div class="item">
-                    Unia Europejska
-                </div>
-
-                <div class="item">
-                    deficyt
-                </div>
-                <div class="item">
-                    rodzina
-                </div>
-
-                <div class="item">
-                    skandal
-                </div>
-
-                <div class="item">
-
-                    aborcja
-                </div>
-
-
-                <div class="item">
-
-                    ku chwale ojczyzny
-                </div>
-
-                <div class="item">
-                    niemiecki zaborca
-                </div>
-
-                <div class="item">
-                zamach
-                </div>
-
-
-                    <div class="item">
-                oficer wojska polskiego
-                    </div>
-
-
-                            <div class="item">
-                rosja
-                            </div>
-
-                <div class="item">
-                bezpieka
-                </div>
-
-                <div class="item">
-                agenci
-                </div>
-
-                <div class="item">
-                    wasza wina
-                </div>
-
-                <div class="item">
-                unia europejska
-                </div>
-
-                <div class="item">
-                        deficyt
-                </div>
-
-
-                <div class="item">
-                    rodzina
-                </div>
-                <div class="item">
-                  piwo
-                </div>
-
-                <!--             "wojna",
-                             "piwo",
-                             "skandal",
-                             "wolność słowa",
-                             "ponton",
-                             "gmach",
-                             "internet",
-                             "kanapka",
-                             "moralny",
-                             "szybko",
-                             "lepper",
-                             "rodzina",
-                             "obniżenie podatków",
-                             "próg podatkowy",
-                             "bezpieczeństwo obywateli",
-                             "prawa czlowieka",
-                             "gender",
-                             "wcześniejsza emerytura",
-                             "zus",
-                             "rozwody",
-                             "nadzieja",
-                             "wybory",
-                             "wcześniejsze wybory",
-                             "wysoka izbo",
-                             "jeszcze polska nie zginęła",
-                             "ofe",
-                             "reforma",
-                             "nfz"-->
-
-
-
-
-
-
-            </div>
-        </div>
-    </div>
-    <div class="clear"></div>
-</div>
-<div id="about" class="bottom-panel">
-    <div class="main-width">
-        <h1>ABOUT</h1>
-        <p>
-            The sejm-ngram provides a visualization of selected ngrams occurences within the speeches of Polish Parliament members. The project is meant to become an useful tool for a simple, quantitative analysis of what is happening behind the doors of Polish Parliament. Initially we would like to provide simple, ngram analysis, possibly with extending it by sentiment analysis.
+<body class="unselectable">
+    <!--[if lt IE 8]>
+        <p class="outated-browser">
+            You are using an <strong>outdated</strong> browser. Please <a href="http://outdatedbrowser.com/" target="_blank">upgrade your browser</a> to improve your experience.
         </p>
+    <![endif]-->
+
+    <div class="container-wrapper" id="header-container">
+        <header class="container-sub-wrapper">
+            <img class="logo" ng-click="$location.url('/')" src="/img/sejmotrendy-logo.png" alt="Logo Sejmotrendy" />
+            <nav class="clearfix">
+                <ul>
+                    <li>
+                        <a href="#/howitworks">JAK TO DZIAŁA?</a>
+                    </li>
+                    <li>
+                        <a href="#/about">O NAS</a>
+                    </li>
+                    <li>
+                        <a href="#/support">WSPARCIE</a>
+                    </li>
+                </ul>
+                <div style="clear:both"> </div>
+            </nav>
+            <div style="clear:both"> </div>
+        </header>
     </div>
-</div>
-<div id="help" class="bottom-panel">
-    <div class="main-width">
-        <h1>HELP</h1>
-        <p>
-            It's very easy. Simply type some ngram into "ngram" text field and press "Generate!" button. Since we're working on it we have provided some debug options on the bottom of chart.
-        </p>
-        <table class="steps">
-            <tr>
-                <td>
-                    <div class="number">1</div>
-                    <div class="description">
-                        draw lines - simply connects
-                        the datapoints for each party
-                        (does not require
-                        generating the chart again)
-                    </div>
-                </td>
-                <td>
-                    <div class="number">2</div>
-                    <div class="description">
-                        x-res - when "use all datapoints" is not selected
-                        the time scope between "startDate" and
-                        "stopDate" is divided into "x-res" number
-                        of boxes; the ngrams with dates fitting
-                        the single box's (sic!) scope are summarized
-                    </div>
-                </td>
-                <td>
-                    <div class="number">3</div>
-                    <div class="description">
-                        use all datapoints - when selected,
-                        the ngrams are summarized per single
-                        day, otherwise the whole time scope
-                        is divided into a number of boxes
-                        specified by "x-res" value.
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <div class="container-wrapper" id="main-container">
+        <main class="container-sub-wrapper">
+            <div ng-view class="fade"></div>
+        </main>
     </div>
-</div>
-<div id="team" class="bottom-panel">
-    <div class="main-width">
-        <h1>TEAM</h1>
-        <div>
-            <table class="team-table">
-                <tr>
-                    <td>
-                        <div class="image">
-                            <img src="images/iryna.png" />
-                        </div>
-                        <div class="description">
-                            <div class="first-name">
-                                IRYNA
-                            </div>
-                            <div class="separator"></div>
-                            <div class="role">
-                                Graphic<br />
-                                Designer
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="image">
-                            <img src="images/krzysiek.png" />
-                        </div>
-                        <div class="description">
-                            <div class="first-name">
-                                KRZYSIEK
-                            </div>
-                            <div class="separator"></div>
-                            <div class="role">
-                                Backend<br />
-                                Puppeteer
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="image">
-                            <img src="images/maciej.png" />
-                        </div>
-                        <div class="description">
-                            <div class="first-name">
-                                MACIEJ
-                            </div>
-                            <div class="separator"></div>
-                            <div class="role">
-                                Frontend<br />
-                                Developer
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="image">
-                            <img src="images/michael.png" />
-                        </div>
-                        <div class="description">
-                            <div class="first-name">
-                                MICHAEL
-                            </div>
-                            <div class="separator"></div>
-                            <div class="role">
-                                Data Visualiser,<br />
-                                Mentor
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="image">
-                            <img src="images/michal.png" />
-                        </div>
-                        <div class="description">
-                            <div class="first-name">
-                                MICHAL
-                            </div>
-                            <div class="separator"></div>
-                            <div class="role">
-                                Backend<br />
-                                Programmer
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="image">
-                            <img src="images/tomek.png" />
-                        </div>
-                        <div class="description">
-                            <div class="first-name">
-                                TOMEK
-                            </div>
-                            <div class="separator"></div>
-                            <div class="role">
-                                Backend<br />
-                                Developer
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div class="container-wrapper" id="footer-container">
+        <footer class="container-sub-wrapper">
+        </footer>
     </div>
-</div>
 
-
-<!-- <div id = "queryDbInfoDiv" style="display:none">
-    <img src="img/loading.gif" style="width:30px"/>
-    querying db...
-</div>
-
-<div id = "processDataInfoDiv" style="display:none">
-    <img src="img/loading.gif" style="width:30px"/>
-    processing data..
-</div>-->
-
-<!-- JavaScript - functions for manipulating the GUI (could be in sepearated file though) -->
-<script src="assets/js/jquery-1.10.2.js"></script>
-
-<!-- Our own code -->
-<script type="text/javascript" src="d3/d3.v3.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-<script type="text/javascript" src="assets/js/underscore-min.js"></script>
-<script type="text/javascript" src="javascripts/diacriticsRemover.js"></script>
-<script type="text/javascript" src="javascripts/viz.js"></script>
-<script type="text/javascript" src="javascripts/gui.js"></script>
-<script type="text/javascript" src="javascripts/SmoothScroll.js"></script>
-<script>
-
-    $(function () {
-
-        $(".dropdown-menu li a").click(function () {
-            $(".btn:first-child").text($(this).text());
-            $(".btn:first-child").val($(this).text());
-
-        });
-        $(document).ready(function () {
-            setupGraph();
-        });
-    })
-
-
-
-    $(function () {
-        $('.popular .item').click(function () {
-
-            $('#inputNgram').val($(this).text().trim());
-
-            buttonGenVizPressed();
-        });
-        
-        $('#inputNgram').keypress(function(event){
-         	var keycode = (event.keyCode ? event.keyCode : event.which);
-        	if(keycode == '13'){
-        		buttonGenVizPressed();
-        	}
-        });
-    });
-</script>
-
-<div id="legendDiv" style="display: none"></div>
+    <script src="/js/vendor/underscore-min.js"></script>
+    <script src="/js/vendor/angular.min.js"></script>
+    <script src="/js/vendor/angular-animate.min.js"></script>
+    <script src="/js/vendor/angular-route.min.js"></script>
+    <script src="/js/vendor/ng-tags-input.js"></script>
+    <script src="/js/vendor/d3.pl.min.js"></script>
+    
+    <script src="/js/angularjs/app.js"></script>
+    <script src="/js/angularjs/directives/OnSizeChanged.js"></script>
+    <script src="/js/angularjs/directives/TermOccurencesChart.js"></script>
+    <script src="/js/angularjs/services/PhrasesService.js"></script>
+    <script src="/js/angularjs/services/TermOccurencesService.js"></script>
+    <script src="/js/angularjs/services/RangeFilterService.js"></script>
+    <script src="/js/angularjs/controllers/IndexCtrl.js"></script>
+    <script src="/js/angularjs/controllers/ChartCtrl.js"></script>
 </body>
 </html>

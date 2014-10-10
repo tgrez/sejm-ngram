@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.sejmngram.common.json.JsonProcessor;
 
 public class ResponseBuilder {
 
 	private String ngramName = "";
-	private Map<String, HashMap<String, Integer>> partiesMap = 
-			new HashMap<String, HashMap<String, Integer>>();
+	private Map<String, TreeMap<String, Integer>> partiesMap =
+			new HashMap<String, TreeMap<String, Integer>>();
 	
 	private HashSet<String> dates = new HashSet<String>();
 	private HashMap<String, Integer> initialDates = new HashMap<String, Integer>();
@@ -30,7 +31,7 @@ public class ResponseBuilder {
 			e.printStackTrace();
 		}
 		for (String date : dates) {
-			initialDates.put(date.substring(0, 7), 0);
+			initialDates.put(date.substring(0, 7) + "-01", 0);
 		}
 	}
 	
@@ -40,9 +41,9 @@ public class ResponseBuilder {
 	
 	public void addOccurances(String partyName, String date, int occurances) {
 		if (!partiesMap.containsKey(partyName)) {
-			partiesMap.put(partyName, new HashMap<String, Integer>(initialDates));
+			partiesMap.put(partyName, new TreeMap<String, Integer>(initialDates));
 		}
-		date = date.substring(0, 7);
+		date = date.substring(0, 7) + "-01";
 		Integer count = partiesMap.get(partyName).get(date);
 		if (count == null) {
 			count = 0;

@@ -16,7 +16,7 @@ database:
   password: sejmngram2
 
   # the JDBC URL
-  url: jdbc:mysql://127.0.0.1:3306/sejmngram?autoReconnect=true&failOverReadOnly=false&maxReconnects=10&characterEncoding=utf-8&useUnicode=true
+  url: jdbc:mysql://127.0.0.1:3306/sejmngram_demo?autoReconnect=true&failOverReadOnly=false&maxReconnects=10&characterEncoding=utf-8&useUnicode=true
 
   # any properties specific to your JDBC driver:
   properties:
