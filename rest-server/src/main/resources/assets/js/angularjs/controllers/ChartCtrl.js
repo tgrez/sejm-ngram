@@ -40,13 +40,14 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
     $scope.search.run = function () {
         $scope.search.wasTriggered = true;
-        $scope.search.isInProgress = false;
-        $scope.$apply();
+        $scope.search.isInProgress = true;
 
         var phrases = phrasesService.getPhrases();
 
-        d3.json("/service/api/ngramfts/" + phrases[0].text,
+        d3.json("http://sejmotrendy.pl/service/api/ngramfts/" + phrases[0].text,
             function (error, data) {
+                $scope.search.isInProgress = false;
+                $scope.$apply();
                 var chartData = data.partiesNgrams[0].listDates;
                 var dateFormat = d3.time.format('%Y-%m-%d');
                 chartData.forEach(function (d, i) { d.date = dateFormat.parse(d.date); });
