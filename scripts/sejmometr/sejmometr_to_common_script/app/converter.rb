@@ -48,6 +48,7 @@ class Converter
               :data => current_common_json_date.strftime("%Y-%m-%d"),
               :tytul => current_json["_data"]["tytul"],
               :stanowisko => current_json["_data"]["stanowiska.nazwa"],
+              :tresc => current_json["_layers"]["html"]["SejmWystapienia"]["m_txt"],
               :partia => (@klub_ids_converter.convert_klub_id_to_psc_klub_id current_json["_data"]["klub_id"]),
               :posel => generate_posel_id(current_json["_data"]["ludzie.posel_id"])
           }
