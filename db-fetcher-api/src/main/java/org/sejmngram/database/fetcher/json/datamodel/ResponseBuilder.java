@@ -2,6 +2,7 @@ package org.sejmngram.database.fetcher.json.datamodel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,30 +10,40 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.sejmngram.common.json.JsonProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResponseBuilder {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ResponseBuilder.class);
+
+	private static final Map<String, Integer> initialDates =
+			Collections.unmodifiableMap(readDateFile());
 
 	private String ngramName = "";
 	private Map<String, TreeMap<String, Integer>> partiesMap =
 			new HashMap<String, TreeMap<String, Integer>>();
 	
-	private HashSet<String> dates = new HashSet<String>();
-	private HashMap<String, Integer> initialDates = new HashMap<String, Integer>();
-	
 	public ResponseBuilder(String ngramName) {
 		this.ngramName = ngramName;
-		readDateFile();
 	}
 	
-	private void readDateFile() {
+	private static Map<String, Integer> readDateFile() {
+		Map<String, Integer> initialDates = new HashMap<String, Integer>();
+		// TODO make configurable, it seems like it is time to introduce Spring...
+		String filename = "../psc-data/nowe_daty.txt";
+		HashSet<String> dates = new HashSet<String>();
 		try {
-			dates = JsonProcessor.jsonFileToHashSet("../psc-data/nowe_daty.txt");
+			dates = JsonProcessor.jsonFileToHashSet(filename);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("Could not read JSON file: " + filename + ", exception was thrown: ", e);
+			return new HashMap<String, Integer>();
 		}
 		for (String date : dates) {
 			initialDates.put(date, 0);
 		}
+		LOG.info("Successfully loaded dates file from " + filename);
+		return initialDates;
 	}
 	
 	public void addOccurance(String partyName, String date) {
