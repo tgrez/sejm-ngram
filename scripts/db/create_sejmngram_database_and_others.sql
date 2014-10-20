@@ -19,10 +19,10 @@ DROP TABLE IF EXISTS wystapienia;
 
 CREATE TABLE wystapienia (
 	id INT NOT NULL AUTO_INCREMENT,
-	jsonId BIGINT,
+	jsonId VARCHAR(15),
 	date DATETIME,
-	partyId INT,
-	deputyId INT,
+	partyId VARCHAR(10),
+	deputyId VARCHAR(10),
 	text TEXT,
 	textNormalized TEXT,
 	PRIMARY KEY (id)
