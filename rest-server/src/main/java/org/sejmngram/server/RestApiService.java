@@ -3,6 +3,7 @@ package org.sejmngram.server;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.sejmngram.server.cache.RedisProvider;
 import org.sejmngram.server.resources.DemoNgramResource;
+import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.resources.NgramFTSResource;
 import org.sejmngram.server.resources.NgramHitCountResource;
 import org.skife.jdbi.v2.DBI;
@@ -38,6 +39,7 @@ public class RestApiService extends Service<RestApiConfiguration> {
         		config.getDatabaseConfiguration(), "mysql");
     	
 //        environment.addHealthCheck(new TemplateHealthCheck(template)); TODO
+        environment.addHealthCheck(new DatabaseHealthCheck(jdbi, 15));
         
         RedisProvider redis = createRedisProvider(config);
         
