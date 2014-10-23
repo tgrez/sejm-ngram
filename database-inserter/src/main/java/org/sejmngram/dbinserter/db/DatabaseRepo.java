@@ -38,10 +38,10 @@ public class DatabaseRepo {
         try{
             stmt = c.prepareStatement("INSERT INTO sejmngram.wystapienia values (default, ?, ?, ?, ?, ?, ?)");
 
-            stmt.setLong(1, Long.parseLong(wystapienie.getId()));
+            stmt.setString(1, wystapienie.getId());
             stmt.setDate(2, new java.sql.Date(wystapienie.getData().getTime()));
-            stmt.setInt(3, Integer.parseInt(wystapienie.getPartia()));
-            stmt.setInt(4, Integer.parseInt(wystapienie.getPosel()));
+            stmt.setString(3, wystapienie.getPartia());
+            stmt.setString(4, wystapienie.getPosel());
             stmt.setString(5, wystapienie.getTresc());
             stmt.setString(6, Toolkit.replaceDiacrytics(wystapienie.getTresc()));
 

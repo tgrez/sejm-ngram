@@ -33,6 +33,11 @@ target/
 # downloaded or extracted from corpus data in common format from e.g. sejmometr
 downloadedData/
 scripts/sejmometr/dataFromCorpus/
+scripts/sejmometr/wystapienia_all
+scripts/sejmometr/sejmometr_to_common_script/output_files
+scripts/sejmometr/processed_data_all
+scripts/sejmometr/raw_data
+
 
 # other downloaded data
 jsonPrinterDir/
