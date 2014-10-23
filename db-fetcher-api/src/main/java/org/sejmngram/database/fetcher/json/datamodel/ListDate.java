@@ -3,9 +3,14 @@ package org.sejmngram.database.fetcher.json.datamodel;
 
 public class ListDate {
 
-    private final String date;
-    private final Integer count;
-    
+    private String date;
+    private Integer count;
+
+	/**
+	 * Needed by Jackson
+	 */
+    public ListDate() {}
+
     public ListDate(String date, Integer count) {
     	this.date = date;
     	this.count = count;
@@ -15,7 +20,16 @@ public class ListDate {
 		return count;
 	}
 
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
 	public String getDate() {
 		return date;
 	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 }

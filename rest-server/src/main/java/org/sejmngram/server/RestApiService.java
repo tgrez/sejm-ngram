@@ -1,6 +1,7 @@
 package org.sejmngram.server;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.sejmngram.server.cache.RedisCacheProvider;
 import org.sejmngram.server.cache.RedisHitCounter;
 import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.resources.NgramFTSResource;
@@ -34,17 +35,21 @@ public class RestApiService extends Service<RestApiConfiguration> {
     @Override
     public void run(RestApiConfiguration config,
                     Environment environment) throws ClassNotFoundException {
-        final DBI jdbi = new DBIFactory().build(environment, 
+        DBI jdbi = new DBIFactory().build(environment,
         		config.getDatabaseConfiguration(), "mysql");
+
+        String redisHostname = "localhost";
         environment.addHealthCheck(new DatabaseHealthCheck(jdbi, 15));
         
         RedisHitCounter redisHitCounter = createRedisCounter(config);
+        RedisCacheProvider redisCache = new RedisCacheProvider(redisHostname, "1000000000");
         
         environment.addResource(new NgramFTSResource(
-        		jdbi,
-                redisHitCounter,
-        		config.getPartiaIdFilename(),
-        		config.getPoselIdFilename()));
+				jdbi,
+				redisHitCounter,
+				redisCache,
+				config.getPartiaIdFilename(),
+				config.getPoselIdFilename()));
 
         environment.addResource(new NgramHitCountResource(redisHitCounter));
 

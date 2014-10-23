@@ -5,8 +5,13 @@ import java.util.List;
 
 public class NgramResponse {
 
-	private final String ngram;
-    private List<PartiesNgrams> partiesNgrams = new ArrayList<PartiesNgrams>();
+	private String ngram;
+	private List<PartiesNgrams> partiesNgrams = new ArrayList<PartiesNgrams>();
+
+	/**
+	 * Needed by Jackson
+	 */
+    public NgramResponse() {}
     
     public NgramResponse(String ngram, List<PartiesNgrams> partiesNgrams) {
     	this.ngram = ngram;
@@ -15,6 +20,14 @@ public class NgramResponse {
     
     public List<PartiesNgrams> getPartiesNgrams() {
     	return partiesNgrams;
+    }
+
+	public void setPartiesNgrams(List<PartiesNgrams> partiesNgrams) {
+		this.partiesNgrams = partiesNgrams;
+	}
+
+    public void setNgram(String ngram) {
+        this.ngram = ngram;
     }
 
 	public String getNgram() {
