@@ -28,6 +28,25 @@
         line-height: 20px;
     }
 
+    .displayed-phrases {
+        .phrase {
+            display: inline-block;
+            padding: 2px 7px 4px;
+            margin-bottom: 10px;
+            .ubuntu-font;
+            background-color: @secondary-red;
+            .border-radius(4px);
+
+            .remove-button {
+                cursor: pointer;
+            }
+
+            &:not(:last-child) {
+                margin-right: 10px;
+            }
+        }
+    }
+
     .search-bar {
         @search-bar-height: 39px;
         @search-bar-border-width: 2px;
@@ -104,7 +123,7 @@
 
         .phrase {
             display: inline-block;
-            padding: 0 7px 4px;
+            padding: 2px 7px 4px;
             margin-bottom: 10px;
             .ubuntu-font;
             background-color: @secondary-red;

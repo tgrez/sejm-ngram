@@ -8,6 +8,11 @@
         Wpisz maksymalnie pięć interesujących Cię słów do poniższego pola.<br />
         Aby porównać kilka wyrażeń oddziel je przecinkiem.<br />
     </div>
+    <div class="displayed-phrases">
+        <div class="phrase" ng-repeat="phraseOccurences in graph.phrasesOccurences">
+            {{phraseOccurences.name}} <a class="remove-button" ng-click="graph.removePhraseOccurences(phraseOccurences.name)"><img src="/img/tag-close.png" alt="Close tag."></a>
+        </div>
+    </div>
     <div class="search-bar">
         <tags-input ng-model="search.phrasesService.phrases" replace-spaces-with-dashes="false"></tags-input>
         <div class="button" ng-click="search.run()">
@@ -31,26 +36,8 @@
             </div>
         </div>
     </div>
-    <div class="chart-wrapper" ng-show="search.wasTriggered && !search.isInProgress">
-        <svg id="term-occurences-chart" width="100%" height="300" on-size-changed="onTermOccurencesChartResize">
-            <defs>
-                <clipPath id="lineTrimRegion">
-                    <rect></rect>
-                </clipPath>
-            </defs>
-            <g class="chart">
-                <path class="line" clip-path="url(#lineTrimRegion)"></path>
-                <g class="axis axisX"></g>
-                <g class="axis axisY"></g>
-            </g>
-        </svg>
-        <svg id="range-filter-chart" width="100%" height="100" on-size-changed="onRangeFilterChartResize">
-            <g class="chart">
-                <path class="line"></path>
-                <g class="axis axisX"></g>
-                <g class="axis axisY"></g>
-                <g class="brush"></g>
-            </g>
-        </svg>
+    <div class="chart-wrapper" ng-show="search.wasTriggered">
+        <st-term-occurences-chart id="term-occurences-chart" ng-model="graph.phrasesOccurences" display-range="graph.selectedRange" lines-colors="graph.linesColors"></st-term-occurences-chart>
+        <st-range-filter-chart id="range-filter-chart" ng-model="graph.phrasesOccurences" selected-range="graph.selectedRange" lines-colors="graph.linesColors"></st-range-filter-chart>
     </div>
 </div>

@@ -12,7 +12,11 @@ module.service('phrasesService', function () {
         if (!this.hasPhrase.call(this, name))
             this.phrases.push(formatedPhrase);
     };
-    
+
+    this.removePhrase = function (name) {
+        this.phrases = _.without(this.phrases, _.findWhere(this.phrases, { text: name }));
+    };
+
     this.preparePhrase = function(phraseName) {
         return { text: phraseName };
     };

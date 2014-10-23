@@ -3,12 +3,12 @@
 /// <reference path="~/js/vendor/d3.min.js" />
 'use strict';
 
-module.directive('stTermOccurencesChart', function () {
+module.directive('stRangeFilterChart', function() {
     return {
         restrict: 'E',
         scope: {
             termsOccurences: '=ngModel',
-            displayRange: '=',
+            selectedRange: '=',
             linesColors: '='
         },
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
@@ -26,21 +26,22 @@ module.directive('stTermOccurencesChart', function () {
             var linesCanvas;
             var axisX;
             var axisY;
+            var brush;
             var scaleX;
             var scaleY;
             var axisXFunction;
             var axisYFunction;
+            var brushFunction;
 
             scope.isInitialized = false;
 
             scope.$watch('termsOccurences.length', onDataChange);
-            scope.$watch('displayRange', onDisplayRangeChange);
 
             function onDataChange() {
                 var isTermsOccurencesEmpty = typeof scope.termsOccurences === 'undefined' || scope.termsOccurences === null || scope.termsOccurences.length === 0;
                 if (!isTermsOccurencesEmpty && !scope.isInitialized) {
-                        initialize();
-                        update();
+                    initialize();
+                    update();
                 }
                 if (scope.isInitialized) {
                     update();
@@ -59,17 +60,17 @@ module.directive('stTermOccurencesChart', function () {
                         left: 40,
                         right: 40
                     };
-                    svg = d3.select('#term-occurences-chart');
+                    svg = d3.select('#range-filter-chart');
                     svgWidth = svg.node().offsetWidth;
                     svgHeight = svg.node().offsetHeight;
                     chartWidth = svgWidth - chartMargin.left - chartMargin.right;
                     chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
                     linesCanvasWidth = chartWidth - linesCanvasMargin.left - linesCanvasMargin.right;
                     linesCanvasHeight = chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
-                    
+
                     defs = svg.append('defs');
                     clipPath = defs.append('clipPath')
-                        .attr('id', 'termOccurencesLinesCanvasRegion');
+                        .attr('id', 'rangeFilterLinesCanvasRegion');
                     clipPathRegion = clipPath.append('rect');
                     clipPathRegion.attr({
                         width: linesCanvasWidth,
@@ -101,39 +102,40 @@ module.directive('stTermOccurencesChart', function () {
                             'class': 'axis axisY',
                             'transform': 'translate(' + linesCanvasMargin.left + ', ' + linesCanvasMargin.top + ')'
                         });
+                    brush = linesCanvas.append('g')
+                        .attr({
+                            'class': 'brush'
+                        });
+
 
                     scaleX = d3.time.scale()
                         .range([0, linesCanvasWidth]);
                     scaleY = d3.scale.linear()
                         .range([linesCanvasHeight, 0]);
 
+                    brushFunction = d3.svg.brush()
+                        .x(scaleX);
+
+                    brush.call(brushFunction)
+                        .selectAll("rect")
+                        .attr("height", linesCanvasHeight);
+
+                    brushFunction.on('brush', function () {
+                        scope.$apply(function () {
+                            scope.selectedRange = brushFunction.extent();
+                        });
+                    });
+
                     scope.isInitialized = true;
                 }
             }
 
-            function onDisplayRangeChange() {
-                if (scope.isInitialized) {
-                    scaleX.domain(scope.displayRange);
-                    axisX.call(axisXFunction);
-                    axisY.call(axisYFunction);
-
-                    for (var i = 0; i < scope.termsOccurences.length; i++) {
-                        var lineFunction = d3.svg.line()
-                            .x(function(o, i) { return scaleX(o.date); })
-                            .y(function(o, i) { return scaleY(o.count); });
-                        linesCanvas.select('.line:nth-child(' + (i + 1) + ')')
-                            .attr('d', lineFunction(scope.termsOccurences[i].occurences));
-                    }
-                }
-            }
-
             function update() {
-
                 var minY = 0;
                 var maxY = 0;
 
                 for (var i = 0; i < scope.termsOccurences.length; i++) {
-                    var tempMaxY = d3.max(scope.termsOccurences[i].occurences, function (o) { return o.count; });
+                    var tempMaxY = d3.max(scope.termsOccurences[i].occurences, function(o) { return o.count; });
                     if (tempMaxY > maxY)
                         maxY = tempMaxY;
                 }
@@ -141,31 +143,27 @@ module.directive('stTermOccurencesChart', function () {
                 var xRange = [scope.termsOccurences[0].occurences[0].date, scope.termsOccurences[0].occurences[scope.termsOccurences[0].occurences.length - 1].date];
                 var yRange = [minY, maxY];
 
-                var isDisplayRangeValid = typeof scope.displayRange !== 'undefined' && scope.displayRange !== null && scope.displayRange.length > 0;
-                if (isDisplayRangeValid)
-                    scaleX.domain(scope.displayRange);
-                else 
-                    scaleX.domain(xRange);
+                scaleX.domain(xRange);
                 scaleY.domain(yRange);
+
 
                 for (var i = 0; i < scope.termsOccurences.length; i++) {
                     var lineId = generateLineId(scope.termsOccurences[i].name);
 
                     var lineFunction = d3.svg.line()
-                        .x(function (o) { return scaleX(o.date); })
-                        .y(function (o) { return scaleY(o.count); });
+                        .x(function(o, i) { return scaleX(o.date); })
+                        .y(function(o, i) { return scaleY(o.count); });
                     var flatLineFunction = d3.svg.line()
-                        .x(function (o) { return scaleX(o.date); })
-                        .y(function (o) { return linesCanvasHeight; });
-
+                        .x(function(o, i) { return scaleX(o.date); })
+                        .y(function(o, i) { return linesCanvasHeight; });
 
                     var line = d3.select('#' + lineId);
                     var isLineExist = line.empty();
                     if (isLineExist) {
-                        line = linesCanvas.append("path")
+                        line = linesCanvas.insert('path', '.brush')
                             .attr('id', lineId)
                             .attr('class', 'line')
-                            .attr('clip-path', 'url(#termOccurencesLinesCanvasRegion)')
+                            .attr('clip-path', 'url(#rangeFilterLinesCanvasRegion)')
                             .attr('style', 'stroke: ' + scope.linesColors[i])
                             .attr('d', flatLineFunction(scope.termsOccurences[i].occurences))
                             .transition()
@@ -186,7 +184,8 @@ module.directive('stTermOccurencesChart', function () {
                     .ticks(4);
                 axisYFunction = d3.svg.axis()
                     .scale(scaleY)
-                    .orient('left');
+                    .orient('left')
+                    .ticks(2);
 
                 axisX.transition().duration(1000).call(axisXFunction);
                 axisY.transition().duration(1000).call(axisYFunction);
@@ -194,7 +193,7 @@ module.directive('stTermOccurencesChart', function () {
 
             function generateLineId(term) {
                 var termFormatted = term.replace(/\s/g, '_');
-                var uniqueLineId = 'termOccurencesLine-' + termFormatted;
+                var uniqueLineId = 'rangeFilterLine-' + termFormatted;
 
                 return uniqueLineId;
             }
@@ -219,10 +218,9 @@ module.directive('stTermOccurencesChart', function () {
             }
         },
         template:
-            '<svg width="100%" height="400">' +
-            '</svg>',
+            '<svg width="100%" height="150">' +
+                '</svg>',
         replace: true
     };
 });
-
 
