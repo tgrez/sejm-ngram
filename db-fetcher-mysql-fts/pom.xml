@@ -12,7 +12,7 @@
 	<artifactId>db-fetcher-mysql-fts</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>db-fetcher-mysql</name>
+	<name>db-fetcher-mysql-fts</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
