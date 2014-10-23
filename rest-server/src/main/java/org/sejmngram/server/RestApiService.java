@@ -2,7 +2,6 @@ package org.sejmngram.server;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.sejmngram.server.cache.RedisProvider;
-import org.sejmngram.server.resources.DemoNgramResource;
 import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.resources.NgramFTSResource;
 import org.sejmngram.server.resources.NgramHitCountResource;
@@ -48,8 +47,6 @@ public class RestApiService extends Service<RestApiConfiguration> {
         		redis,
         		config.getPartiaIdFilename(),
         		config.getPoselIdFilename()));
-
-        environment.addResource(new DemoNgramResource());
 
         environment.addResource(new NgramHitCountResource(redis));
 
