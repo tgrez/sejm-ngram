@@ -38,12 +38,12 @@ public class RestApiService extends Service<RestApiConfiguration> {
         DBI jdbi = new DBIFactory().build(environment,
         		config.getDatabaseConfiguration(), "mysql");
 
-        String redisHostname = "localhost";
-        environment.addHealthCheck(new DatabaseHealthCheck(jdbi, 15));
+        int dbHealthCheckTimeout = 15;
+        environment.addHealthCheck(new DatabaseHealthCheck(jdbi, dbHealthCheckTimeout));
 //        environment.addHealthCheck(new RedisHealthCheck(redisHostname));
         
         RedisHitCounter redisHitCounter = createRedisCounter(config);
-        RedisCacheProvider redisCache = new RedisCacheProvider(redisHostname, "1000000000");
+        RedisCacheProvider redisCache = createRedisCacheProvider(config);
         
         environment.addResource(new NgramFTSResource(
 				jdbi,
@@ -60,6 +60,16 @@ public class RestApiService extends Service<RestApiConfiguration> {
                 .setInitParam("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin")
                 .setInitParam("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
     }
+
+	private RedisCacheProvider createRedisCacheProvider(RestApiConfiguration config) {
+		String redisAddress = config.getRedisAddress();
+		String maxmemoryBytes = "1000000000";
+		if (redisAddress != null) {
+			return new RedisCacheProvider(redisAddress, maxmemoryBytes);
+		} else {
+			return null;
+		}
+	}
 
 	private RedisHitCounter createRedisCounter(RestApiConfiguration config) {
 		String redisAddress = config.getRedisAddress();
