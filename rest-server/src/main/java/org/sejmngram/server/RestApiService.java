@@ -40,6 +40,7 @@ public class RestApiService extends Service<RestApiConfiguration> {
 
         String redisHostname = "localhost";
         environment.addHealthCheck(new DatabaseHealthCheck(jdbi, 15));
+//        environment.addHealthCheck(new RedisHealthCheck(redisHostname));
         
         RedisHitCounter redisHitCounter = createRedisCounter(config);
         RedisCacheProvider redisCache = new RedisCacheProvider(redisHostname, "1000000000");
