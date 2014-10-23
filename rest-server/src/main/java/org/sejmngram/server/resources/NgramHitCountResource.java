@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.sejmngram.server.cache.Counter;
+import org.sejmngram.server.cache.HitCounter;
 
 import com.yammer.dropwizard.jersey.params.IntParam;
 import com.yammer.metrics.annotation.Timed;
@@ -19,9 +19,9 @@ import com.yammer.metrics.annotation.Timed;
 @Produces(MediaType.APPLICATION_JSON)
 public class NgramHitCountResource {
 
-	private final Counter counter;
+	private final HitCounter counter;
 
-	public NgramHitCountResource(Counter counter) {
+	public NgramHitCountResource(HitCounter counter) {
 		this.counter = counter;
 	}
 	

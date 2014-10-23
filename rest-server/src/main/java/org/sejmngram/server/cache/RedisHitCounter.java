@@ -3,17 +3,17 @@ package org.sejmngram.server.cache;
 import java.util.Set;
 import redis.clients.jedis.Jedis;
 
-public class RedisProvider implements Counter {
+public class RedisHitCounter implements HitCounter {
 
 	private static final String HIT_COUNT_KEY_NAME = "ngrams:hitcount";
 	
 	private final Jedis jedis;
 	
-	public RedisProvider() {
+	public RedisHitCounter() {
 		this("localhost");
 	}
 	
-	public RedisProvider(String hostname) {
+	public RedisHitCounter(String hostname) {
 		jedis = new Jedis(hostname);
 	}
 

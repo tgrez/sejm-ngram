@@ -1,7 +1,7 @@
 package org.sejmngram.server;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.sejmngram.server.cache.RedisProvider;
+import org.sejmngram.server.cache.RedisHitCounter;
 import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.resources.NgramFTSResource;
 import org.sejmngram.server.resources.NgramHitCountResource;
@@ -38,15 +38,15 @@ public class RestApiService extends Service<RestApiConfiguration> {
         		config.getDatabaseConfiguration(), "mysql");
         environment.addHealthCheck(new DatabaseHealthCheck(jdbi, 15));
         
-        RedisProvider redis = createRedisProvider(config);
+        RedisHitCounter redisHitCounter = createRedisCounter(config);
         
         environment.addResource(new NgramFTSResource(
         		jdbi,
-        		redis,
+                redisHitCounter,
         		config.getPartiaIdFilename(),
         		config.getPoselIdFilename()));
 
-        environment.addResource(new NgramHitCountResource(redis));
+        environment.addResource(new NgramHitCountResource(redisHitCounter));
 
 
         environment.addFilter(CrossOriginFilter.class, "/*")
@@ -55,10 +55,10 @@ public class RestApiService extends Service<RestApiConfiguration> {
                 .setInitParam("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
     }
 
-	private RedisProvider createRedisProvider(RestApiConfiguration config) {
+	private RedisHitCounter createRedisCounter(RestApiConfiguration config) {
 		String redisAddress = config.getRedisAddress();
 		if (redisAddress != null) {
-			return new RedisProvider(redisAddress);
+			return new RedisHitCounter(redisAddress);
 		} else {
 			return null;
 		}
