@@ -36,8 +36,6 @@ public class RestApiService extends Service<RestApiConfiguration> {
                     Environment environment) throws ClassNotFoundException {
         final DBI jdbi = new DBIFactory().build(environment, 
         		config.getDatabaseConfiguration(), "mysql");
-    	
-//        environment.addHealthCheck(new TemplateHealthCheck(template)); TODO
         environment.addHealthCheck(new DatabaseHealthCheck(jdbi, 15));
         
         RedisProvider redis = createRedisProvider(config);
