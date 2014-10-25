@@ -7,20 +7,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.sejmngram.database.fetcher.connection.DbConnector;
+import org.sejmngram.database.fetcher.connection.MySqlDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
-import org.sejmngram.server.factory.NgramProvider;
 
 import com.google.common.base.Optional;
 import com.yammer.metrics.annotation.Timed;
 
 @Path("/api/ngram")
 @Produces(MediaType.APPLICATION_JSON)
-public class NgramResource {
+public class BlobNgramResource {
 
-	private final NgramProvider ngramProvider;
+	private final DbConnector db;
 	
-	public NgramResource() {
-		this.ngramProvider = new NgramProvider();
+	public BlobNgramResource() {
+        this.db = new MySqlDbConnector();
+        this.db.connect();
 	}
 	
 	@GET
@@ -28,7 +30,7 @@ public class NgramResource {
     @Timed
 	public NgramResponse sayHello(@PathParam("ngram") String ngramName,
 			@QueryParam("name") Optional<String> name) {
-		return ngramProvider.generateRandomNgramResponse(ngramName);
+		return db.retrieve(ngramName);
 	}
 
 }

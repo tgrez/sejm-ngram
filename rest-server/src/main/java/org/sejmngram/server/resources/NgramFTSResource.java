@@ -6,10 +6,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.sejmngram.database.fetcher.connection.DbConnector;
+import org.sejmngram.database.fetcher.connection.MySqlFtsDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.server.cache.CacheProvider;
 import org.sejmngram.server.cache.HitCounter;
-import org.sejmngram.server.factory.NgramFTSProvider;
 import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ import com.yammer.metrics.annotation.Timed;
 @Produces(MediaType.APPLICATION_JSON)
 public class NgramFTSResource {
 
-	private final NgramFTSProvider ngramProvider;
+	private final DbConnector db;
 	private final HitCounter counter;
 	private final CacheProvider<NgramResponse> cacheProvider;
 
@@ -29,9 +30,10 @@ public class NgramFTSResource {
 
 	public NgramFTSResource(DBI jdbi, HitCounter counter, CacheProvider<NgramResponse> cacheProvider,
 			String partyFilename, String poselFilename) {
-		this.ngramProvider = new NgramFTSProvider(jdbi, partyFilename, poselFilename);
 		this.counter = counter;
 		this.cacheProvider = cacheProvider;
+		this.db = new MySqlFtsDbConnector(jdbi, partyFilename, poselFilename);
+		this.db.connect();
 	}
 	
 	@GET
@@ -47,7 +49,7 @@ public class NgramFTSResource {
 				return cachedResponse.get();
 			}
 		}
-		NgramResponse dbResponse = ngramProvider.generateNgramResponse(ngramName);
+		NgramResponse dbResponse = db.retrieve(ngramName);
 		LOG.debug("retrieved from db");
 		if (cacheProvider != null) {
 			cacheProvider.store(ngramName, dbResponse);
