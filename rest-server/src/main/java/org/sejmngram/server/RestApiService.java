@@ -64,7 +64,7 @@ public class RestApiService extends Service<RestApiConfiguration> {
 
         environment.addResource(new NgramHitCountResource(redisHitCounter));
 
-
+        //add filters for cors
         environment.addFilter(CrossOriginFilter.class, "/*")
                 .setInitParam("allowedOrigins", "*")
                 .setInitParam("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin")

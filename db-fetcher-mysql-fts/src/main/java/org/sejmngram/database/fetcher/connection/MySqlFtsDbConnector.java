@@ -2,12 +2,9 @@ package org.sejmngram.database.fetcher.connection;
 
 import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramFtsConverter;
-import org.sejmngram.database.fetcher.json.datamodel.NgramOccurencesResponse;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.resource.NgramFtsDao;
 import org.skife.jdbi.v2.DBI;
-
-import java.util.Date;
 
 public class MySqlFtsDbConnector implements DbConnector {
 
@@ -43,8 +40,6 @@ public class MySqlFtsDbConnector implements DbConnector {
 				new IdConverter(partyFilename), new IdConverter(poselFilename));
 	}
 
-
-
 	@Override
 	public NgramResponse retrieveByParty(String ngram, int partyId) {
 		// TODO Auto-generated method stub
@@ -56,10 +51,5 @@ public class MySqlFtsDbConnector implements DbConnector {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-    @Override
-    public NgramOccurencesResponse retrieveNgramOccurences(String ngram, Date date, int limitPerPage, int nrPageRequested) {
-        return NgramOccurencesResponse.getFakeOne();
-    }
 
 }

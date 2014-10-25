@@ -9,14 +9,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.sejmngram.database.fetcher.json.datamodel.ListDate;
-import org.sejmngram.database.fetcher.json.datamodel.NgramOccurencesResponse;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
 import org.sejmngram.database.fetcher.model.Ngram;
@@ -127,9 +125,4 @@ public class DbConnectorMock implements DbConnector {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-    @Override
-    public NgramOccurencesResponse retrieveNgramOccurences(String ngram, Date date, int limitPerPage, int nrPageRequested) {
-        return NgramOccurencesResponse.getFakeOne();
-    }
 }

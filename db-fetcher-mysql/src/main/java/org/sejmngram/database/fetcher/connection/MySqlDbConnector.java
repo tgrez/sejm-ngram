@@ -3,7 +3,6 @@ package org.sejmngram.database.fetcher.connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -13,7 +12,6 @@ import org.jooq.impl.DSL;
 import org.jooq.util.maven.example.tables.Ngrams;
 import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramConverter;
-import org.sejmngram.database.fetcher.json.datamodel.NgramOccurencesResponse;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
 import com.yammer.metrics.annotation.Timed;
@@ -94,11 +92,5 @@ public class MySqlDbConnector implements DbConnector {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-    @Override
-    public NgramOccurencesResponse retrieveNgramOccurences(String ngram, Date date, int limitPerPage, int nrPageRequested) {
-        return NgramOccurencesResponse.getFakeOne();
-    }
-
 
 }
