@@ -7,6 +7,12 @@ import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.resources.NgramFTSResource;
 import org.sejmngram.server.resources.NgramHitCountResource;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.assets.AssetsBundle;
@@ -16,6 +22,9 @@ import com.yammer.dropwizard.jdbi.DBIFactory;
 import com.yammer.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 
 public class RestApiService extends Service<RestApiConfiguration> {
+
+	private static final Logger LOG = LoggerFactory.getLogger(RestApiService.class);
+
     public static void main(String[] args) throws Exception {
         new RestApiService().run(args);
     }
@@ -42,8 +51,9 @@ public class RestApiService extends Service<RestApiConfiguration> {
         environment.addHealthCheck(new DatabaseHealthCheck(jdbi, dbHealthCheckTimeout));
 //        environment.addHealthCheck(new RedisHealthCheck(redisHostname));
         
-        RedisHitCounter redisHitCounter = createRedisCounter(config);
-        RedisCacheProvider redisCache = createRedisCacheProvider(config);
+        JedisPool jedisPool = createJedisPool(config);
+        RedisHitCounter redisHitCounter = createRedisCounter(jedisPool);
+        RedisCacheProvider redisCache = createRedisCacheProvider(jedisPool);
         
         environment.addResource(new NgramFTSResource(
 				jdbi,
@@ -61,20 +71,32 @@ public class RestApiService extends Service<RestApiConfiguration> {
                 .setInitParam("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
     }
 
-	private RedisCacheProvider createRedisCacheProvider(RestApiConfiguration config) {
+	private JedisPool createJedisPool(RestApiConfiguration config) {
 		String redisAddress = config.getRedisAddress();
-		String maxmemoryBytes = "1000000000";
-		if (redisAddress != null) {
-			return new RedisCacheProvider(redisAddress, maxmemoryBytes);
+		if (redisAddress == null) {
+			return null;
+		}
+		JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), redisAddress);
+		try (Jedis jedis = jedisPool.getResource()) {
+			jedis.configSet("maxmemory", "1000000000"); // in bytes for redis 2.8.13
+			jedis.configSet("maxmemory-policy", "volatile-lru");
+			jedis.configSet("maxmemory-samples", "5");
+		}
+		LOG.info("Successfully created jedis pool for redis access.");
+		return jedisPool;
+	}
+
+	private RedisCacheProvider createRedisCacheProvider(JedisPool jedisPool) {
+		if (jedisPool != null) {
+			return new RedisCacheProvider(jedisPool);
 		} else {
 			return null;
 		}
 	}
 
-	private RedisHitCounter createRedisCounter(RestApiConfiguration config) {
-		String redisAddress = config.getRedisAddress();
-		if (redisAddress != null) {
-			return new RedisHitCounter(redisAddress);
+	private RedisHitCounter createRedisCounter(JedisPool jedisPool) {
+		if (jedisPool != null) {
+			return new RedisHitCounter(jedisPool);
 		} else {
 			return null;
 		}

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import com.google.common.base.Optional;
 
@@ -18,20 +19,15 @@ public class RedisCacheProvider implements CacheProvider<NgramResponse>{
 	private static final String CACHE_KEY_PREFIX = "ngrams:cache:";
 	private static final int EXPIRE_TIME_SECONDS = 3 * 24 * 60 * 60; // 3 days
 	
-	private final Jedis jedis;
-	private final String maxmemoryPolicy = "volatile-lru";
-	private final String maxmemorySamples = "5";
+	private JedisPool jedisPool;
 	
-	public RedisCacheProvider(String hostname, String maxmemory) {
-		this.jedis = new Jedis(hostname);
-		this.jedis.configSet("maxmemory", maxmemory);
-		this.jedis.configSet("maxmemory-policy", maxmemoryPolicy);
-		this.jedis.configSet("maxmemory-samples", maxmemorySamples);
+	public RedisCacheProvider(JedisPool jedisPool) {
+		this.jedisPool = jedisPool;
 	}
 
 	@Override
 	public void store(String key, NgramResponse value) {
-		try {
+		try (Jedis jedis = jedisPool.getResource()) {
 			jedis.setex(CACHE_KEY_PREFIX + key, EXPIRE_TIME_SECONDS,
 					JsonProcessor.transformToJson(value));
 		} catch (IOException e) {
@@ -41,15 +37,15 @@ public class RedisCacheProvider implements CacheProvider<NgramResponse>{
 
 	@Override
 	public Optional<NgramResponse> tryGet(String key) {
-		String value = jedis.get(CACHE_KEY_PREFIX + key);
-		if (value == null) {
-			return Optional.absent();
-		}
 		NgramResponse response = null;
-		try {
+		try (Jedis jedis = jedisPool.getResource()) {
+			String value = jedis.get(CACHE_KEY_PREFIX + key);
+			if (value == null) {
+				return Optional.absent();
+			}
 			response = JsonProcessor.transform(value, NgramResponse.class);
 		} catch (IOException e) {
-			LOG.error("Exception was thrown when generating json for ngram: " + key + " from: " + value, e);
+			LOG.error("Exception was thrown when generating json for ngram: " + key + " exception: ", e);
 		}
 		return Optional.fromNullable(response);
 	}
