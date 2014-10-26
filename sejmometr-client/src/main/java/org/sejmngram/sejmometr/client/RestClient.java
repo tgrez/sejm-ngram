@@ -1,7 +1,8 @@
 package org.sejmngram.sejmometr.client;
 
-import org.apache.log4j.Logger;
 import org.sejmngram.common.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -9,7 +10,7 @@ import com.sun.jersey.api.client.WebResource;
 
 public class RestClient {
 	
-	private static final Logger LOG = Logger.getLogger(RestClient.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
 	
 	private static final String acceptHeader = Configuration.getInstance().getSejmometrAcceptHeader(); 
 	private static final String url = Configuration.getInstance().getSejmometrUrl();

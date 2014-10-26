@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.sejmngram.common.Configuration;
@@ -14,10 +13,12 @@ import org.sejmngram.sejmometr.client.RestClient;
 import org.sejmngram.sejmometr.json.datamodel.klub2.KlubResponse;
 import org.sejmngram.sejmometr.json.datamodel.wystapienie2.Data;
 import org.sejmngram.sejmometr.json.datamodel.wystapienie2.WystapienieResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SejmometrToCommonTransformer {
 
-	private static final Logger LOG = Logger.getLogger(SejmometrToCommonTransformer.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(SejmometrToCommonTransformer.class);
 	
 	private static Map<Integer, String> partyIdToPartyNameMap = new HashMap<Integer, String>();
 	

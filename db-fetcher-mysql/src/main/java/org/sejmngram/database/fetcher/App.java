@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
 import org.sejmngram.database.fetcher.connection.DbConnectorMock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class App {
 	
-	private static final Logger LOG = Logger.getLogger(App.class);
+	private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
 	// TODO move database creation to maven?
 	public static void main(String[] args) throws IOException {

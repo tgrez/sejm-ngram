@@ -6,20 +6,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JsonProcessor {
 
 	private JsonProcessor() {
 	}
 	
-	private static final Logger LOG = Logger.getLogger(JsonProcessor.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(JsonProcessor.class); 
 
 	private static ObjectMapper objectMapper = new ObjectMapper();
 	

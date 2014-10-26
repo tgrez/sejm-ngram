@@ -13,15 +13,16 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.sejmngram.database.fetcher.json.datamodel.ListDate;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
 import org.sejmngram.database.fetcher.model.Ngram;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DbConnectorMock implements DbConnector {
 
-	private static final Logger LOG = Logger.getLogger(DbConnectorMock.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DbConnectorMock.class);
 
 	private static final String filename = "ngrams_mocking.txt";
 	private static DateFormat df = new SimpleDateFormat("yyyyMMdd");

@@ -5,17 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonProcessingException;
 import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.common.json.datamodel.Wystapienie;
 import org.sejmngram.common.json.print.Printer;
 import org.sejmngram.sejmometr.json.datamodel.wystapienie2.WystapienieResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TransformExecutor {
 
-	private static final Logger LOG = Logger.getLogger(TransformExecutor.class.getName());
+	private static final Logger LOG = LoggerFactory.getLogger(TransformExecutor.class); 
 	
 	public static void process(Map<Integer, String> responses)
 			throws JsonParseException, JsonProcessingException, IOException {

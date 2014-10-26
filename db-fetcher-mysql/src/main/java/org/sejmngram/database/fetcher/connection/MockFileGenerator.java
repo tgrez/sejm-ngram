@@ -11,14 +11,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MockFileGenerator {
 
 	private static final String filename = "ngrams_mocking.txt";
 	private static final Random rand = new Random();
 	private static DateFormat df = new SimpleDateFormat("yyyyMMdd");
-	private static final Logger LOG = Logger.getLogger(MockFileGenerator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MockFileGenerator.class);
 	
 	private static final String[] ngramArray =  {
 		"aaa",

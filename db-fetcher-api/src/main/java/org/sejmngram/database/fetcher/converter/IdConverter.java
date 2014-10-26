@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.sejmngram.common.json.JsonProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IdConverter {
 	
-	private static final Logger LOG = Logger.getLogger(IdConverter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(IdConverter.class);
 	
 	private Map<Integer, String> idToNameMap = new HashMap<Integer, String>();
 	

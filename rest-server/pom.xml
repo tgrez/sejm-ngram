@@ -17,12 +17,12 @@
 		<dependency>
 			<groupId>com.yammer.dropwizard</groupId>
 			<artifactId>dropwizard-core</artifactId>
-			<version>0.6.2</version>
+			<version>${dropwizard.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.yammer.dropwizard</groupId>
 			<artifactId>dropwizard-jdbi</artifactId>
-			<version>0.6.2</version>
+			<version>${dropwizard.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -32,7 +32,7 @@
 		<dependency>
 		    <groupId>redis.clients</groupId>
 		    <artifactId>jedis</artifactId>
-		    <version>2.6.0</version>
+		    <version>${jedis.version}</version>
 		</dependency>
 		<dependency>
             <groupId>sejm-ngram</groupId>
@@ -52,12 +52,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<!-- compile for Java 1.7 -->
+                <version>${maven.compiler.plugin.version}</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-					<encoding>UTF-8</encoding>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 
