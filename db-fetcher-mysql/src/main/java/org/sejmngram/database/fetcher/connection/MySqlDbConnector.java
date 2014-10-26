@@ -14,9 +14,6 @@ import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramConverter;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
-import com.yammer.metrics.annotation.Timed;
-
-// TODO exception handling
 public class MySqlDbConnector implements DbConnector {
 
 	private static final String USERNAME = "db-fetcher";
@@ -62,7 +59,6 @@ public class MySqlDbConnector implements DbConnector {
 		return ngramConverter.dbRecordsToNgramResponse(ngramName, result);
 	}
 
-	@Timed
 	private Result<Record> queryDatabase(String ngramName) {
         DSLContext context = DSL.using(conn, SQLDialect.MYSQL);
         Result<Record> result = context.select()
