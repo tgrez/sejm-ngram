@@ -22,12 +22,12 @@ import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-public class RestApiService extends Application<RestApiConfiguration> {
+public class RestApiApplication extends Application<RestApiConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RestApiService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RestApiApplication.class);
 
     public static void main(String[] args) throws Exception {
-        new RestApiService().run(args);
+        new RestApiApplication().run(args);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class RestApiService extends Application<RestApiConfiguration> {
     public void initialize(Bootstrap<RestApiConfiguration> bootstrap) {
         // static assets
         bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.htm"));
-        
+
         // unwrap any thrown SQLException or DBIException instances
         // necessary for getting full stack trace in logs
         bootstrap.addBundle(new DBIExceptionsBundle());
@@ -56,11 +56,11 @@ public class RestApiService extends Application<RestApiConfiguration> {
         int dbHealthCheckTimeout = 15;
         environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, dbHealthCheckTimeout));
 //        environment.addHealthCheck(new RedisHealthCheck(redisHostname));
-        
+
         JedisPool jedisPool = createJedisPool(config);
         RedisHitCounter redisHitCounter = createRedisCounter(jedisPool);
         RedisCacheProvider redisCache = createRedisCacheProvider(jedisPool);
-        
+
         environment.jersey().register(new NgramFTSResource(
                 jdbi,
                 redisHitCounter,
