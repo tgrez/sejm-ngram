@@ -18,19 +18,19 @@ import com.google.common.base.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 public class BlobNgramResource {
 
-	private final DbConnector db;
-	
-	public BlobNgramResource() {
+    private final DbConnector db;
+
+    public BlobNgramResource() {
         this.db = new MySqlDbConnector();
         this.db.connect();
-	}
-	
-	@GET
-	@Path("{ngram}")
+    }
+
+    @GET
+    @Path("{ngram}")
     @Timed
-	public NgramResponse sayHello(@PathParam("ngram") String ngramName,
-			@QueryParam("name") Optional<String> name) {
-		return db.retrieve(ngramName);
-	}
+    public NgramResponse sayHello(@PathParam("ngram") String ngramName,
+            @QueryParam("name") Optional<String> name) {
+        return db.retrieve(ngramName);
+    }
 
 }

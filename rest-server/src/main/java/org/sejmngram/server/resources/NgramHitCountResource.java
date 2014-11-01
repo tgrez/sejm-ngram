@@ -20,20 +20,21 @@ import com.codahale.metrics.annotation.Timed;
 @Produces(MediaType.APPLICATION_JSON)
 public class NgramHitCountResource {
 
-	private final HitCounter counter;
+    private final HitCounter counter;
 
-	public NgramHitCountResource(HitCounter counter) {
-		this.counter = counter;
-	}
-	
-	@GET
-	@Path("/top")
-	@Timed
-	public Set<String> getTopNgram(@QueryParam("limit") @DefaultValue("10") IntParam limit) {
-		if (counter != null) {
-			return counter.getTop(limit.get());
-		} else {
-			return new HashSet<String>();
-		}
-	}
+    public NgramHitCountResource(HitCounter counter) {
+        this.counter = counter;
+    }
+
+    @GET
+    @Path("/top")
+    @Timed
+    public Set<String> getTopNgram(
+            @QueryParam("limit") @DefaultValue("10") IntParam limit) {
+        if (counter != null) {
+            return counter.getTop(limit.get());
+        } else {
+            return new HashSet<String>();
+        }
+    }
 }
