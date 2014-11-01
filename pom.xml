@@ -10,7 +10,7 @@
     <name>sejm-ngram-parent</name>
 
     <properties>
-        <dropwizard.version>0.6.2</dropwizard.version>
+        <dropwizard.version>0.7.1</dropwizard.version>
         <jedis.version>2.6.0</jedis.version>
         <logback.version>1.1.2</logback.version>
         <junit.version>3.8.1</junit.version>

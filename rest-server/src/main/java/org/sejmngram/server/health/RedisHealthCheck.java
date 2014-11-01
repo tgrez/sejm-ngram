@@ -2,14 +2,13 @@ package org.sejmngram.server.health;
 
 import redis.clients.jedis.Jedis;
 
-import com.yammer.metrics.core.HealthCheck;
+import com.codahale.metrics.health.HealthCheck;
 
 public class RedisHealthCheck extends HealthCheck {
 
 	private Jedis jedis;
 	
 	public RedisHealthCheck(String hostname) {
-		super("redis");
 		this.jedis = new Jedis(hostname);
 	}
 
@@ -32,7 +31,7 @@ public class RedisHealthCheck extends HealthCheck {
 		} catch (JedisConnectionException e) {
 		    // Not connected
 		}
-		 */
+		*/
 	}
 
 }

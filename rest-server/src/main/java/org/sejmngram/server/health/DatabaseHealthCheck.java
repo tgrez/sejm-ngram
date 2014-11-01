@@ -4,7 +4,7 @@ import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
 import org.skife.jdbi.v2.tweak.HandleCallback;
 
-import com.yammer.metrics.core.HealthCheck;
+import com.codahale.metrics.health.HealthCheck;
 
 public class DatabaseHealthCheck extends HealthCheck {
 
@@ -12,7 +12,6 @@ public class DatabaseHealthCheck extends HealthCheck {
 	private int timeout;
 
 	public DatabaseHealthCheck(DBI jdbi, int timeout) {
-		super("database-jdbi");
 		this.jdbi = jdbi;
 		this.timeout = timeout;
 	}

@@ -32,19 +32,16 @@
 			<version>5.1.26</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jdbi</groupId>
-			<artifactId>jdbi</artifactId>
-			<version>2.53</version>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-jdbi</artifactId>
+			<version>${dropwizard.version}</version>
+            <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.yammer.metrics</groupId>
-			<artifactId>metrics-core</artifactId>
-			<version>2.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.yammer.metrics</groupId>
-			<artifactId>metrics-annotation</artifactId>
-			<version>2.2.0</version>
+			<groupId>io.dropwizard</groupId>
+			<artifactId>dropwizard-metrics</artifactId>
+			<version>${dropwizard.version}</version>
+            <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

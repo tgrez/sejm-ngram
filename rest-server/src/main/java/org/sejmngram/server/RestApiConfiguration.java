@@ -1,45 +1,46 @@
 package org.sejmngram.server;
 
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.db.DatabaseConfiguration;
 
 public class RestApiConfiguration extends Configuration {
 
-	@Valid
+    @Valid
     @NotNull
     @JsonProperty
-    private DatabaseConfiguration database = new DatabaseConfiguration();
+    private DataSourceFactory database = new DataSourceFactory();
 
     @NotEmpty
     @JsonProperty
-	private String poselIdFilename;
+    private String poselIdFilename;
 
-	@NotEmpty
+    @NotEmpty
     @JsonProperty
-	private String partiaIdFilename;
+    private String partiaIdFilename;
 
-	@JsonProperty
-	private String redisAddress;
+    @JsonProperty
+    private String redisAddress;
 
     public String getPoselIdFilename() {
-    	return poselIdFilename;
+        return poselIdFilename;
     }
 
     public String getPartiaIdFilename() {
-    	return partiaIdFilename;
+        return partiaIdFilename;
     }
-    
-    public DatabaseConfiguration getDatabaseConfiguration() {
+
+    public DataSourceFactory getDataSourceFactory() {
         return database;
     }
 
-	public String getRedisAddress() {
-		return redisAddress;
-	}
+    public String getRedisAddress() {
+        return redisAddress;
+    }
 }

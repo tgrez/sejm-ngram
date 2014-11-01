@@ -1,5 +1,7 @@
 package org.sejmngram.server.resources;
 
+import io.dropwizard.jersey.params.IntParam;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.server.cache.HitCounter;
 
-import com.yammer.dropwizard.jersey.params.IntParam;
-import com.yammer.metrics.annotation.Timed;
+import com.codahale.metrics.annotation.Timed;
 
 @Path("/api/hitcount")
 @Produces(MediaType.APPLICATION_JSON)

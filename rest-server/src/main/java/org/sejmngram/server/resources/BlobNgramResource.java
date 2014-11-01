@@ -11,8 +11,8 @@ import org.sejmngram.database.fetcher.connection.DbConnector;
 import org.sejmngram.database.fetcher.connection.MySqlDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
+import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
-import com.yammer.metrics.annotation.Timed;
 
 @Path("/api/ngram")
 @Produces(MediaType.APPLICATION_JSON)

@@ -15,8 +15,8 @@ import org.skife.jdbi.v2.DBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
-import com.yammer.metrics.annotation.Timed;
 
 @Path("/api/ngramfts")
 @Produces(MediaType.APPLICATION_JSON)
