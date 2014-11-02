@@ -23,14 +23,14 @@ import com.google.common.base.Optional;
 public class NgramFTSResource {
 
     private final DbConnector db;
-    private final HitCounter counter;
-    private final CacheProvider<NgramResponse> cacheProvider;
+    private final Optional<? extends HitCounter> counter;
+    private final Optional<? extends CacheProvider<NgramResponse>> cacheProvider;
 
     private static final Logger LOG = LoggerFactory
             .getLogger(NgramFTSResource.class);
 
-    public NgramFTSResource(DBI jdbi, HitCounter counter,
-            CacheProvider<NgramResponse> cacheProvider, String partyFilename,
+    public NgramFTSResource(DBI jdbi, Optional<? extends HitCounter> counter,
+            Optional<? extends CacheProvider<NgramResponse>> cacheProvider, String partyFilename,
             String poselFilename) {
         this.counter = counter;
         this.cacheProvider = cacheProvider;
@@ -44,8 +44,8 @@ public class NgramFTSResource {
     public NgramResponse getNgram(@PathParam("ngram") String ngramName) {
         incrementHitCount(ngramName);
         LOG.debug("received request");
-        if (cacheProvider != null) {
-            Optional<NgramResponse> cachedResponse = cacheProvider
+        if (cacheProvider.isPresent()) {
+            Optional<NgramResponse> cachedResponse = cacheProvider.get()
                     .tryGet(ngramName);
             if (cachedResponse.isPresent()) {
                 LOG.debug("retrieved from cache");
@@ -54,16 +54,16 @@ public class NgramFTSResource {
         }
         NgramResponse dbResponse = db.retrieve(ngramName);
         LOG.debug("retrieved from db");
-        if (cacheProvider != null) {
-            cacheProvider.store(ngramName, dbResponse);
+        if (cacheProvider.isPresent()) {
+            cacheProvider.get().store(ngramName, dbResponse);
             LOG.debug("stored in cache");
         }
         return dbResponse;
     }
 
     private void incrementHitCount(String ngramName) {
-        if (counter != null) {
-            counter.increment(ngramName);
+        if (counter.isPresent()) {
+            counter.get().increment(ngramName);
         }
     }
 

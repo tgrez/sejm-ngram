@@ -15,14 +15,15 @@ import javax.ws.rs.core.MediaType;
 import org.sejmngram.server.cache.HitCounter;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Optional;
 
 @Path("/api/hitcount")
 @Produces(MediaType.APPLICATION_JSON)
 public class NgramHitCountResource {
 
-    private final HitCounter counter;
+    private final Optional<? extends HitCounter> counter;
 
-    public NgramHitCountResource(HitCounter counter) {
+    public NgramHitCountResource(Optional<? extends HitCounter> counter) {
         this.counter = counter;
     }
 
@@ -31,8 +32,8 @@ public class NgramHitCountResource {
     @Timed
     public Set<String> getTopNgram(
             @QueryParam("limit") @DefaultValue("10") IntParam limit) {
-        if (counter != null) {
-            return counter.getTop(limit.get());
+        if (counter.isPresent() && limit.get() != null) {
+            return counter.get().getTop(limit.get());
         } else {
             return new HashSet<String>();
         }

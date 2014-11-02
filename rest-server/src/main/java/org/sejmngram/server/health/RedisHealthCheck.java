@@ -1,37 +1,27 @@
 package org.sejmngram.server.health;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import com.codahale.metrics.health.HealthCheck;
 
 public class RedisHealthCheck extends HealthCheck {
 
-    private Jedis jedis;
+    private final JedisPool jedisPool;
 
-    public RedisHealthCheck(String hostname) {
-        this.jedis = new Jedis(hostname);
+    public RedisHealthCheck(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
     }
 
     @Override
-    protected Result check() throws Exception {
-        if (jedis.isConnected()) {
-            return Result.healthy();
-        } else {
-            return Result.unhealthy("Jedis says it is not connected.");
+    protected Result check() {
+        try (Jedis jedis = jedisPool.getResource()) {
+            if (jedis.isConnected()) {
+                return Result.healthy();
+            } else {
+                return Result.unhealthy("Jedis is not connected.");
+            }
         }
-        /*
-        JedisPool pool = new JedisPool(...);
-        try {
-            Jedis jedis = pool.getResource();
-            // Is connected
-            // TODO return jedis back to pool
-            * pool.returnResource(jedis);
-            * jedis.set("foo","bar");
-            assertEquals("bar",jedis.get("foo"));
-        } catch (JedisConnectionException e) {
-        // Not connected
-        }
-    */
     }
 
 }

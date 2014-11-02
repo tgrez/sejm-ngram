@@ -1,20 +1,5 @@
 package org.sejmngram.server;
 
-import javax.servlet.FilterRegistration.Dynamic;
-
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.sejmngram.server.cache.RedisCacheProvider;
-import org.sejmngram.server.cache.RedisHitCounter;
-import org.sejmngram.server.health.DatabaseHealthCheck;
-import org.sejmngram.server.resources.NgramFTSResource;
-import org.sejmngram.server.resources.NgramHitCountResource;
-import org.skife.jdbi.v2.DBI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.jdbi.DBIFactory;
@@ -22,9 +7,20 @@ import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
-public class RestApiApplication extends Application<RestApiConfiguration> {
+import javax.servlet.FilterRegistration.Dynamic;
 
-    private static final Logger LOG = LoggerFactory.getLogger(RestApiApplication.class);
+import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.sejmngram.server.health.DatabaseHealthCheck;
+import org.sejmngram.server.health.RedisHealthCheck;
+import org.sejmngram.server.redis.RedisConnection;
+import org.sejmngram.server.redis.RedisFactory;
+import org.sejmngram.server.resources.NgramFTSResource;
+import org.sejmngram.server.resources.NgramHitCountResource;
+import org.skife.jdbi.v2.DBI;
+
+import com.google.common.base.Optional;
+
+public class RestApiApplication extends Application<RestApiConfiguration> {
 
     public static void main(String[] args) throws Exception {
         new RestApiApplication().run(args);
@@ -53,22 +49,24 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
         DBI jdbi = new DBIFactory().build(environment,
                 config.getDataSourceFactory(), "mysql");
 
+        RedisFactory redisFactory = new RedisFactory();
+        Optional<RedisConnection> redisConnection = redisFactory.createRedisConnection(config.getRedis());
+
+        if (redisConnection.isPresent()) {
+            environment.lifecycle().manage(redisConnection.get());
+            environment.healthChecks().register("redis", new RedisHealthCheck(redisConnection.get()));
+        }
         int dbHealthCheckTimeout = 15;
         environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, dbHealthCheckTimeout));
-//        environment.addHealthCheck(new RedisHealthCheck(redisHostname));
-
-        JedisPool jedisPool = createJedisPool(config);
-        RedisHitCounter redisHitCounter = createRedisCounter(jedisPool);
-        RedisCacheProvider redisCache = createRedisCacheProvider(jedisPool);
 
         environment.jersey().register(new NgramFTSResource(
                 jdbi,
-                redisHitCounter,
-                redisCache,
+                redisFactory.createRedisCounter(redisConnection),
+                redisFactory.createRedisCacheProvider(redisConnection),
                 config.getPartiaIdFilename(),
                 config.getPoselIdFilename()));
 
-        environment.jersey().register(new NgramHitCountResource(redisHitCounter));
+        environment.jersey().register(new NgramHitCountResource(redisFactory.createRedisCounter(redisConnection)));
 
         //add filters for cors
         Dynamic filter = environment.servlets()
@@ -76,36 +74,5 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
         filter.setInitParameter("allowedOrigins", "*");
         filter.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
         filter.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
-    }
-
-    private JedisPool createJedisPool(RestApiConfiguration config) {
-        String redisAddress = config.getRedisAddress();
-        if (redisAddress == null) {
-            return null;
-        }
-        JedisPool jedisPool = new JedisPool(new JedisPoolConfig(), redisAddress);
-        try (Jedis jedis = jedisPool.getResource()) {
-            jedis.configSet("maxmemory", "1000000000"); // in bytes for redis 2.8.13
-            jedis.configSet("maxmemory-policy", "volatile-lru");
-            jedis.configSet("maxmemory-samples", "5");
-        }
-        LOG.info("Successfully created jedis pool for redis access.");
-        return jedisPool;
-    }
-
-    private RedisCacheProvider createRedisCacheProvider(JedisPool jedisPool) {
-        if (jedisPool != null) {
-            return new RedisCacheProvider(jedisPool);
-        } else {
-            return null;
-        }
-    }
-
-    private RedisHitCounter createRedisCounter(JedisPool jedisPool) {
-        if (jedisPool != null) {
-            return new RedisHitCounter(jedisPool);
-        } else {
-            return null;
-        }
     }
 }
