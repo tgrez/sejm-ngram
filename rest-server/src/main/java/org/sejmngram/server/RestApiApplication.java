@@ -14,13 +14,17 @@ import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.health.RedisHealthCheck;
 import org.sejmngram.server.redis.RedisConnection;
 import org.sejmngram.server.redis.RedisFactory;
-import org.sejmngram.server.resources.NgramFTSResource;
-import org.sejmngram.server.resources.NgramHitCountResource;
+import org.sejmngram.server.resources.impl.ResourceFactory;
 import org.skife.jdbi.v2.DBI;
 
 import com.google.common.base.Optional;
 
 public class RestApiApplication extends Application<RestApiConfiguration> {
+    
+    private static final int DB_HEALTH_CHECK_TIMEOUT = 15;
+    
+    private RedisFactory redisFactory = new RedisFactory();
+    private ResourceFactory ngramResourceFactory = new ResourceFactory(redisFactory);
 
     public static void main(String[] args) throws Exception {
         new RestApiApplication().run(args);
@@ -46,31 +50,25 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
             throws Exception {
         environment.jersey().setUrlPattern("/service/*");
 
-        DBI jdbi = new DBIFactory().build(environment,
-                config.getDataSourceFactory(), "mysql");
+        DBI jdbi = new DBIFactory().build(environment, config.getDataSourceFactory(), "mysql");
 
-        RedisFactory redisFactory = new RedisFactory();
         Optional<RedisConnection> redisConnection = redisFactory.createRedisConnection(config.getRedis());
-
         if (redisConnection.isPresent()) {
             environment.lifecycle().manage(redisConnection.get());
             environment.healthChecks().register("redis", new RedisHealthCheck(redisConnection.get()));
         }
-        int dbHealthCheckTimeout = 15;
-        environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, dbHealthCheckTimeout));
+        environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, DB_HEALTH_CHECK_TIMEOUT));
 
-        environment.jersey().register(new NgramFTSResource(
-                jdbi,
-                redisFactory.createRedisCounter(redisConnection),
-                redisFactory.createRedisCacheProvider(redisConnection),
-                config.getPartiaIdFilename(),
-                config.getPoselIdFilename()));
+        environment.jersey().register(ngramResourceFactory.createFTSNgramResource(jdbi, redisConnection,
+                config.getPartiaIdFilename(), config.getPartiaIdFilename()));
+        environment.jersey().register(ngramResourceFactory.createHitCountResource(redisConnection));
 
-        environment.jersey().register(new NgramHitCountResource(redisFactory.createRedisCounter(redisConnection)));
+        addCrossOriginFilter(environment);
+    }
 
+    private void addCrossOriginFilter(Environment environment) {
         //add filters for cors
-        Dynamic filter = environment.servlets()
-                .addFilter("crossOriginFilter", CrossOriginFilter.class);
+        Dynamic filter = environment.servlets().addFilter("crossOriginFilter", CrossOriginFilter.class);
         filter.setInitParameter("allowedOrigins", "*");
         filter.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
         filter.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");

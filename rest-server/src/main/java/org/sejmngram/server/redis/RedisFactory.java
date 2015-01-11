@@ -15,19 +15,11 @@ public class RedisFactory {
         }
     }
 
-    public Optional<RedisCacheProvider> createRedisCacheProvider(Optional<RedisConnection> redisConnection) {
-        if (redisConnection.isPresent()) {
-            return Optional.of(new RedisCacheProvider(redisConnection.get()));
-        } else {
-            return Optional.absent();
-        }
+    public RedisCacheProvider createRedisCacheProvider(RedisConnection redisConnection) {
+        return new RedisCacheProvider(redisConnection);
     }
 
-    public Optional<RedisHitCounter> createRedisCounter(Optional<RedisConnection> redisConnection) {
-        if (redisConnection.isPresent()) {
-            return Optional.of(new RedisHitCounter(redisConnection.get()));
-        } else {
-            return Optional.absent();
-        }
+    public RedisHitCounter createRedisCounter(RedisConnection redisConnection) {
+        return new RedisHitCounter(redisConnection);
     }
 }

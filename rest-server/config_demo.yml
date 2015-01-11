@@ -55,3 +55,7 @@ logging:
   loggers:
     "io.dropwizard": INFO
     "org.eclipse.jetty": WARN
+
+#redis:
+#  host: localhost
+#  port: 6379

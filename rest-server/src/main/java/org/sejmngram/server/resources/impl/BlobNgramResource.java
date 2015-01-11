@@ -1,22 +1,17 @@
-package org.sejmngram.server.resources;
+package org.sejmngram.server.resources.impl;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.sejmngram.database.fetcher.connection.DbConnector;
 import org.sejmngram.database.fetcher.connection.MySqlDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
-
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
+import org.sejmngram.server.resources.NgramResource;
 
 @Path("/api/ngram")
 @Produces(MediaType.APPLICATION_JSON)
-public class BlobNgramResource {
+public class BlobNgramResource implements NgramResource {
 
     private final DbConnector db;
 
@@ -25,11 +20,7 @@ public class BlobNgramResource {
         this.db.connect();
     }
 
-    @GET
-    @Path("{ngram}")
-    @Timed
-    public NgramResponse sayHello(@PathParam("ngram") String ngramName,
-            @QueryParam("name") Optional<String> name) {
+    public NgramResponse getNgram(String ngramName) {
         return db.retrieve(ngramName);
     }
 

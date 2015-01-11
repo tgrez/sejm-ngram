@@ -1,4 +1,4 @@
-package org.sejmngram.server.resources;
+package org.sejmngram.server.resources.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -7,35 +7,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.math.RandomUtils;
 import org.sejmngram.database.fetcher.json.datamodel.ListDate;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
+import org.sejmngram.server.resources.NgramResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.codahale.metrics.annotation.Timed;
-import com.google.common.base.Optional;
-
 @Path("/api2/ngram")
 @Produces(MediaType.APPLICATION_JSON)
-public class RandomNgramResource {
+public class RandomNgramResource implements NgramResource {
 
     private static final Logger LOG = LoggerFactory
             .getLogger(RandomNgramResource.class);
 
-    @GET
-    @Path("{ngram}")
-    @Timed
-    public NgramResponse sayHello(@PathParam("ngram") String ngramName,
-            @QueryParam("name") Optional<String> name) {
+    public NgramResponse getNgram(String ngramName) {
         LOG.error(ngramName);
         String ngramURLdecoded;
         try {
