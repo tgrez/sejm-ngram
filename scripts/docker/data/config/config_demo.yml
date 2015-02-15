@@ -1,0 +1,61 @@
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    type: http
+    port: 8080
+
+partiaIdFilename: partiaId.json
+poselIdFilename: poselId.json
+
+database:
+  # the name of your JDBC driver
+  driverClass: com.mysql.jdbc.Driver
+
+  # the username
+  user: db-fetcher
+
+  # the password
+  password: sejmngram2
+
+  # the JDBC URL
+  url: jdbc:mysql://127.0.0.1:3306/sejmngram_demo?autoReconnect=true&failOverReadOnly=false&maxReconnects=10&characterEncoding=utf-8&useUnicode=true
+
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+
+  # the minimum number of connections to keep open
+  minSize: 8
+
+  # the maximum number of connections to keep open
+  maxSize: 32
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+
+  # how long a connection must be held before it can be validated
+  evictionInterval: 10s
+
+  # the maximum lifetime of an idle connection
+  minIdleTime: 1 minute
+
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+logging:
+  level: DEBUG
+
+  loggers:
+    "io.dropwizard": INFO
+    "org.eclipse.jetty": WARN
+
+#redis:
+#  host: localhost
+#  port: 6379
