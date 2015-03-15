@@ -48,8 +48,6 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
     @Override
     public void run(RestApiConfiguration config, Environment environment)
             throws Exception {
-        environment.jersey().setUrlPattern("/service/*");
-
         DBI jdbi = new DBIFactory().build(environment, config.getDataSourceFactory(), "mysql");
 
         Optional<RedisConnection> redisConnection = redisFactory.createRedisConnection(config.getRedis());
