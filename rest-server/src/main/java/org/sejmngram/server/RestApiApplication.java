@@ -7,6 +7,7 @@ import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration.Dynamic;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -18,6 +19,8 @@ import org.sejmngram.server.resources.impl.ResourceFactory;
 import org.skife.jdbi.v2.DBI;
 
 import com.google.common.base.Optional;
+
+import java.util.EnumSet;
 
 public class RestApiApplication extends Application<RestApiConfiguration> {
     
@@ -68,9 +71,12 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
 
     private void addCrossOriginFilter(Environment environment) {
         //add filters for cors
-        Dynamic filter = environment.servlets().addFilter("crossOriginFilter", CrossOriginFilter.class);
-        filter.setInitParameter("allowedOrigins", "*");
-        filter.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
-        filter.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
+        Dynamic filter = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        filter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "GET,PUT,POST,DELETE,OPTIONS");
+        filter.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        filter.setInitParameter(CrossOriginFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, "*");
+        filter.setInitParameter("allowedHeaders", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        filter.setInitParameter("allowCredentials", "true");
     }
 }
