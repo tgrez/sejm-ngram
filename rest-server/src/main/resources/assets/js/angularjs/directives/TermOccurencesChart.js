@@ -219,7 +219,7 @@ module.directive('stTermOccurencesChart', function () {
             }
         },
         template:
-            '<svg width="100%" height="400">' +
+            '<svg width="758" height="400">' +
             '</svg>',
         replace: true
     };
