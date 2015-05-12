@@ -8,8 +8,9 @@ module.directive('stGraphLegend', function() {
         restrict: 'E',
 
        template:
-            '<svg width="200" height="400">' +
-                '</svg>',
+            '<div>' +
+             'POKAZ' +
+                '</div>',
        replace: true
     };
 });
