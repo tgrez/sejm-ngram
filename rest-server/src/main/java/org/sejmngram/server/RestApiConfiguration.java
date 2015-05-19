@@ -2,6 +2,7 @@ package org.sejmngram.server;
 
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.elasticsearch.config.EsConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -20,6 +21,9 @@ public class RestApiConfiguration extends Configuration {
 
     @JsonProperty
     private RedisConfiguration redis;
+
+    @JsonProperty
+    private EsConfiguration elasticsearch;
 
     @NotEmpty
     @JsonProperty
@@ -43,5 +47,9 @@ public class RestApiConfiguration extends Configuration {
 
     public RedisConfiguration getRedis() {
         return redis;
+    }
+
+    public EsConfiguration getElasticsearch() {
+        return elasticsearch;
     }
 }

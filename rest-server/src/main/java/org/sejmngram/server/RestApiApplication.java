@@ -2,6 +2,8 @@ package org.sejmngram.server;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.elasticsearch.health.EsClusterHealthCheck;
+import io.dropwizard.elasticsearch.managed.ManagedEsClient;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -20,11 +22,14 @@ import org.skife.jdbi.v2.DBI;
 import com.google.common.base.Optional;
 
 public class RestApiApplication extends Application<RestApiConfiguration> {
+
+    private static final int DB_HEALTH_CHECK_TIMEOUT = 15; // seconds
     
-    private static final int DB_HEALTH_CHECK_TIMEOUT = 15;
-    
+    // TODO introduce dependency injection?
     private RedisFactory redisFactory = new RedisFactory();
     private ResourceFactory ngramResourceFactory = new ResourceFactory(redisFactory);
+    private Optional<RedisConnection> redisConnection;
+    private DBI jdbi;
 
     public static void main(String[] args) throws Exception {
         new RestApiApplication().run(args);
@@ -46,26 +51,46 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
     }
 
     @Override
-    public void run(RestApiConfiguration config, Environment environment)
-            throws Exception {
-        DBI jdbi = new DBIFactory().build(environment, config.getDataSourceFactory(), "mysql");
+    public void run(RestApiConfiguration config, Environment environment) {
 
-        Optional<RedisConnection> redisConnection = redisFactory.createRedisConnection(config.getRedis());
-        if (redisConnection.isPresent()) {
-            environment.lifecycle().manage(redisConnection.get());
-            environment.healthChecks().register("redis", new RedisHealthCheck(redisConnection.get()));
-        }
-        environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, DB_HEALTH_CHECK_TIMEOUT));
-
-        environment.jersey().register(ngramResourceFactory.createFTSNgramResource(jdbi, redisConnection,
-                config.getPartiaIdFilename(), config.getPartiaIdFilename()));
-        environment.jersey().register(ngramResourceFactory.createHitCountResource(redisConnection));
+        registerDatabase(config, environment);
+        registerElasticSearch(config, environment);
+        registerRedis(config, environment);
+        registerResources(config, environment);
 
         addCrossOriginFilter(environment);
     }
 
+    private void registerResources(RestApiConfiguration config, Environment environment) {
+        environment.jersey().register(ngramResourceFactory.createFTSNgramResource(jdbi, redisConnection,
+                config.getPartiaIdFilename(), config.getPartiaIdFilename()));
+        environment.jersey().register(ngramResourceFactory.createHitCountResource(redisConnection));
+        // TODO healthchecks
+    }
+
+    private void registerRedis(RestApiConfiguration config, Environment environment) {
+        redisConnection = redisFactory.createRedisConnection(config.getRedis());
+        if (redisConnection.isPresent()) {
+            environment.lifecycle().manage(redisConnection.get());
+            environment.healthChecks().register("redis", new RedisHealthCheck(redisConnection.get()));
+        }
+    }
+
+    private void registerElasticSearch(RestApiConfiguration config, Environment environment) {
+        if (config.getElasticsearch() != null) {
+            ManagedEsClient elasticSearchClient = new ManagedEsClient(config.getElasticsearch());
+            environment.lifecycle().manage(elasticSearchClient);
+            environment.healthChecks().register("ElasticSearch cluster health",
+                    new EsClusterHealthCheck(elasticSearchClient.getClient()));
+        }
+    }
+
+    private void registerDatabase(RestApiConfiguration config, Environment environment) {
+        jdbi = new DBIFactory().build(environment, config.getDataSourceFactory(), "mysql");
+        environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, DB_HEALTH_CHECK_TIMEOUT));
+    }
+
     private void addCrossOriginFilter(Environment environment) {
-        //add filters for cors
         Dynamic filter = environment.servlets().addFilter("crossOriginFilter", CrossOriginFilter.class);
         filter.setInitParameter("allowedOrigins", "*");
         filter.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");

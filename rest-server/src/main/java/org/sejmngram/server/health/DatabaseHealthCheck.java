@@ -9,11 +9,11 @@ import com.codahale.metrics.health.HealthCheck;
 public class DatabaseHealthCheck extends HealthCheck {
 
     private DBI jdbi;
-    private int timeout;
+    private int timeoutInSeconds;
 
-    public DatabaseHealthCheck(DBI jdbi, int timeout) {
+    public DatabaseHealthCheck(DBI jdbi, int timeoutInSeconds) {
         this.jdbi = jdbi;
-        this.timeout = timeout;
+        this.timeoutInSeconds = timeoutInSeconds;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class DatabaseHealthCheck extends HealthCheck {
         try {
             result = jdbi.withHandle(new HandleCallback<Boolean>() {
                 public Boolean withHandle(Handle handle) throws Exception {
-                    return handle.getConnection().isValid(timeout);
+                    return handle.getConnection().isValid(timeoutInSeconds);
                 }
             });
         } catch (Exception e) {
