@@ -17,7 +17,16 @@ module
 .directive('stGraphLegend', function() {
     return {
        restrict: 'E',
+       scope: {
+                   partiesNames: '=ngModel'
+       },
+       link : function (scope, element, attrs) {
+                   scope.$watch('partiesNames.length', onDataChange);
+
+            function onDataChange(){
+                console.log(scope.partiesNames[0])
+            }
+       },
        templateUrl: 'templates/legend.html',
-       replace: true
     };
 });

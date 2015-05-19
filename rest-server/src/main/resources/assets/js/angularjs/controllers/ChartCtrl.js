@@ -13,6 +13,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     };
     $scope.graph = {
         phrasesOccurences: [],
+        partiesNames: [],
         selectedRange: null,
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65']
     }
@@ -52,6 +53,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                         occurences: chartData
                     };
 
+                    var partiesNames = _.map(data.partiesNgrams, function(partyNgram){ return partyNgram.name});
+
+                    $scope.graph.partiesNames = partiesNames;
                     $scope.graph.phrasesOccurences.push(chartDataFormatted);
                     $scope.search.phrasesService.removePhrase(phraseName);
                     $scope.$apply();
