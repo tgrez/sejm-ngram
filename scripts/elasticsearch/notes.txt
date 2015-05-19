@@ -1,0 +1,18 @@
+source bin/activate
+
+curl -XPUT 'http://localhost:9200/sejmngram/wystapienie/5820110513' -d '{
+"posel": 2131,
+"tytul": "Sprawozdanie stenograficzne z obrad Sejmu RP z 13 maja 2011 r. (kadencja VI, Posiedzenie Plenarne 92, dzień 3) Poseł Wojciech Saługa",
+"data": "2011-05-13",
+"stanowisko": "Poseł ",
+"partia": 49,
+"tresc": "Odpowiadając panu posłowi, chciałbym powiedzieć, że było to dyskutowane. To nie jest nowatorskie rozwiązanie, które ma być przyjęte tylko w Polsce. Takie samo rozwiązanie jest zastosowane w wielu krajach Unii Europejskiej. Ubezpieczyciele w Czechach i na Słowacji dają sobie z tym radę i mamy przekonanie, że polscy ubezpieczyciele też sobie z takim ubezpieczeniem poradzą, bo to są identyczne zasady jak przyjęte w Czechach i na Słowacji."
+}'
+curl -XGET 'http://localhost:9200/sejmngram/wystapienie/5820110513?pretty=true'
+curl 'http://localhost:9200/blog/post/_search?q=tresc:to&pretty=true'
+curl 'http://localhost:9200/sejmngram/wystapienie/_search?q=tresc:to&pretty=true'
+curl 'http://localhost:9200/sejmngram/wystapienie/_search?q=tresc:nie&pretty=true'
+curl 'http://localhost:9200/sejmngram/wystapienie/_search?q=tresc:zatem&pretty=true'
+
+
+curl -XDELETE localhost:9200/sejmngram/wystapienie
