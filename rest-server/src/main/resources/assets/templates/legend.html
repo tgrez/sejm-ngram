@@ -1,7 +1,10 @@
 <div>
     <ul>
         <li ng-repeat="partyName in partiesNames">
-            <p>{{partyName}}</p>
+            <div class="party-wrapper">
+                <input class="party-checkbox" type="checkbox" name="vehicle" value="Bike"><div class="partyname">{{partyName}}</div>
+            </div>
+
         </li>
     </ul>
 </div>
