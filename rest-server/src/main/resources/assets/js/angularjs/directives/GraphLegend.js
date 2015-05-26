@@ -18,7 +18,8 @@ module
     return {
        restrict: 'E',
        scope: {
-                   partiesNames: '=ngModel'
+                   partiesNames: '=ngModel',
+                   checkboxClicked: '&'
        },
        link : function (scope, element, attrs) {
                    scope.$watch('partiesNames.length', onDataChange);

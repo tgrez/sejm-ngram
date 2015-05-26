@@ -38,7 +38,7 @@
     </div>
     <div class="chart-wrapper" ng-show="search.wasTriggered">
         <st-term-occurences-chart id="term-occurences-chart" ng-model="graph.phrasesOccurences" display-range="graph.selectedRange" lines-colors="graph.linesColors"></st-term-occurences-chart>
-        <st-graph-legend id="legend-box" ng-model="graph.partiesNames"></st-graph-legend>
+        <st-graph-legend id="legend-box" ng-model="graph.partiesNames" checkbox-clicked="graph.checkboxClicked()"></st-graph-legend>
         <st-range-filter-chart id="range-filter-chart" ng-model="graph.phrasesOccurences" selected-range="graph.selectedRange" lines-colors="graph.linesColors"></st-range-filter-chart>
     </div>
 </div>
