@@ -8,6 +8,7 @@ module.directive('stTermOccurencesChart', function () {
         restrict: 'E',
         scope: {
             termsOccurences: '=ngModel',
+            partiesNames: '=',
             displayRange: '=',
             linesColors: '='
         },
@@ -129,16 +130,29 @@ module.directive('stTermOccurencesChart', function () {
 
             function update() {
 
+                var multiLineData = []
+
+                if (scope.termsOccurences.length == 1){ //one ngram, many parties
+                    for (var i = 0; i < scope.termsOccurences[0].partiesOccurences.length; i++) {
+                        multiLineData.push({
+                            lineName: scope.termsOccurences[0].partiesOccurences[i].partyName,
+                            occurences: scope.termsOccurences[0].partiesOccurences[i].occurences
+                        })
+                    }
+                }
+
                 var minY = 0;
                 var maxY = 0;
 
-                for (var i = 0; i < scope.termsOccurences.length; i++) {
-                    var tempMaxY = d3.max(scope.termsOccurences[i].occurences, function (o) { return o.count; });
+                console.log(multiLineData)
+
+                for (var i = 0; i < multiLineData.length; i++) {
+                    var tempMaxY = d3.max(multiLineData[i].occurences, function (o) { return o.count; });
                     if (tempMaxY > maxY)
                         maxY = tempMaxY;
                 }
 
-                var xRange = [scope.termsOccurences[0].occurences[0].date, scope.termsOccurences[0].occurences[scope.termsOccurences[0].occurences.length - 1].date];
+                var xRange = [multiLineData[0].occurences[0].date, multiLineData[0].occurences[multiLineData[0].occurences.length - 1].date];
                 var yRange = [minY, maxY];
 
                 var isDisplayRangeValid = typeof scope.displayRange !== 'undefined' && scope.displayRange !== null && scope.displayRange.length > 0;
@@ -148,8 +162,8 @@ module.directive('stTermOccurencesChart', function () {
                     scaleX.domain(xRange);
                 scaleY.domain(yRange);
 
-                for (var i = 0; i < scope.termsOccurences.length; i++) {
-                    var lineId = generateLineId(scope.termsOccurences[i].name);
+                for (var i = 0; i < multiLineData.length; i++) {
+                    var lineId = generateLineId(multiLineData[i].lineName);
 
                     var lineFunction = d3.svg.line()
                         .x(function (o) { return scaleX(o.date); })
@@ -167,18 +181,18 @@ module.directive('stTermOccurencesChart', function () {
                             .attr('class', 'line')
                             .attr('clip-path', 'url(#termOccurencesLinesCanvasRegion)')
                             .attr('style', 'stroke: ' + scope.linesColors[i])
-                            .attr('d', flatLineFunction(scope.termsOccurences[i].occurences))
+                            .attr('d', flatLineFunction(multiLineData[i].occurences))
                             .transition()
                             .duration(1000)
-                            .attr('d', lineFunction(scope.termsOccurences[i].occurences));
+                            .attr('d', lineFunction(multiLineData[i].occurences));
                     } else {
                         line.transition()
                             .duration(1000)
-                            .attr('d', lineFunction(scope.termsOccurences[i].occurences));
+                            .attr('d', lineFunction(multiLineData[i].occurences));
                     }
                 }
 
-                removeObsolateLines(linesCanvas, scope.termsOccurences);
+                removeObsolateLines(linesCanvas, multiLineData);
 
                 axisXFunction = d3.svg.axis()
                     .scale(scaleX)
@@ -193,10 +207,7 @@ module.directive('stTermOccurencesChart', function () {
             }
 
             function generateLineId(term) {
-                var termFormatted = term.replace(/\s/g, '_');
-                var uniqueLineId = 'termOccurencesLine-' + termFormatted;
-
-                return uniqueLineId;
+                return 'termOccurencesLine-' + scope.partiesNames.getId(term);
             }
 
             function removeObsolateLines(linesCanvas, termsOccurences) {
@@ -206,7 +217,7 @@ module.directive('stTermOccurencesChart', function () {
                     var line = this;
                     var lineId = line.id;
                     var isTermExist = _.any(termsOccurences, function (o, i) {
-                        var term = o.name;
+                        var term = o.lineName;
                         var termId = generateLineId(term);
 
                         return termId === lineId;

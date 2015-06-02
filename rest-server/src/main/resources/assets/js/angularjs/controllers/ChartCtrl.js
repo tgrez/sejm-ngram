@@ -14,6 +14,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     $scope.graph = {
         phrasesOccurences: [],
         partiesNames: [],
+        getIdFromPartyName: null,
         selectedRange: null,
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'],
         checkboxClicked: null
@@ -46,17 +47,29 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                     var phraseName = data.ngram;
 
                     var dateFormat = d3.time.format('%Y-%m-%d');
-                    var chartData = data.partiesNgrams[0].listDates;
-                    chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
+
+                    var partiesOccurences = []
+                    for(var i = 0; i < data.partiesNgrams.length; i++){
+                        var chartData = data.partiesNgrams[i].listDates;
+                        chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
+                        partiesOccurences.push({
+                            partyName: data.partiesNgrams[i].name,
+                            occurences: chartData
+                        })
+                    }
 
                     var chartDataFormatted = {
                         name: phraseName,
-                        occurences: chartData
+                        partiesOccurences: partiesOccurences
                     };
 
                     var partiesNames = _.map(data.partiesNgrams, function(partyNgram){ return partyNgram.name});
+                    console.log(partiesNames)
 
-                    $scope.graph.partiesNames = partiesNames;
+                   $scope.graph.partiesNames = partiesNames;
+                   $scope.graph.partiesNames.getId = function(partyName){
+                        return $scope.graph.partiesNames.indexOf(partyName)
+                    }
                     $scope.graph.phrasesOccurences.push(chartDataFormatted);
                     $scope.search.phrasesService.removePhrase(phraseName);
                     $scope.$apply();
