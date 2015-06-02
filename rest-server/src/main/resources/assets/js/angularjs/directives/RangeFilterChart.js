@@ -8,6 +8,7 @@ module.directive('stRangeFilterChart', function() {
         restrict: 'E',
         scope: {
             termsOccurences: '=ngModel',
+            partiesNames: '=',
             selectedRange: '=',
             linesColors: '='
         },
@@ -134,21 +135,37 @@ module.directive('stRangeFilterChart', function() {
                 var minY = 0;
                 var maxY = 0;
 
-                for (var i = 0; i < scope.termsOccurences.length; i++) {
-                    var tempMaxY = d3.max(scope.termsOccurences[i].occurences, function(o) { return o.count; });
+
+
+
+            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
+                var multiLineData = []
+
+                    if (scope.termsOccurences.length == 1){ //one ngram, many parties
+                        for (var i = 0; i < scope.termsOccurences[0].partiesOccurences.length; i++) {
+                            multiLineData.push({
+                                lineName: scope.termsOccurences[0].partiesOccurences[i].partyName,
+                                occurences: scope.termsOccurences[0].partiesOccurences[i].occurences
+                            })
+                        }
+                    }
+
+                for (var i = 0; i < multiLineData.length; i++) {
+                    var tempMaxY = d3.max(multiLineData[i].occurences, function(o) { return o.count; });
                     if (tempMaxY > maxY)
                         maxY = tempMaxY;
                 }
 
-                var xRange = [scope.termsOccurences[0].occurences[0].date, scope.termsOccurences[0].occurences[scope.termsOccurences[0].occurences.length - 1].date];
+                var xRange = [multiLineData[0].occurences[0].date, multiLineData[0].occurences[multiLineData[0].occurences.length - 1].date];
                 var yRange = [minY, maxY];
 
                 scaleX.domain(xRange);
                 scaleY.domain(yRange);
 
 
-                for (var i = 0; i < scope.termsOccurences.length; i++) {
-                    var lineId = generateLineId(scope.termsOccurences[i].name);
+                for (var i = 0; i < multiLineData.length; i++) {
+                    var lineId = generateLineId(multiLineData[i].lineName);
+                    console.log('range line id '+ lineId)
 
                     var lineFunction = d3.svg.line()
                         .x(function(o, i) { return scaleX(o.date); })
@@ -160,23 +177,25 @@ module.directive('stRangeFilterChart', function() {
                     var line = d3.select('#' + lineId);
                     var isLineExist = line.empty();
                     if (isLineExist) {
+                        console.log('line exists')
                         line = linesCanvas.insert('path', '.brush')
                             .attr('id', lineId)
                             .attr('class', 'line')
                             .attr('clip-path', 'url(#rangeFilterLinesCanvasRegion)')
                             .attr('style', 'stroke: ' + scope.linesColors[i])
-                            .attr('d', flatLineFunction(scope.termsOccurences[i].occurences))
+                            .attr('d', flatLineFunction(multiLineData[i].occurences))
                             .transition()
                             .duration(1000)
-                            .attr('d', lineFunction(scope.termsOccurences[i].occurences));
+                            .attr('d', lineFunction(multiLineData[i].occurences));
                     } else {
+                        console.log('line doesnt exists')
                         line.transition()
                             .duration(1000)
-                            .attr('d', lineFunction(scope.termsOccurences[i].occurences));
+                            .attr('d', lineFunction(multiLineData[i].occurences));
                     }
                 }
 
-                removeObsolateLines(linesCanvas, scope.termsOccurences);
+                removeObsolateLines(linesCanvas, multiLineData);
 
                 axisXFunction = d3.svg.axis()
                     .scale(scaleX)
@@ -191,13 +210,13 @@ module.directive('stRangeFilterChart', function() {
                 axisY.transition().duration(1000).call(axisYFunction);
             }
 
-            function generateLineId(term) {
-                var termFormatted = term.replace(/\s/g, '_');
-                var uniqueLineId = 'rangeFilterLine-' + termFormatted;
+            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
 
-                return uniqueLineId;
+            function generateLineId(term) {
+               return 'rangeFilterLine-' + scope.partiesNames.getId(term);
             }
 
+            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
             function removeObsolateLines(linesCanvas, termsOccurences) {
                 var lines = linesCanvas.selectAll('.line');
 
@@ -205,7 +224,7 @@ module.directive('stRangeFilterChart', function() {
                     var line = this;
                     var lineId = line.id;
                     var isTermExist = _.any(termsOccurences, function (o, i) {
-                        var term = o.name;
+                        var term = o.lineName;
                         var termId = generateLineId(term);
 
                         return termId === lineId;
