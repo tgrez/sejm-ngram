@@ -17,7 +17,7 @@
         <dependency>
             <groupId>io.dropwizard.modules</groupId>
             <artifactId>dropwizard-elasticsearch</artifactId>
-            <version>0.8.0-1</version>
+            <version>${dropwizard.elasticsearch.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
