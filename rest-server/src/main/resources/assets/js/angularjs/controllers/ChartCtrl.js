@@ -85,6 +85,11 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         generateLineId:     function(prefix, term) {
                                 return prefix + '-' + $scope.graph.partiesNames.getId(term);
                     },
+        generateLineColorForPartyName: function(partyName){
+            var linesColor = $scope.graph.linesColors;
+            var partyId = $scope.graph.partiesNames.getId(partyName);
+            return linesColor[ partyId % linesColor.length]
+        },
         removeObsolateLines: function (linesCanvas, termsOccurences, line_prefix) {
             var lines = linesCanvas.selectAll('.line');
 

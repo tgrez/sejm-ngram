@@ -11,7 +11,6 @@ module.directive('stTermOccurencesChart', function () {
             partiesNames: '=',
             graphDrawHelper: '=',
             displayRange: '=',
-            linesColors: '='
         },
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
             var LINE_PREFIX = 'termOccurencesLine'
@@ -142,8 +141,6 @@ module.directive('stTermOccurencesChart', function () {
                 var minY = 0;
                 var maxY = 0;
 
-                console.log(multiLineData)
-
                 for (var i = 0; i < multiLineData.length; i++) {
                     var tempMaxY = d3.max(multiLineData[i].occurences, function (o) { return o.count; });
                     if (tempMaxY > maxY)
@@ -178,7 +175,7 @@ module.directive('stTermOccurencesChart', function () {
                             .attr('id', lineId)
                             .attr('class', 'line')
                             .attr('clip-path', 'url(#termOccurencesLinesCanvasRegion)')
-                            .attr('style', 'stroke: ' + scope.linesColors[i])
+                            .attr('style', 'stroke: ' + scope.graphDrawHelper.generateLineColorForPartyName(multiLineData[i].lineName))
                             .attr('d', flatLineFunction(multiLineData[i].occurences))
                             .transition()
                             .duration(1000)

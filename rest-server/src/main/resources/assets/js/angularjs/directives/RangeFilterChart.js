@@ -10,8 +10,7 @@ module.directive('stRangeFilterChart', function() {
             termsOccurences: '=ngModel',
             partiesNames: '=',
             graphDrawHelper: '=',
-            selectedRange: '=',
-            linesColors: '='
+            selectedRange: '='
         },
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
             var LINE_PREFIX = 'rangeFilterLine';
@@ -153,7 +152,6 @@ module.directive('stRangeFilterChart', function() {
 
                 for (var i = 0; i < multiLineData.length; i++) {
                     var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
-                    console.log('range line id '+ lineId)
 
                     var lineFunction = d3.svg.line()
                         .x(function(o, i) { return scaleX(o.date); })
@@ -165,18 +163,16 @@ module.directive('stRangeFilterChart', function() {
                     var line = d3.select('#' + lineId);
                     var isLineExist = line.empty();
                     if (isLineExist) {
-                        console.log('line exists')
                         line = linesCanvas.insert('path', '.brush')
                             .attr('id', lineId)
                             .attr('class', 'line')
                             .attr('clip-path', 'url(#rangeFilterLinesCanvasRegion)')
-                            .attr('style', 'stroke: ' + scope.linesColors[i])
+                            .attr('style', 'stroke: ' + scope.graphDrawHelper.generateLineColorForPartyName(multiLineData[i].lineName))
                             .attr('d', flatLineFunction(multiLineData[i].occurences))
                             .transition()
                             .duration(1000)
                             .attr('d', lineFunction(multiLineData[i].occurences));
                     } else {
-                        console.log('line doesnt exists')
                         line.transition()
                             .duration(1000)
                             .attr('d', lineFunction(multiLineData[i].occurences));
@@ -198,7 +194,7 @@ module.directive('stRangeFilterChart', function() {
             }
         },
         template:
-            '<svg width="100%" height="150">' +
+            '<svg width="758" height="150">' +
                 '</svg>',
         replace: true
     };

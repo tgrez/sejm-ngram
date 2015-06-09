@@ -2,8 +2,22 @@
     <ul>
         <li ng-repeat="partyName in partiesNames">
             <div class="party-wrapper">
-                <input class="party-checkbox" type="checkbox" name="vehicle" value="Bike" ng-click="checkboxClicked()">
-                <div class="partyname">{{partyName}}</div>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="party-indicator"></div>
+                        </td>
+                        <td>
+                            <input class="party-checkbox" type="checkbox" name="vehicle" value="Bike" ng-click="checkboxClicked()"/>
+                        </td>
+                        <td>
+                            <div class="partyname">{{partyName}}</div>
+                        </td>
+
+                    </tr>
+                </table>
+
+
             </div>
 
         </li>
