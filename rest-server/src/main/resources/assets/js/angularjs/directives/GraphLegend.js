@@ -19,7 +19,8 @@ module
        restrict: 'E',
        scope: {
                    partiesNames: '=ngModel',
-                   checkboxClicked: '&'
+                   checkboxClicked: '&',
+                   graphDrawHelper: '='
        },
        link : function (scope, element, attrs) {
                    scope.$watch('partiesNames.length', onDataChange);

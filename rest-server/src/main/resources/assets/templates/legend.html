@@ -5,7 +5,8 @@
                 <table>
                     <tr>
                         <td>
-                            <div class="party-indicator"></div>
+
+                            <div class="party-indicator" ng-style="{{graphDrawHelper.getPartyColorStyle(partyName)}}"></div>
                         </td>
                         <td>
                             <input class="party-checkbox" type="checkbox" name="vehicle" value="Bike" ng-click="checkboxClicked()"/>

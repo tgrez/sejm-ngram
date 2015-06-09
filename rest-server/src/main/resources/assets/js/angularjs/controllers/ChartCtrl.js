@@ -107,7 +107,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                 }
             });
         },
-        calculateMultiLineData: function calculateMultiLineData(scopeTermOccurences){
+        calculateMultiLineData: function(scopeTermOccurences){
             var multiLineData = []
             if (scopeTermOccurences.length == 1){ //one ngram, many parties
                 for (var i = 0; i < scopeTermOccurences[0].partiesOccurences.length; i++) {
@@ -118,6 +118,13 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                 }
             }
             return multiLineData
+        },
+        getPartyColorStyle: function(partyName){
+            console.log('party Name: ' + partyName);
+            var color = this.generateLineColorForPartyName(partyName);
+            var returnS = '{"background-color":' + '"' + color +'"}';
+            console.log(returnS)
+            return returnS;
         }
     }
 
