@@ -42,7 +42,7 @@ module.directive('stTermOccurencesChart', function () {
 
             function onDataChange() {
                 var isTermsOccurencesEmpty = typeof scope.termsOccurences === 'undefined' || scope.termsOccurences === null || scope.termsOccurences.length === 0;
-                scope.multiLineData = calculateMultiLineData(scope.termsOccurences)
+                scope.multiLineData = scope.graphDrawHelper.calculateMultiLineData(scope.termsOccurences)
                 if (!isTermsOccurencesEmpty && !scope.isInitialized) {
                         initialize();
                         update();
@@ -118,18 +118,7 @@ module.directive('stTermOccurencesChart', function () {
 
             /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
 
-            function calculateMultiLineData(scopeTermOccurences){
-                var multiLineData = []
-                if (scopeTermOccurences.length == 1){ //one ngram, many parties
-                    for (var i = 0; i < scopeTermOccurences[0].partiesOccurences.length; i++) {
-                        multiLineData.push({
-                            lineName: scopeTermOccurences[0].partiesOccurences[i].partyName,
-                            occurences: scopeTermOccurences[0].partiesOccurences[i].occurences
-                        })
-                    }
-                }
-                return multiLineData
-            }
+
 
             function onDisplayRangeChange() {
                 if (scope.isInitialized) {

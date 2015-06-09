@@ -137,17 +137,7 @@ module.directive('stRangeFilterChart', function() {
                 var minY = 0;
                 var maxY = 0;
 
-            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-                var multiLineData = []
-
-                    if (scope.termsOccurences.length == 1){ //one ngram, many parties
-                        for (var i = 0; i < scope.termsOccurences[0].partiesOccurences.length; i++) {
-                            multiLineData.push({
-                                lineName: scope.termsOccurences[0].partiesOccurences[i].partyName,
-                                occurences: scope.termsOccurences[0].partiesOccurences[i].occurences
-                            })
-                        }
-                    }
+                var multiLineData = scope.graphDrawHelper.calculateMultiLineData(scope.termsOccurences)
 
                 for (var i = 0; i < multiLineData.length; i++) {
                     var tempMaxY = d3.max(multiLineData[i].occurences, function(o) { return o.count; });

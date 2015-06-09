@@ -101,6 +101,18 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                     line.remove();
                 }
             });
+        },
+        calculateMultiLineData: function calculateMultiLineData(scopeTermOccurences){
+            var multiLineData = []
+            if (scopeTermOccurences.length == 1){ //one ngram, many parties
+                for (var i = 0; i < scopeTermOccurences[0].partiesOccurences.length; i++) {
+                    multiLineData.push({
+                        lineName: scopeTermOccurences[0].partiesOccurences[i].partyName,
+                        occurences: scopeTermOccurences[0].partiesOccurences[i].occurences
+                    })
+                }
+            }
+            return multiLineData
         }
     }
 
