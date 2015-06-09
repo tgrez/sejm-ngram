@@ -161,7 +161,6 @@ module.directive('stRangeFilterChart', function() {
                 scaleX.domain(xRange);
                 scaleY.domain(yRange);
 
-
                 for (var i = 0; i < multiLineData.length; i++) {
                     var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
                     console.log('range line id '+ lineId)
@@ -193,8 +192,7 @@ module.directive('stRangeFilterChart', function() {
                             .attr('d', lineFunction(multiLineData[i].occurences));
                     }
                 }
-
-                removeObsolateLines(linesCanvas, multiLineData);
+                scope.graphDrawHelper.removeObsolateLines(linesCanvas, multiLineData, LINE_PREFIX);
 
                 axisXFunction = d3.svg.axis()
                     .scale(scaleX)
@@ -207,26 +205,6 @@ module.directive('stRangeFilterChart', function() {
 
                 axisX.transition().duration(1000).call(axisXFunction);
                 axisY.transition().duration(1000).call(axisYFunction);
-            }
-
-            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-            function removeObsolateLines(linesCanvas, termsOccurences) {
-                var lines = linesCanvas.selectAll('.line');
-
-                lines.each(function () {
-                    var line = this;
-                    var lineId = line.id;
-                    var isTermExist = _.any(termsOccurences, function (o, i) {
-                        var term = o.lineName;
-                        var termId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, term);
-
-                        return termId === lineId;
-                    });
-
-                    if (!isTermExist) {
-                        line.remove();
-                    }
-                });
             }
         },
         template:

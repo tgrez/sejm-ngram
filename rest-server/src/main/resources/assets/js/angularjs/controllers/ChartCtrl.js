@@ -65,7 +65,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                     };
 
                     var partiesNames = _.map(data.partiesNgrams, function(partyNgram){ return partyNgram.name});
-                    console.log(partiesNames)
 
                    $scope.graph.partiesNames = partiesNames;
                    $scope.graph.partiesNames.getId = function(partyName){
@@ -83,10 +82,26 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     };
 
     $scope.graph.graphDrawHelper = {
-        testFunction:       function(){ console.log("test of my function!")},
         generateLineId:     function(prefix, term) {
                                 return prefix + '-' + $scope.graph.partiesNames.getId(term);
-                    }
+                    },
+        removeObsolateLines: function (linesCanvas, termsOccurences, line_prefix) {
+            var lines = linesCanvas.selectAll('.line');
+
+            lines.each(function () {
+                var line = this;
+                var lineId = line.id;
+                var isTermExist = _.any(termsOccurences, function (o, i) {
+                    var term = o.lineName;
+                    var termId = $scope.graph.graphDrawHelper.generateLineId(line_prefix, term);
+                    return termId === lineId;
+                });
+
+                if (!isTermExist) {
+                    line.remove();
+                }
+            });
+        }
     }
 
     $scope.graph.checkboxClicked = function(){

@@ -148,9 +148,6 @@ module.directive('stTermOccurencesChart', function () {
             }
 
             function update() {
-
-                scope.graphDrawHelper.testFunction();
-
                 var multiLineData = scope.multiLineData
 
                 var minY = 0;
@@ -204,7 +201,7 @@ module.directive('stTermOccurencesChart', function () {
                     }
                 }
 
-                removeObsolateLines(linesCanvas, multiLineData);
+                scope.graphDrawHelper.removeObsolateLines(linesCanvas, multiLineData, LINE_PREFIX);
 
                 axisXFunction = d3.svg.axis()
                     .scale(scaleX)
@@ -216,26 +213,6 @@ module.directive('stTermOccurencesChart', function () {
 
                 axisX.transition().duration(1000).call(axisXFunction);
                 axisY.transition().duration(1000).call(axisYFunction);
-            }
-
-            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-            function removeObsolateLines(linesCanvas, termsOccurences) {
-                var lines = linesCanvas.selectAll('.line');
-
-                lines.each(function () {
-                    var line = this;
-                    var lineId = line.id;
-                    var isTermExist = _.any(termsOccurences, function (o, i) {
-                        var term = o.lineName;
-                        var termId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, term);
-
-                        return termId === lineId;
-                    });
-
-                    if (!isTermExist) {
-                        line.remove();
-                    }
-                });
             }
         },
         template:
