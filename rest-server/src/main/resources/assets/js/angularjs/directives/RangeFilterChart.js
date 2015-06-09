@@ -9,10 +9,12 @@ module.directive('stRangeFilterChart', function() {
         scope: {
             termsOccurences: '=ngModel',
             partiesNames: '=',
+            graphDrawHelper: '=',
             selectedRange: '=',
             linesColors: '='
         },
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+            var LINE_PREFIX = 'rangeFilterLine';
             var svg;
             var svgWidth;
             var svgHeight;
@@ -135,9 +137,6 @@ module.directive('stRangeFilterChart', function() {
                 var minY = 0;
                 var maxY = 0;
 
-
-
-
             /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
                 var multiLineData = []
 
@@ -164,7 +163,7 @@ module.directive('stRangeFilterChart', function() {
 
 
                 for (var i = 0; i < multiLineData.length; i++) {
-                    var lineId = generateLineId(multiLineData[i].lineName);
+                    var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
                     console.log('range line id '+ lineId)
 
                     var lineFunction = d3.svg.line()
@@ -211,12 +210,6 @@ module.directive('stRangeFilterChart', function() {
             }
 
             /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-
-            function generateLineId(term) {
-               return 'rangeFilterLine-' + scope.partiesNames.getId(term);
-            }
-
-            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
             function removeObsolateLines(linesCanvas, termsOccurences) {
                 var lines = linesCanvas.selectAll('.line');
 
@@ -225,7 +218,7 @@ module.directive('stRangeFilterChart', function() {
                     var lineId = line.id;
                     var isTermExist = _.any(termsOccurences, function (o, i) {
                         var term = o.lineName;
-                        var termId = generateLineId(term);
+                        var termId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, term);
 
                         return termId === lineId;
                     });

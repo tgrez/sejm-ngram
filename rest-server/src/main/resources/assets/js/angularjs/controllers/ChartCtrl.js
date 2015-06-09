@@ -14,6 +14,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     $scope.graph = {
         phrasesOccurences: [],
         partiesNames: [],
+        graphDrawHelper: null,
         getIdFromPartyName: null,
         selectedRange: null,
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'],
@@ -80,6 +81,13 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         var remainingOccurences = _.filter($scope.graph.phrasesOccurences, function(d, i) { return name !== d.name; });
         $scope.graph.phrasesOccurences = remainingOccurences;
     };
+
+    $scope.graph.graphDrawHelper = {
+        testFunction:       function(){ console.log("test of my function!")},
+        generateLineId:     function(prefix, term) {
+                                return prefix + '-' + $scope.graph.partiesNames.getId(term);
+                    }
+    }
 
     $scope.graph.checkboxClicked = function(){
         console.log('CheckboxCLicked!')

@@ -9,10 +9,12 @@ module.directive('stTermOccurencesChart', function () {
         scope: {
             termsOccurences: '=ngModel',
             partiesNames: '=',
+            graphDrawHelper: '=',
             displayRange: '=',
             linesColors: '='
         },
         link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+            var LINE_PREFIX = 'termOccurencesLine'
             var svg;
             var svgWidth;
             var svgHeight;
@@ -33,6 +35,7 @@ module.directive('stTermOccurencesChart', function () {
             var axisYFunction;
 
             scope.isInitialized = false;
+
 
             scope.$watch('termsOccurences.length', onDataChange);
             scope.$watch('displayRange', onDisplayRangeChange);
@@ -145,6 +148,9 @@ module.directive('stTermOccurencesChart', function () {
             }
 
             function update() {
+
+                scope.graphDrawHelper.testFunction();
+
                 var multiLineData = scope.multiLineData
 
                 var minY = 0;
@@ -169,7 +175,7 @@ module.directive('stTermOccurencesChart', function () {
                 scaleY.domain(yRange);
 
                 for (var i = 0; i < multiLineData.length; i++) {
-                    var lineId = generateLineId(multiLineData[i].lineName);
+                    var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
 
                     var lineFunction = d3.svg.line()
                         .x(function (o) { return scaleX(o.date); })
@@ -213,13 +219,6 @@ module.directive('stTermOccurencesChart', function () {
             }
 
             /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-
-            function generateLineId(term) {
-                return 'termOccurencesLine-' + scope.partiesNames.getId(term);
-            }
-
-            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-
             function removeObsolateLines(linesCanvas, termsOccurences) {
                 var lines = linesCanvas.selectAll('.line');
 
@@ -228,7 +227,7 @@ module.directive('stTermOccurencesChart', function () {
                     var lineId = line.id;
                     var isTermExist = _.any(termsOccurences, function (o, i) {
                         var term = o.lineName;
-                        var termId = generateLineId(term);
+                        var termId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, term);
 
                         return termId === lineId;
                     });
