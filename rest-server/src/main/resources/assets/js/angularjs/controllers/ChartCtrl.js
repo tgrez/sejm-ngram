@@ -120,17 +120,16 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
             return multiLineData
         },
         getPartyColorStyle: function(partyName){
-            console.log('party Name: ' + partyName);
             var color = this.generateLineColorForPartyName(partyName);
             var returnS = '{"background-color":' + '"' + color +'"}';
-            console.log(returnS)
             return returnS;
         }
     }
 
-    $scope.graph.checkboxClicked = function(){
-        console.log('CheckboxCLicked!')
+    $scope.graph.checkboxClicked = function(checked, partyName){
+        console.log('checkbox!' + checked + " " +  partyName)
     }
+
     $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {
         var isNewValueEmpty = typeof newValue === 'undefined' || newValue === null;
         if (!isNewValueEmpty)
