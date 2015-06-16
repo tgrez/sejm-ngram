@@ -42,10 +42,7 @@ module.directive('stTermOccurencesChart', function () {
             scope.$watchCollection('partiesVisibility', onPartiesVisibilityChange)
 
             function onPartiesVisibilityChange(){
-                _.each(scope.partiesVisibility, function(num, key){
-                    d3.select("#" + scope.graphDrawHelper.generateLineId(LINE_PREFIX, key) )
-                      .style('visibility', num ? 'visible' : 'hidden')
-                    })
+                scope.graphDrawHelper.setLineVisibility(LINE_PREFIX)
             }
 
             function onDataChange() {

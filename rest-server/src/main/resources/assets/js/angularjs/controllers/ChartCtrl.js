@@ -73,7 +73,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                    }
 
                    _.each(partiesNames, function(partyName){
-                        $scope.graph.partiesVisibility[partyName] = true
+                        $scope.graph.partiesVisibility[partyName] = false
                     });
 
                     console.log($scope.graph.partiesVisibility);
@@ -90,6 +90,12 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     };
 
     $scope.graph.graphDrawHelper = {
+        setLineVisibility: function(line_prefix){
+           _.each($scope.graph.partiesVisibility, function(num, key){
+                d3.select("#" + $scope.graph.graphDrawHelper.generateLineId(line_prefix, key) )
+                  .style('visibility', num ? 'visible' : 'hidden')
+                })
+        },
         generateLineId:     function(prefix, term) {
                                 return prefix + '-' + $scope.graph.partiesNames.getId(term);
                     },

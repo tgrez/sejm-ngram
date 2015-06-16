@@ -39,6 +39,6 @@
     <div class="chart-wrapper" ng-show="search.wasTriggered">
         <st-term-occurences-chart id="term-occurences-chart" parties-visibility="graph.partiesVisibility" ng-model="graph.phrasesOccurences" graph-draw-helper="graph.graphDrawHelper" parties-names= "graph.partiesNames" display-range="graph.selectedRange"></st-term-occurences-chart>
         <st-graph-legend id="legend-box" ng-model="graph.partiesNames" checkbox-clicked="graph.checkboxClicked" graph-draw-helper="graph.graphDrawHelper"></st-graph-legend>
-        <st-range-filter-chart id="range-filter-chart" ng-model="graph.phrasesOccurences" parties-names= "graph.partiesNames" graph-draw-helper="graph.graphDrawHelper" selected-range="graph.selectedRange"></st-range-filter-chart>
+        <st-range-filter-chart id="range-filter-chart" ng-model="graph.phrasesOccurences" parties-visibility="graph.partiesVisibility" parties-names= "graph.partiesNames" graph-draw-helper="graph.graphDrawHelper" selected-range="graph.selectedRange"></st-range-filter-chart>
     </div>
 </div>
