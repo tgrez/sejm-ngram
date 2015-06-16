@@ -65,30 +65,6 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven.assembly.plugin.version}</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.sejmngram.database.fetcher.App</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 
 		</plugins>
 	</build>
