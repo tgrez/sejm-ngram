@@ -17,6 +17,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         graphDrawHelper: null,
         getIdFromPartyName: null,
         selectedRange: null,
+        partiesVisibility: {},
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'],
         checkboxClicked: null
     }
@@ -69,7 +70,14 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                    $scope.graph.partiesNames = partiesNames;
                    $scope.graph.partiesNames.getId = function(partyName){
                         return $scope.graph.partiesNames.indexOf(partyName)
-                    }
+                   }
+
+                   _.each(partiesNames, function(partyName){
+                        $scope.graph.partiesVisibility[partyName] = true
+                    });
+
+                    console.log($scope.graph.partiesVisibility);
+
                     $scope.graph.phrasesOccurences.push(chartDataFormatted);
                     $scope.search.phrasesService.removePhrase(phraseName);
                     $scope.$apply();
@@ -127,7 +135,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     }
 
     $scope.graph.checkboxClicked = function(checked, partyName){
-        console.log('checkbox!' + checked + " " +  partyName)
+        $scope.graph.partiesVisibility[partyName] = checked;
     }
 
     $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {

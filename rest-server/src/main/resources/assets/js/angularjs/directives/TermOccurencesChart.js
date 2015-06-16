@@ -8,6 +8,7 @@ module.directive('stTermOccurencesChart', function () {
         restrict: 'E',
         scope: {
             termsOccurences: '=ngModel',
+            partiesVisibility: '=',
             partiesNames: '=',
             graphDrawHelper: '=',
             displayRange: '=',
@@ -38,6 +39,14 @@ module.directive('stTermOccurencesChart', function () {
 
             scope.$watch('termsOccurences.length', onDataChange);
             scope.$watch('displayRange', onDisplayRangeChange);
+            scope.$watchCollection('partiesVisibility', onPartiesVisibilityChange)
+
+            function onPartiesVisibilityChange(){
+                _.each(scope.partiesVisibility, function(num, key){
+                    d3.select("#" + scope.graphDrawHelper.generateLineId(LINE_PREFIX, key) )
+                      .style('visibility', num ? 'visible' : 'hidden')
+                    })
+            }
 
             function onDataChange() {
                 var isTermsOccurencesEmpty = typeof scope.termsOccurences === 'undefined' || scope.termsOccurences === null || scope.termsOccurences.length === 0;
@@ -114,10 +123,6 @@ module.directive('stTermOccurencesChart', function () {
                     scope.isInitialized = true;
                 }
             }
-
-            /* This should be refactored, same method exists in TermsOccurences and RangeFilterChart*/
-
-
 
             function onDisplayRangeChange() {
                 if (scope.isInitialized) {
