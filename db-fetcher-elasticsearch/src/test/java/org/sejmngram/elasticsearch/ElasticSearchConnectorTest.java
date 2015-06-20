@@ -10,7 +10,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -27,6 +29,8 @@ import org.sejmngram.database.fetcher.json.datamodel.PartiesNgrams;
 
 public class ElasticSearchConnectorTest {
 
+    private static final String SEARCHED_NGRAM = "posel";
+    private static final String INDEX = "sample";
     private static final String TERM_COUNT = "term_count";
     private static final String DATA = "data";
     private static final String PARTIA = "partia";
@@ -37,7 +41,7 @@ public class ElasticSearchConnectorTest {
     private static final String DATE2 = "1997-05-23";
 
     private Client client = mock(Client.class);
-    private ElasticSearchConnector connector = new ElasticSearchConnector(client, "sample");
+    private ElasticSearchConnector connector = new ElasticSearchConnector(client, INDEX);
     private SearchHits searchHits = mock(SearchHits.class);
 
     @Before
@@ -98,14 +102,14 @@ public class ElasticSearchConnectorTest {
 
     @Test
     public void shouldCountOccurancesForGivenNgram() {
-        NgramResponse ngramResponse = connector.retrieve("posel");
+        NgramResponse ngramResponse = connector.retrieve(SEARCHED_NGRAM);
 
         assertEquals(TERM_COUNT_1 + TERM_COUNT_2, getNgramTotalCount(ngramResponse));
     }
 
     @Test
     public void shouldCountOccurancesForDifferentDates() {
-        NgramResponse ngramResponse = connector.retrieve("posel");
+        NgramResponse ngramResponse = connector.retrieve(SEARCHED_NGRAM);
         List<ListDate> listDates = ngramResponse.getPartiesNgrams().get(0)
                 .getListDates();
 
@@ -113,6 +117,22 @@ public class ElasticSearchConnectorTest {
         assertEquals(DATE2, listDates.get(1).getDate());
         assertEquals(TERM_COUNT_1, listDates.get(0).getCount().intValue());
         assertEquals(TERM_COUNT_2, listDates.get(1).getCount().intValue());
+    }
+
+    @Test
+    public void shouldReturnResponseWithAllDatesProvided() {
+        Set<String> providedDates = new HashSet<String>(
+                Arrays.asList(DATE1, DATE2, "1995-03-14", "1997-08-11", "2001-03-04"));
+        connector = new ElasticSearchConnector(client, INDEX, providedDates);
+        NgramResponse ngramResponse = connector.retrieve(SEARCHED_NGRAM);
+
+        Set<String> receivedDates = new HashSet<String>();
+        for (ListDate listDate : ngramResponse.getPartiesNgrams().get(0).getListDates()) {
+            receivedDates.add(listDate.getDate());
+        }
+
+        assertEquals(providedDates.size(), receivedDates.size());
+        assertTrue(receivedDates.containsAll(providedDates));
     }
 
     private int getNgramTotalCount(NgramResponse ngramResponse) {

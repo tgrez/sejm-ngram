@@ -2,6 +2,10 @@ package org.sejmngram.elasticsearch;
 
 import static org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder.emptyResponse;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
@@ -27,10 +31,17 @@ public class ElasticSearchConnector implements DbConnector {
 
     private final String index;
     private Client client;
+    private Set<String> dates = new HashSet<String>();
 
     public ElasticSearchConnector(Client client, String index) {
         this.client = client;
         this.index = index;
+    }
+
+    public ElasticSearchConnector(Client client, String index,
+            Set<String> providedDates) {
+        this(client, index);
+        this.dates = Collections.unmodifiableSet(providedDates);
     }
 
     @Override
@@ -47,7 +58,7 @@ public class ElasticSearchConnector implements DbConnector {
     }
 
     private NgramResponse createResponse(String ngram, SearchResponse esSearchResponse) {
-        ResponseBuilder responseBuilder = new ResponseBuilder(ngram);
+        ResponseBuilder responseBuilder = new ResponseBuilder(ngram, dates);
         if (esSearchResponse.getHits().getHits().length >= RESULT_SIZE) {
             LOG.warn("Maximum number of elasticsearch search hits reached: " + RESULT_SIZE
                     + ". Possibly not receiving all available results from elasticsearch.");
