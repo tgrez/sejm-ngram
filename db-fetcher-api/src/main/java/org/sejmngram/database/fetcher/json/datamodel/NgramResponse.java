@@ -14,6 +14,10 @@ public class NgramResponse {
     public NgramResponse() {
     }
 
+    public NgramResponse(String ngram) {
+        this.ngram = ngram;
+    }
+
     public NgramResponse(String ngram, List<PartiesNgrams> partiesNgrams) {
         this.ngram = ngram;
         this.partiesNgrams = partiesNgrams;

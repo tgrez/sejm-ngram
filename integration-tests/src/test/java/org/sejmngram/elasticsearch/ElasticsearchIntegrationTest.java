@@ -1,5 +1,8 @@
 package org.sejmngram.elasticsearch;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -7,6 +10,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -16,14 +21,15 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.junit.Before;
 import org.junit.Test;
+import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
 public class ElasticsearchIntegrationTest {
 
     @Before
     public void insertData() throws IOException {
         String hostAddress = "http://localhost:9200/";
-        sendPutRequest(hostAddress + "sample/doc_count/a", "{'text': 'Java, Java, Java, Java is great.'}");
-        sendPutRequest(hostAddress + "sample/doc_count/b", "{'text': 'Java, Java is coffee.'}");
+        sendPutRequest(hostAddress + "sample/doc_count/a", "{\"text\": \"Java, Java, Java, Java is great.\"}");
+        sendPutRequest(hostAddress + "sample/doc_count/b", "{\"text\": \"Java, Java is coffee.\"}");
     }
 
     private void sendPutRequest(String address, String content)
@@ -57,14 +63,26 @@ public class ElasticsearchIntegrationTest {
             .actionGet();
  
         long hits = sr.getHits().getTotalHits();
+        assertEquals(2, hits);
  
         System.out.println("hits:["+hits+"]");
         for(SearchHit hit : sr.getHits()){
             System.out.println("--------------------");
             System.out.println("term_count:"+hit.field("term_count").getValue());
         }
- 
+
         client.close();
+    }
+
+    @Test
+    public void connectToRealElasticSearchInstanceByConnector() throws JsonGenerationException, JsonMappingException, IOException {
+        Client client = new TransportClient()
+            .addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
+        ElasticSearchConnector esConnector = new ElasticSearchConnector(client, "sejmngram");
+
+        NgramResponse ngramResponse = esConnector.retrieve("Argentyna");
+
+        assertNotNull(ngramResponse);
     }
 
 }

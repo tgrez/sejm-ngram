@@ -77,4 +77,8 @@ public class ResponseBuilder {
         }
         return new NgramResponse(ngramName, partiesNgrams);
     }
+
+    public static NgramResponse emptyResponse(String ngramName) {
+        return new ResponseBuilder(ngramName).generateResponse();
+    }
 }
