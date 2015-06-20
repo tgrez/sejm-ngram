@@ -9,6 +9,7 @@ server:
 
 partiaIdFilename: ../psc-data/partiaId.json
 poselIdFilename: ../psc-data/poselId.json
+datesFilename: ../psc-data/nowe_daty.txt
 
 database:
   # the name of your JDBC driver

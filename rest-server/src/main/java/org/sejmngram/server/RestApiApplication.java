@@ -63,7 +63,7 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
 
     private void registerResources(RestApiConfiguration config, Environment environment) {
         environment.jersey().register(ngramResourceFactory.createFTSNgramResource(jdbi, redisConnection,
-                config.getPartiaIdFilename(), config.getPartiaIdFilename()));
+                config.getPartiaIdFilename(), config.getPartiaIdFilename(), config.getDatesFilename()));
         environment.jersey().register(ngramResourceFactory.createHitCountResource(redisConnection));
         // TODO healthchecks
     }

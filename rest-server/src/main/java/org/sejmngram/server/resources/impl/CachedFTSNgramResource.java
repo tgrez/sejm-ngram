@@ -17,15 +17,15 @@ import com.google.common.base.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 public class CachedFTSNgramResource extends FTSNgramResource {
     
-    private static final Logger LOG = LoggerFactory.getLogger(FTSNgramResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CachedFTSNgramResource.class);
     
     private final HitCounter counter;
     private final CacheProvider<NgramResponse> cacheProvider;
 
     public CachedFTSNgramResource(DBI jdbi, HitCounter counter,
             CacheProvider<NgramResponse> cacheProvider,
-            String partyFilename, String poselFilename) {
-        super(jdbi, partyFilename, poselFilename);
+            String partyFilename, String poselFilename, String datesFilename) {
+        super(jdbi, partyFilename, poselFilename, datesFilename);
         this.counter = counter;
         this.cacheProvider = cacheProvider;
     }

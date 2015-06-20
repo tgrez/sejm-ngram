@@ -17,14 +17,14 @@ public class ResourceFactory {
     }
     
     public FTSNgramResource createFTSNgramResource(DBI jdbi, Optional<RedisConnection> redisConnection,
-            String partyFilename, String poselFilename) {
+            String partyFilename, String poselFilename, String datesFilename) {
         if (redisConnection.isPresent()) {
             return new CachedFTSNgramResource(jdbi,
                     redisFactory.createRedisCounter(redisConnection.get()),
                     redisFactory.createRedisCacheProvider(redisConnection.get()),
-                    partyFilename, poselFilename);
+                    partyFilename, poselFilename, datesFilename);
         } else {
-            return new FTSNgramResource(jdbi, partyFilename, poselFilename);
+            return new FTSNgramResource(jdbi, partyFilename, poselFilename, datesFilename);
         }
     }
     

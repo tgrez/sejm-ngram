@@ -33,6 +33,10 @@ public class RestApiConfiguration extends Configuration {
     @JsonProperty
     private String partiaIdFilename;
 
+    @NotEmpty
+    @JsonProperty
+    private String datesFilename;
+
     public String getPoselIdFilename() {
         return poselIdFilename;
     }
@@ -51,5 +55,9 @@ public class RestApiConfiguration extends Configuration {
 
     public EsConfiguration getElasticsearch() {
         return elasticsearch;
+    }
+
+    public String getDatesFilename() {
+        return datesFilename;
     }
 }

@@ -1,6 +1,8 @@
 package org.sejmngram.database.fetcher.converter;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder;
@@ -10,16 +12,18 @@ public class NgramFtsConverter {
 
     private IdConverter partyConverter;
     private IdConverter poselConverter;
+    private final Set<String> dates;
 
     public NgramFtsConverter(IdConverter partyConverter,
-            IdConverter poselConverter) {
+            IdConverter poselConverter, Set<String> dates) {
         this.partyConverter = partyConverter;
         this.poselConverter = poselConverter;
+        this.dates = Collections.unmodifiableSet(dates);
     }
 
     public NgramResponse dbRecordsToNgramResponse(String ngramName,
             List<Record> records) {
-        ResponseBuilder responesBuilder = new ResponseBuilder(ngramName);
+        ResponseBuilder responesBuilder = new ResponseBuilder(ngramName, dates);
 
         for (Record r : records) {
             String partyName = partyConverter.resolve(r.getPartyId());

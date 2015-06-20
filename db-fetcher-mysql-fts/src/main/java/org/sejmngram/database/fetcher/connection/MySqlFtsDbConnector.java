@@ -1,12 +1,21 @@
 package org.sejmngram.database.fetcher.connection;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.sejmngram.common.json.JsonProcessor;
 import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramFtsConverter;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.resource.NgramFtsDao;
 import org.skife.jdbi.v2.DBI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MySqlFtsDbConnector implements DbConnector {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MySqlFtsDbConnector.class);
 
     private NgramFtsConverter ngramFtsConverter = null;
 
@@ -14,9 +23,9 @@ public class MySqlFtsDbConnector implements DbConnector {
     private NgramFtsDao ngramFtsDao;
 
     public MySqlFtsDbConnector(DBI jdbi, String partyFilename,
-            String poselFilename) {
+            String poselFilename, String datesFilename) {
         this.jdbi = jdbi;
-        readIdFiles(partyFilename, poselFilename);
+        readFiles(partyFilename, poselFilename, datesFilename);
     }
 
     @Override
@@ -36,9 +45,23 @@ public class MySqlFtsDbConnector implements DbConnector {
                 ngramFtsDao.searchFts(ngram));
     }
 
-    private void readIdFiles(String partyFilename, String poselFilename) {
+    private void readFiles(String partyFilename, String poselFilename, String datesFilename) {
+        Set<String> dates = readDatesFile(datesFilename);
         ngramFtsConverter = new NgramFtsConverter(
-                new IdConverter(partyFilename), new IdConverter(poselFilename));
+                new IdConverter(partyFilename), new IdConverter(poselFilename), dates);
+    }
+
+    private Set<String> readDatesFile(String filename) {
+        Set<String> dates = new HashSet<String>();
+        try {
+            dates = JsonProcessor.jsonFileToHashSet(filename);
+        } catch (IOException e) {
+            LOG.error("Could not read JSON file: " + filename
+                    + ", exception was thrown: ", e);
+            return new HashSet<String>();
+        }
+        LOG.info("Successfully loaded dates file from " + filename);
+        return dates;
     }
 
     @Override

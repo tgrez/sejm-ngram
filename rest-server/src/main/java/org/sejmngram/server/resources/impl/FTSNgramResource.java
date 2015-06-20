@@ -17,8 +17,8 @@ public class FTSNgramResource implements NgramResource {
     private final DbConnector db;
 
     public FTSNgramResource(DBI jdbi, String partyFilename,
-            String poselFilename) {
-        this.db = new MySqlFtsDbConnector(jdbi, partyFilename, poselFilename);
+            String poselFilename, String datesFilename) {
+        this.db = new MySqlFtsDbConnector(jdbi, partyFilename, poselFilename, datesFilename);
         this.db.connect();
     }
 
