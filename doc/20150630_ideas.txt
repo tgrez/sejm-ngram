@@ -1,0 +1,8 @@
+most used words during certain period - najpopularniejsze slowa
+aktywnosc werbalna wszystkich partii - suma słów
+rzad kontra opozycja
+najaktywniejsi mowcy
+generalnie aktywnosc partii, czyli w tle liczba wszystkich slow, a wykres pokazuje aktywnosc (liczbe slow dla danej partii)
+dlugosc wystapien
+skomplikowanie wystapien
+(ilosc wystapien w miesiacu / wszystkie slowa w miesiacu) / (ilosc wystapien we wszystkich wystapieniach / wszystkie slowa we wszystkich wystapieniach) - czyli liczenie istotnosci slowa w podzakresie, moze tez byc np dla partii
