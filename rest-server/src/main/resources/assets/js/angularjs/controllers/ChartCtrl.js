@@ -54,10 +54,15 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                     for(var i = 0; i < data.partiesNgrams.length; i++){
                         var chartData = data.partiesNgrams[i].listDates;
                         chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
-                        partiesOccurences.push({
-                            partyName: data.partiesNgrams[i].name,
-                            occurences: chartData
-                        })
+
+                        var partyName = data.partiesNgrams[i].name;
+
+                        if (partyName != "" && partyName != null){
+                             partiesOccurences.push({
+                                    partyName: data.partiesNgrams[i].name,
+                                    occurences: chartData
+                                })
+                        }
                     }
 
                     var chartDataFormatted = {
@@ -65,7 +70,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                         partiesOccurences: partiesOccurences
                     };
 
-                    var partiesNames = _.map(data.partiesNgrams, function(partyNgram){ return partyNgram.name});
+                    var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return partiesOccurence.partyName});
 
                    $scope.graph.partiesNames = partiesNames;
                    $scope.graph.partiesNames.getId = function(partyName){
