@@ -36,7 +36,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         for (var i = 0; i < phrases.length; i++) {
             $scope.search.callsInProgressCount++;
 
-            d3.json("service/api/ngramfts/" + phrases[i].text,
+            d3.json("service/api/ngramfts/" + phrases[i].text.toLowerCase(),
                 function (error, data) {
                     $scope.search.callsInProgressCount--;
 
