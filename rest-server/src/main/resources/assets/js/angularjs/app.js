@@ -6,11 +6,18 @@ var module = angular.module('sejmotrendyApp', ['ngTagsInput', 'ngRoute', 'ngAnim
             .when('/chart', {
                 templateUrl: '/templates/chart.html',
                 controller: 'ChartCtrl',
-                reloadOnSearch: false
+                reloadOnSearch: false,
+                resolve: {
+                    frequentPhrases: ['$http', function($http) {
+                        return $http.get("/service/api/hitcount/top").then(function(response){
+                           return response.data;
+                        });
+                    }]
+                }
             })
             .when('/chart#:phrasesString', {
                 templateUrl: '/templates/chart.html',
-                controller: 'ChartCtrl',
+                controller: 'ChartCtrl'
             })
             .when('/howitworks', {
                 templateUrl: '/templates/howitworks.html'

@@ -3,7 +3,7 @@
 /// <reference path="~/js/vendor/d3.min.js" />
 'use strict';
 
-module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService) {
+module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService, frequentPhrases) {
     $scope.search = {
         phrasesService: phrasesService,
         wasTriggered: false,
@@ -16,17 +16,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         selectedRange: null,
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65']
     }
-    $scope.mostPopularPhrases = {
-        phrases: [
-            'aborcja',
-            'recesja',
-            'sejm',
-            'deficyt',
-            'rosja',
-            'putin',
-            'posel'
-        ]
-    };
+    $scope.mostPopularPhrases = frequentPhrases;
 
     $scope.search.run = function () {
         $scope.search.wasTriggered = true;
