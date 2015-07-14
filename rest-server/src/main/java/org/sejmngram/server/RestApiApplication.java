@@ -27,13 +27,10 @@ import java.util.EnumSet;
 
 public class RestApiApplication extends Application<RestApiConfiguration> {
 
-    private static final int DB_HEALTH_CHECK_TIMEOUT = 15; // seconds
-    
     // TODO introduce dependency injection?
     private RedisFactory redisFactory = new RedisFactory();
     private ResourceFactory ngramResourceFactory = new ResourceFactory(redisFactory);
     private Optional<RedisConnection> redisConnection;
-    private DBI jdbi;
     private ManagedEsClient elasticSearchClient;
 
     public static void main(String[] args) throws Exception {
@@ -58,7 +55,6 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
     @Override
     public void run(RestApiConfiguration config, Environment environment) {
 
-        registerDatabase(config, environment);
         registerElasticSearch(config, environment);
         registerRedis(config, environment);
         registerResources(config, environment);
@@ -88,12 +84,6 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
             environment.healthChecks().register("ElasticSearch cluster health",
                     new EsClusterHealthCheck(elasticSearchClient.getClient()));
         }
-    }
-
-    // TODO create separate branch for database
-    private void registerDatabase(RestApiConfiguration config, Environment environment) {
-        jdbi = new DBIFactory().build(environment, config.getDataSourceFactory(), "mysql");
-        environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, DB_HEALTH_CHECK_TIMEOUT));
     }
 
     private void addCrossOriginFilter(Environment environment) {
