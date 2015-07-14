@@ -12,6 +12,7 @@ import io.dropwizard.setup.Environment;
 import javax.servlet.FilterRegistration.Dynamic;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.sejmngram.server.config.RestApiConfiguration;
 import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.health.RedisHealthCheck;
 import org.sejmngram.server.redis.RedisConnection;
@@ -30,6 +31,7 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
     private ResourceFactory ngramResourceFactory = new ResourceFactory(redisFactory);
     private Optional<RedisConnection> redisConnection;
     private DBI jdbi;
+    private ManagedEsClient elasticSearchClient;
 
     public static void main(String[] args) throws Exception {
         new RestApiApplication().run(args);
@@ -62,8 +64,8 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
     }
 
     private void registerResources(RestApiConfiguration config, Environment environment) {
-        environment.jersey().register(ngramResourceFactory.createFTSNgramResource(jdbi, redisConnection,
-                config.getPartiaIdFilename(), config.getPartiaIdFilename(), config.getDatesFilename()));
+        environment.jersey().register(ngramResourceFactory.createElasticSearchNgramResource(
+                redisConnection, elasticSearchClient, config.getElasticsearch(), config.getSejmFilesConfig()));
         environment.jersey().register(ngramResourceFactory.createHitCountResource(redisConnection));
         // TODO healthchecks
     }
@@ -78,13 +80,14 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
 
     private void registerElasticSearch(RestApiConfiguration config, Environment environment) {
         if (config.getElasticsearch() != null) {
-            ManagedEsClient elasticSearchClient = new ManagedEsClient(config.getElasticsearch());
+            elasticSearchClient = new ManagedEsClient(config.getElasticsearch());
             environment.lifecycle().manage(elasticSearchClient);
             environment.healthChecks().register("ElasticSearch cluster health",
                     new EsClusterHealthCheck(elasticSearchClient.getClient()));
         }
     }
 
+    // TODO create separate branch for database
     private void registerDatabase(RestApiConfiguration config, Environment environment) {
         jdbi = new DBIFactory().build(environment, config.getDataSourceFactory(), "mysql");
         environment.healthChecks().register("database-jdbi", new DatabaseHealthCheck(jdbi, DB_HEALTH_CHECK_TIMEOUT));

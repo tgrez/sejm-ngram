@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 import org.sejmngram.database.fetcher.connection.DbConnector;
 import org.sejmngram.database.fetcher.connection.MySqlFtsDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
+import org.sejmngram.server.config.SejmFilesConfiguration;
 import org.sejmngram.server.resources.NgramResource;
 import org.skife.jdbi.v2.DBI;
 
@@ -16,9 +17,9 @@ public class FTSNgramResource implements NgramResource {
 
     private final DbConnector db;
 
-    public FTSNgramResource(DBI jdbi, String partyFilename,
-            String poselFilename, String datesFilename) {
-        this.db = new MySqlFtsDbConnector(jdbi, partyFilename, poselFilename, datesFilename);
+    public FTSNgramResource(DBI jdbi, SejmFilesConfiguration config) {
+        this.db = new MySqlFtsDbConnector(jdbi, config.getPartyFilename(),
+                config.getPoselFilename(), config.readDatesFromFile());
         this.db.connect();
     }
 

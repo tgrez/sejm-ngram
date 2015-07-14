@@ -59,4 +59,8 @@ public class ResponseBuilder {
     public static NgramResponse emptyResponse(String ngramName) {
         return new ResponseBuilder(ngramName).generateResponse();
     }
+
+    public static NgramResponse emptyResponse(String ngramName, Set<String> dates) {
+        return new ResponseBuilder(ngramName, dates).generateResponse();
+    }
 }

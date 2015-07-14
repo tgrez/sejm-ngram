@@ -20,14 +20,16 @@ import org.slf4j.LoggerFactory;
 
 public class ElasticSearchConnector implements DbConnector {
 
+    private static final String ID_FIELD = "id";
+
     private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchConnector.class);
 
-    private static final int RESULT_SIZE = 1000 * 1000;
+    private static final int RESULT_SIZE_LIMIT = 1000 * 1000;
     private static final String TERM_COUNT = "term_count";
     private static final String TEXT_FIELD = "tresc";
 
-    private static final String PARTIA = "partia";
-    private static final String DATA = "data";
+    private static final String PARTY_FIELD = "partia";
+    private static final String DATE_FIELD = "data";
 
     private final String index;
     private Client client;
@@ -48,25 +50,34 @@ public class ElasticSearchConnector implements DbConnector {
     public NgramResponse retrieve(String ngram) {
         // TODO sanitize input
         ngram = normalizeNgram(ngram);
+        LOG.trace("Received ngram request: " + ngram);
+        LOG.trace("Querying ElasticSearch...");
         SearchResponse esSearchResponse = queryElasticSearch(ngram);
+        LOG.trace("ElasticSearch response received");
 
+        NgramResponse ngramResponse;
         if (isContainingAnyResults(esSearchResponse)) {
-            return createResponse(ngram, esSearchResponse);
+            LOG.trace("There are " + esSearchResponse.getHits().getTotalHits() + " search hits");
+            ngramResponse = createResponse(ngram, esSearchResponse);
         } else {
-            return emptyResponse(ngram);
+            LOG.trace("Does not contain any results, returning empty response");
+            ngramResponse = emptyResponse(ngram, dates);
         }
+        LOG.trace("Finished processing.");
+        return ngramResponse;
     }
 
     private NgramResponse createResponse(String ngram, SearchResponse esSearchResponse) {
         ResponseBuilder responseBuilder = new ResponseBuilder(ngram, dates);
-        if (esSearchResponse.getHits().getHits().length >= RESULT_SIZE) {
-            LOG.warn("Maximum number of elasticsearch search hits reached: " + RESULT_SIZE
+        // TODO histogram result size? https://dropwizard.github.io/metrics/3.1.0/manual/core/#histograms
+        if (esSearchResponse.getHits().getTotalHits() >= RESULT_SIZE_LIMIT) {
+            LOG.warn("Maximum number of elasticsearch search hits reached: " + RESULT_SIZE_LIMIT
                     + ". Possibly not receiving all available results from elasticsearch.");
         }
         for (SearchHit searchHit : esSearchResponse.getHits()) {
             int termCount = searchHit.field(TERM_COUNT).getValue();
-            String partyName = searchHit.field(PARTIA).getValue();
-            String date = searchHit.field(DATA).getValue();
+            String partyName = searchHit.field(PARTY_FIELD).getValue();
+            String date = searchHit.field(DATE_FIELD).getValue();
             responseBuilder.addOccurances(partyName, date, termCount);
         }
         return responseBuilder.generateResponse();
@@ -84,13 +95,14 @@ public class ElasticSearchConnector implements DbConnector {
     }
 
     private SearchResponse queryElasticSearch(String ngram) {
-        QueryBuilder query = QueryBuilders.queryString(ngram).defaultField(TEXT_FIELD);
-        SearchResponse searchResponse = client.prepareSearch(index).setQuery(query).setSize(RESULT_SIZE)
+        QueryBuilder query = QueryBuilders.matchPhraseQuery(TEXT_FIELD, ngram);
+        SearchResponse searchResponse = client.prepareSearch(index)
+                .setQuery(query).setSize(RESULT_SIZE_LIMIT)
                 .addScriptField(TERM_COUNT, createCountScript(ngram))
-                .addField(DATA)
-                .addField(PARTIA)
+                .addField(DATE_FIELD)
+                .addField(PARTY_FIELD)
                 .addField(TEXT_FIELD)
-                .addField("id")
+                .addField(ID_FIELD)
                 .get();
         return searchResponse;
     }

@@ -2,6 +2,7 @@ package org.sejmngram.elasticsearch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -10,8 +11,6 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -48,7 +47,7 @@ public class ElasticsearchIntegrationTest {
     @Test
     public void shouldSuccessfullyGetTermCountFromElasticsearch() {
         Client client = new TransportClient()
-            .addTransportAddress(new InetSocketTransportAddress("127.0.0.1",9300));
+            .addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
         String queryTerm = "java";
  
@@ -75,7 +74,7 @@ public class ElasticsearchIntegrationTest {
     }
 
     @Test
-    public void connectToRealElasticSearchInstanceByConnector() throws JsonGenerationException, JsonMappingException, IOException {
+    public void connectToRealElasticSearchInstanceByConnector() throws Exception {
         Client client = new TransportClient()
             .addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
         ElasticSearchConnector esConnector = new ElasticSearchConnector(client, "sejmngram");
@@ -83,6 +82,18 @@ public class ElasticsearchIntegrationTest {
         NgramResponse ngramResponse = esConnector.retrieve("Argentyna");
 
         assertNotNull(ngramResponse);
+        assertTrue(ngramResponse.getPartiesNgrams().size() > 0);
     }
 
+    @Test
+    public void searchPhraseWithMultipleWords() {
+        Client client = new TransportClient()
+            .addTransportAddress(new InetSocketTransportAddress("127.0.0.1", 9300));
+        ElasticSearchConnector esConnector = new ElasticSearchConnector(client, "sejmngram");
+
+        NgramResponse ngramResponse = esConnector.retrieve("wysoka izbo");
+
+        assertNotNull(ngramResponse);
+        assertTrue(ngramResponse.getPartiesNgrams().size() > 0);
+    }
 }

@@ -9,7 +9,7 @@ import org.sejmngram.database.fetcher.connection.MySqlDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.server.resources.NgramResource;
 
-@Path("/api/ngram")
+@Path("/api/ngramblob")
 @Produces(MediaType.APPLICATION_JSON)
 public class BlobNgramResource implements NgramResource {
 

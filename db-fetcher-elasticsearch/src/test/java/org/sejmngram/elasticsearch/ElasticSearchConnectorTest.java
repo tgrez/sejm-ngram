@@ -78,6 +78,7 @@ public class ElasticSearchConnectorTest {
         when(client.prepareSearch(anyString())).thenReturn(requestBuilderMock);
         when(requestBuilderMock.setQuery(isA(QueryBuilder.class))).thenReturn(requestBuilderMock);
         when(requestBuilderMock.setSize(anyInt())).thenReturn(requestBuilderMock);
+        when(requestBuilderMock.setTypes(anyString())).thenReturn(requestBuilderMock);
         when(requestBuilderMock.addField(anyString())).thenReturn(requestBuilderMock);
         when(requestBuilderMock.addScriptField(anyString(), anyString())).thenReturn(requestBuilderMock);
         SearchResponse searchResponse = mock(SearchResponse.class);
