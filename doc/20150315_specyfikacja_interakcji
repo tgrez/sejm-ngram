@@ -1,0 +1,12 @@
+1. trzeba zrobić podekrany "How It Works", "O nas", "Wsparcie"
+	- Iryna zaprojektowała w shared na dropboxie jakby było pod spodem, a na stronie jest jakby obok - kiedy to się zmieniło?
+2. Interakcje dla głównego ekranu:
+	- zwracane są dane dla wszystkich partii, ale wyświetlana jest tylko jedna (albo suma)
+
+	+ Trzeba dodać możliwość wybierania partii (na podstawie legendy)
+	+ Miało być podówjnie: CHYBA albo różne partie i pojedyczny ngram? ALBO rozne ngramy ale zsumowane dla partii
+	+ CheckBOxy dla jednego ngramu (żeby wybrać kilka bądź jedną partię)
+	+ radiobuttony dla kilku ngramów (żeby porównywać wyniki dla różnch partii)
+
+	c) obsługa legendy (checkboxy dla jednego ngramu pozwalające pokazać kilka partii na raz oraz radio buttony dla kilka ngramów pozwalające wybrać partię, z której są zrobione serie danych)
+d) grupowanie danych we frontendzie - w tym momencie usunąłem agregację do 1 miesiąca i wszystkie wartości są wiualizowane. Maciek ma pomysł, żeby stworzyć 3-stopniowe grupowanie - dla najwyższego poziomu agregować po miesiącach, potem po tygodniach, zaś dla najniższego - op poszczególnych dniach (jak teraz).

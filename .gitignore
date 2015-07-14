@@ -49,3 +49,4 @@ sejmometrDownloaded/
 
 # mock file
 ngrams_mocking.txt
+buildAndRunFTS_no_demo.sh
