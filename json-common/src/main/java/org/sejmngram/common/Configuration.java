@@ -1,7 +1,5 @@
 package org.sejmngram.common;
 
-import com.sun.jmx.snmp.defaults.DefaultPaths;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,9 +21,9 @@ public class Configuration {
 	private static final String SEJMOMETR_DOWNLOADED_DIR="sejmometr.downloaded.dir";
 	private static final String SEJMOMETR_IDS_DELIMETER = ",";
 	private static final String SEJMOMETR_IDS_RANGE_DELIMETER = "-";
-	
+
 	private Properties properties;
-	
+
 	private Configuration() {
 		properties = new Properties();
 		try {
@@ -44,11 +42,11 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
-	private static class SingletonHolder { 
+
+	private static class SingletonHolder {
         public static final Configuration INSTANCE = new Configuration();
 	}
-	
+
 	public static Configuration getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
@@ -64,23 +62,23 @@ public class Configuration {
 	public String getCommonOutputFilenameEnding() {
 		return properties.getProperty(COMMON_OUTPUT_FILENAME_ENDING);
 	}
-	
+
 	public String getSejmometrUrl() {
 		return properties.getProperty(SEJMOMETR_URL);
 	}
-	
+
 	public String getSejmometrWystapienia() {
 		return properties.getProperty(SEJMOMETR_WYSTAPIENIA);
 	}
-	
+
 	public String getSejmometrKluby() {
 		return properties.getProperty(SEJMOMETR_KLUBY);
 	}
-	
+
 	public String getSejmometrAcceptHeader() {
 		return properties.getProperty(SEJMOMETR_ACCEPT_HEADER);
 	}
-	
+
 	public List<Integer> getSejmometrIds() {
 		List<Integer> result = new ArrayList<Integer>();
 		String property = properties.getProperty(SEJMOMETR_ID_LIST);
