@@ -56,7 +56,13 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
                     var dateFormat = d3.time.format('%Y-%m-%d');
 
-                    var partiesOccurences = []
+                    var partiesOccurences = [];
+
+                    var allPartiesOccurences = {
+                        partyName: "All",
+                        occurences: null
+                    }
+
                     for(var i = 0; i < data.partiesNgrams.length; i++){
                         var chartData = data.partiesNgrams[i].listDates;
                         chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
@@ -71,12 +77,15 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                         }
                     }
 
+                    console.log(partiesOccurences)
+
                     var chartDataFormatted = {
                         name: phraseName,
                         partiesOccurences: partiesOccurences
                     };
 
-                    var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return partiesOccurence.partyName});
+
+                   var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return partiesOccurence.partyName});
 
                    $scope.graph.partiesNames = partiesNames;
                    $scope.graph.partiesNames.getId = function(partyName){
