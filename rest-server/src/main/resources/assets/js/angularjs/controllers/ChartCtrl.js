@@ -3,7 +3,7 @@
 /// <reference path="~/js/vendor/d3.min.js" />
 'use strict';
 
-module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService, frequentPhrases) {
+module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService) {
     $scope.search = {
         phrasesService: phrasesService,
         wasTriggered: false,
@@ -13,6 +13,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     };
     $scope.graph = {
         phrasesOccurences: [],
+        sumPartiesOccurences: null,
         partiesNames: [],
         graphDrawHelper: null,
         getIdFromPartyName: null,
@@ -21,7 +22,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'],
         checkboxClicked: null
     }
-/*
+
   $scope.mostPopularPhrases = {
         phrases: [
             'aborcja',
@@ -33,11 +34,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
             'posel'
         ]
     };
-
-    */
-
-    $scope.mostPopularPhrases = frequentPhrases;
-
 
     $scope.search.run = function () {
         $scope.search.wasTriggered = true;
@@ -54,40 +50,15 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
                     var phraseName = data.ngram;
 
-                    var dateFormat = d3.time.format('%Y-%m-%d');
+                    var chartDataFormatted = formatSingleNgramResponse(data, phraseName)
+                    var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return partiesOccurence.partyName });
 
-                    var partiesOccurences = [];
-
-                    for(var i = 0; i < data.partiesNgrams.length; i++){
-                        var chartData = data.partiesNgrams[i].listDates;
-                        chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
-
-                        var partyName = data.partiesNgrams[i].name;
-
-                        if (partyName != "" && partyName != null){
-                             partiesOccurences.push({
-                                    partyName: data.partiesNgrams[i].name,
-                                    occurences: chartData
-                                })
-                        }
+                    $scope.graph.partiesNames = partiesNames;
+                    $scope.graph.partiesNames.getId = function(partyName){
+                        return $scope.graph.partiesNames.indexOf(partyName)
                     }
 
-                    console.log(partiesOccurences)
-
-                    var chartDataFormatted = {
-                        name: phraseName,
-                        partiesOccurences: partiesOccurences
-                    };
-
-
-                   var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return partiesOccurence.partyName});
-
-                   $scope.graph.partiesNames = partiesNames;
-                   $scope.graph.partiesNames.getId = function(partyName){
-                        return $scope.graph.partiesNames.indexOf(partyName)
-                   }
-
-                   _.each(partiesNames, function(partyName){
+                    _.each(partiesNames, function(partyName){
                         $scope.graph.partiesVisibility[partyName] = false
                     });
 
@@ -100,7 +71,38 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         }
     };
 
-    function formatSingleNgramResponse(){
+    function formatSingleNgramResponse(data, singleNgram){
+        var ALL_PARTIES_KEY = "all";
+        var dateFormat = d3.time.format('%Y-%m-%d');
+
+        var partiesOccurences = [];
+        var sumParties = null;
+
+        for(var i = 0; i < data.partiesNgrams.length; i++){
+            var chartData = data.partiesNgrams[i].listDates;
+            chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
+
+            var partyName = data.partiesNgrams[i].name;
+
+            if (partyName == ALL_PARTIES_KEY){
+                sumParties = chartData;
+            }
+
+            if (partyName != "" && partyName != null && partyName != ALL_PARTIES_KEY){
+                 partiesOccurences.push({
+                        partyName: data.partiesNgrams[i].name,
+                        occurences: chartData
+                    })
+            }
+        }
+
+        partiesOccurences.unshift({partyName: ALL_PARTIES_KEY, occurences: sumParties});
+
+        var chartDataFormatted = {
+            name: singleNgram,
+            partiesOccurences: partiesOccurences
+        };
+        return chartDataFormatted;
     }
 
     $scope.graph.removePhraseOccurences = function(name) {

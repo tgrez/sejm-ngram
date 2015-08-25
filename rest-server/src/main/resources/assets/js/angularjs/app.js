@@ -6,15 +6,7 @@ var module = angular.module('sejmotrendyApp', ['ngTagsInput', 'ngRoute', 'ngAnim
             .when('/chart', {
                 templateUrl: '/templates/chart.html',
                 controller: 'ChartCtrl',
-                reloadOnSearch: false,
-                resolve: {
-                    frequentPhrases: ['$http', function($http) {
-                        return $http.get("/service/api/hitcount/top").then(function(response){
-                           return response.data;
-                        });
-                    }]
-                }
-
+                reloadOnSearch: false
             })
             .when('/chart#:phrasesString', {
                 templateUrl: '/templates/chart.html',
