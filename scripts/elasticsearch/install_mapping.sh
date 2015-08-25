@@ -1,5 +1,11 @@
 #!/bin/bash
-bin/plugin install elasticsearch/elasticsearch-analysis-stempel/2.6.0
+if [$# -ne 1]; then
+	echo "Standard path will be used"
+	exit
+else
+	ELASTIC_SEARCH_PATH="$1"
+	$ELASTIC_SEARCH_PATH/bin/plugin install elasticsearch/elasticsearch-analysis-stempel/2.6.0
+fi
 
 curl -XDELETE "http://127.0.0.1:9200/sejmngram"
 
