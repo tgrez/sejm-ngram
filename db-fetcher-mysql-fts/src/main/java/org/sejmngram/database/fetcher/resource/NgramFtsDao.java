@@ -15,12 +15,5 @@ public interface NgramFtsDao {
             + "FROM wystapienia WHERE MATCH (textNormalized) AGAINST "
             + "( concat('\"', :ngram, '\"') IN BOOLEAN MODE) GROUP BY date, partyId")
     List<Record> searchFts(@Bind("ngram") String ngram);
-
-    @SqlQuery("SELECT date, partyId,  SUM(term_count(textNormalized, :ngram)) AS count "
-            + "FROM wystapienia WHERE MATCH (textNormalized) AGAINST "
-            + "( concat('\"', :ngram, '\"') IN BOOLEAN MODE) GROUP BY date")
-    List<Record> searchFtsAll(@Bind("ngram") String ngram);
-
-
     void close();
 }

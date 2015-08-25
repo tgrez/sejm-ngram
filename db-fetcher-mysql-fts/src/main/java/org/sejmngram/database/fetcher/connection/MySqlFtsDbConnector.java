@@ -14,7 +14,7 @@ public class MySqlFtsDbConnector implements DbConnector {
     private NgramFtsDao ngramFtsDao;
 
     public MySqlFtsDbConnector(DBI jdbi, String partyFilename,
-            String poselFilename) {
+                               String poselFilename) {
         this.jdbi = jdbi;
         readIdFiles(partyFilename, poselFilename);
     }

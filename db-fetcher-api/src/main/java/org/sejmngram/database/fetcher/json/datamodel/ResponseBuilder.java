@@ -76,20 +76,8 @@ public class ResponseBuilder {
             partiesNgrams.add(new PartiesNgrams(partyName, listDates));
         }
 
-        partiesNgrams.add(addSummaryParty());
-
         return new NgramResponse(ngramName, partiesNgrams);
     }
 
-    private PartiesNgrams addSummaryParty(List<PartiesNgrams> listOfParties) {
 
-        List<ListDate> listDates;
-
-        for (PartiesNgrams partyNgram : listOfParties){
-            partyNgram.getListDates()
-            partyNgram.
-        }
-
-        PartiesNgrams summary = new PartiesNgrams("all", )
-    }
 }
