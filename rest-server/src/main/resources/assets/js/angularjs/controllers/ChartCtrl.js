@@ -58,11 +58,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
                     var partiesOccurences = [];
 
-                    var allPartiesOccurences = {
-                        partyName: "All",
-                        occurences: null
-                    }
-
                     for(var i = 0; i < data.partiesNgrams.length; i++){
                         var chartData = data.partiesNgrams[i].listDates;
                         chartData.forEach(function(d, i) { d.date = dateFormat.parse(d.date); });
@@ -104,6 +99,10 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                 });
         }
     };
+
+    function formatSingleNgramResponse(){
+    }
+
     $scope.graph.removePhraseOccurences = function(name) {
         var remainingOccurences = _.filter($scope.graph.phrasesOccurences, function(d, i) { return name !== d.name; });
         $scope.graph.phrasesOccurences = remainingOccurences;

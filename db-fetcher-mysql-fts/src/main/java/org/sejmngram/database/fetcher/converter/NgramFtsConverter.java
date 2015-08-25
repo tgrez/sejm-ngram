@@ -25,7 +25,7 @@ public class NgramFtsConverter {
             String partyName = partyConverter.resolve(r.getPartyId());
             responesBuilder.addOccurances(partyName, r.getDate().toString(),
                     r.getCount());
-            responesBuilder.addOccurances("ALL", r.getDate().toString(),
+            responesBuilder.addOccurances("all", r.getDate().toString(),
                     r.getCount());
         }
 
