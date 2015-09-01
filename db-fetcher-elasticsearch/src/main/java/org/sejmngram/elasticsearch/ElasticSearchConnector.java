@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -96,14 +97,15 @@ public class ElasticSearchConnector implements DbConnector {
 
     private SearchResponse queryElasticSearch(String ngram) {
         QueryBuilder query = QueryBuilders.matchPhraseQuery(TEXT_FIELD, ngram);
-        SearchResponse searchResponse = client.prepareSearch(index)
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index)
                 .setQuery(query).setSize(RESULT_SIZE_LIMIT)
                 .addScriptField(TERM_COUNT, createCountScript(ngram))
                 .addField(DATE_FIELD)
                 .addField(PARTY_FIELD)
                 .addField(TEXT_FIELD)
-                .addField(ID_FIELD)
-                .get();
+                .addField(ID_FIELD);
+        LOG.trace("ElasticSearch Query using Java Client API:\n" + searchRequestBuilder.internalBuilder());
+        SearchResponse searchResponse = searchRequestBuilder.get();
         return searchResponse;
     }
 
