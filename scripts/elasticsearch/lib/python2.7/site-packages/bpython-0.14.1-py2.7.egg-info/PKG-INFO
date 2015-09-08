@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: bpython
+Version: 0.14.1
+Summary: Fancy Interface to the Python Interpreter
+Home-page: http://www.bpython-interpreter.org/
+Author: Bob Farrell, Andreas Stuehrk et al.
+Author-email: robertanthonyfarrell@gmail.com
+License: MIT/X
+Description: bpython is a fancy interface to the Python
+            interpreter for Unix-like operating systems.
+Platform: UNKNOWN
