@@ -8,7 +8,6 @@ module.directive('stTermOccurencesChart', function () {
         restrict: 'E',
         scope: {
             termsOccurences: '=ngModel',
-            partiesVisibility: '=',
             partiesNames: '=',
             graphDrawHelper: '=',
             displayRange: '=',
@@ -39,7 +38,7 @@ module.directive('stTermOccurencesChart', function () {
 
             scope.$watch('termsOccurences.length', onDataChange);
             scope.$watch('displayRange', onDisplayRangeChange);
-            scope.$watchCollection('partiesVisibility', onPartiesVisibilityChange)
+            scope.$watch('partiesNames', onPartiesVisibilityChange, true)
 
             function onPartiesVisibilityChange(){
                 scope.graphDrawHelper.setLineVisibility(LINE_PREFIX)

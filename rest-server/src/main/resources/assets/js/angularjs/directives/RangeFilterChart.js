@@ -8,7 +8,6 @@ module.directive('stRangeFilterChart', function() {
         restrict: 'E',
         scope: {
             termsOccurences: '=ngModel',
-            partiesVisibility: '=',
             partiesNames: '=',
             graphDrawHelper: '=',
             selectedRange: '='
@@ -39,7 +38,7 @@ module.directive('stRangeFilterChart', function() {
             scope.isInitialized = false;
 
             scope.$watch('termsOccurences.length', onDataChange);
-            scope.$watchCollection('partiesVisibility', onPartiesVisibilityChange)
+            scope.$watch('partiesNames', onPartiesVisibilityChange, true)
 
             function onPartiesVisibilityChange(){
                 scope.graphDrawHelper.setLineVisibility(LINE_PREFIX)

@@ -21,7 +21,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         graphDrawHelper: null,
         getIdFromPartyName: null,
         selectedRange: null,
-        partiesVisibility: {},
         linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'],
         checkboxClicked: null
     }
@@ -54,18 +53,13 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                     var phraseName = data.ngram;
 
                     var chartDataFormatted = formatSingleNgramResponse(data, phraseName)
-                    var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return partiesOccurence.partyName });
+                    var partiesNames = _.map(chartDataFormatted.partiesOccurences, function(partiesOccurence){ return {"partyName" : partiesOccurence.partyName, "isVisible" : false }});
 
                     $scope.graph.partiesNames = partiesNames;
                     $scope.graph.partiesNames.getId = function(partyName){
-                        return $scope.graph.partiesNames.indexOf(partyName)
+                        var foundObject = _.find($scope.graph.partiesNames, function(object){ return object.partyName == partyName} )
+                        return $scope.graph.partiesNames.indexOf(foundObject)
                     }
-
-                    _.each(partiesNames, function(partyName){
-                        $scope.graph.partiesVisibility[partyName] = false
-                    });
-
-                    console.log($scope.graph.partiesVisibility);
 
                     $scope.graph.phrasesOccurences.push(chartDataFormatted);
                     $scope.search.phrasesService.removePhrase(phraseName);
@@ -114,9 +108,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
     $scope.graph.graphDrawHelper = {
         setLineVisibility: function(line_prefix){
-           _.each($scope.graph.partiesVisibility, function(num, key){
-                d3.select("#" + $scope.graph.graphDrawHelper.generateLineId(line_prefix, key) )
-                  .style('visibility', num ? 'visible' : 'hidden')
+           _.each($scope.graph.partiesNames, function(object, key){
+                d3.select("#" + $scope.graph.graphDrawHelper.generateLineId(line_prefix, object.partyName) )
+                  .style('visibility', object.isVisible ? 'visible' : 'hidden')
                 })
         },
         generateLineId:     function(prefix, term) {
@@ -164,7 +158,8 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     }
 
     $scope.graph.checkboxClicked = function(checked, partyName){
-        $scope.graph.partiesVisibility[partyName] = checked;
+        var partyIndex = $scope.graph.partiesNames.getId(partyName)
+        $scope.graph.partiesNames[partyIndex].isVisible = checked;
     }
 
     $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {

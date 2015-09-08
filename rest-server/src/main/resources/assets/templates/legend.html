@@ -1,17 +1,17 @@
 <div>
     <ul>
-        <li ng-repeat="partyName in partiesNames">
+        <li ng-repeat="partyObject in partiesNames">
             <div class="party-wrapper">
                 <table>
                     <tr>
                         <td>
-                            <div class="party-indicator" ng-style="{{graphDrawHelper.getPartyColorStyle(partyName)}}"></div>
+                            <div class="party-indicator" ng-style="{{graphDrawHelper.getPartyColorStyle(partyObject.partyName)}}"></div>
                         </td>
                         <td>
-                            <input class="party-checkbox" type="checkbox" name="vehicle"  ng-model="isChecked" ng-change="checkboxClicked(isChecked, partyName)"/>
+                            <input class="party-checkbox" type="checkbox"  ng-model="isChecked" ng-change="checkboxClicked(isChecked, partyObject.partyName)"/>
                         </td>
                         <td>
-                            <div class="partyname">{{partyName}}</div>
+                            <div class="partyname">{{partyObject.partyName}}</div>
                         </td>
 
                     </tr>
