@@ -20,7 +20,7 @@ import org.sejmngram.database.fetcher.model.Ngram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DbConnectorMock implements DbConnector {
+public class DbConnectorMock implements NgramDbConnector {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DbConnectorMock.class);
 

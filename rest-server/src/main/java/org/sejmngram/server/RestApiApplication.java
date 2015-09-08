@@ -4,7 +4,6 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.elasticsearch.health.EsClusterHealthCheck;
 import io.dropwizard.elasticsearch.managed.ManagedEsClient;
-import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -14,12 +13,11 @@ import javax.servlet.FilterRegistration.Dynamic;
 
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.sejmngram.server.config.RestApiConfiguration;
-import org.sejmngram.server.health.DatabaseHealthCheck;
 import org.sejmngram.server.health.RedisHealthCheck;
 import org.sejmngram.server.redis.RedisConnection;
 import org.sejmngram.server.redis.RedisFactory;
+import org.sejmngram.server.resources.impl.OccurenceResource;
 import org.sejmngram.server.resources.impl.ResourceFactory;
-import org.skife.jdbi.v2.DBI;
 
 import com.google.common.base.Optional;
 
@@ -66,6 +64,7 @@ public class RestApiApplication extends Application<RestApiConfiguration> {
         environment.jersey().register(ngramResourceFactory.createElasticSearchNgramResource(
                 redisConnection, elasticSearchClient, config.getElasticsearch(), config.getSejmFilesConfig()));
         environment.jersey().register(ngramResourceFactory.createHitCountResource(redisConnection));
+        environment.jersey().register(new OccurenceResource());
         // TODO healthchecks
     }
 

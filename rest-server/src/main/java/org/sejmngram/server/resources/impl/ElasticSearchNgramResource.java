@@ -9,7 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.sejmngram.database.fetcher.connection.DbConnector;
+import org.sejmngram.database.fetcher.connection.NgramDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.elasticsearch.ElasticSearchConnector;
 import org.sejmngram.server.config.SejmFilesConfiguration;
@@ -19,7 +19,7 @@ import org.sejmngram.server.resources.NgramResource;
 @Produces(MediaType.APPLICATION_JSON)
 public class ElasticSearchNgramResource implements NgramResource {
 
-    private final DbConnector connector;
+    private final NgramDbConnector connector;
 
     public ElasticSearchNgramResource(ManagedEsClient managedEsClient, EsConfiguration esConfig,
             SejmFilesConfiguration sejmFilesConfig) {

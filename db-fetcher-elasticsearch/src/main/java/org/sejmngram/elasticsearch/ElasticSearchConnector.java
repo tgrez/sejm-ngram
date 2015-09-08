@@ -7,36 +7,29 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-import org.sejmngram.database.fetcher.connection.DbConnector;
+import org.sejmngram.database.fetcher.connection.NgramDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ElasticSearchConnector implements DbConnector {
-
-    private static final String ID_FIELD = "id";
+public class ElasticSearchConnector extends AbstractElasticSearchConnector implements NgramDbConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchConnector.class);
 
     private static final int RESULT_SIZE_LIMIT = 1000 * 1000;
-    private static final String TERM_COUNT = "term_count";
-    private static final String TEXT_FIELD = "tresc";
-
-    private static final String PARTY_FIELD = "partia";
-    private static final String DATE_FIELD = "data";
 
     private final String index;
-    private Client client;
     private Set<String> dates = new HashSet<String>();
 
     public ElasticSearchConnector(Client client, String index) {
-        this.client = client;
+    	super(client);
         this.index = index;
     }
 
@@ -94,19 +87,6 @@ public class ElasticSearchConnector implements DbConnector {
                 && searchResponse.getHits().getHits().length > 0;
     }
 
-    private SearchResponse queryElasticSearch(String ngram) {
-        QueryBuilder query = QueryBuilders.matchPhraseQuery(TEXT_FIELD, ngram);
-        SearchResponse searchResponse = client.prepareSearch(index)
-                .setQuery(query).setSize(RESULT_SIZE_LIMIT)
-                .addScriptField(TERM_COUNT, createCountScript(ngram))
-                .addField(DATE_FIELD)
-                .addField(PARTY_FIELD)
-                .addField(TEXT_FIELD)
-                .addField(ID_FIELD)
-                .get();
-        return searchResponse;
-    }
-
     private String createCountScript(String ngram) {
         return "_index['" + TEXT_FIELD + "']['" + ngram + "'].tf()";
     }
@@ -130,5 +110,21 @@ public class ElasticSearchConnector implements DbConnector {
     public void disconnect() {
         client.close();
     }
+
+	@Override
+	protected SearchRequestBuilder buildQuery(SearchRequestBuilder searchRequestBuilder, String phrase) {
+		return searchRequestBuilder
+		      .setSize(RESULT_SIZE_LIMIT)
+		      .addScriptField(TERM_COUNT, createCountScript(phrase))
+		      .addField(DATE_FIELD)
+		      .addField(PARTY_FIELD)
+		      .addField(TEXT_FIELD)
+		      .addField(ID_FIELD);
+	}
+
+	@Override
+	protected String getIndex() {
+		return index;
+	}
 
 }
