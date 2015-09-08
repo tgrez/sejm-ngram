@@ -11,6 +11,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         callsInProgressCount: 0,
         run: null
     };
+
+    $scope.ALL_PARTIES_KEY = "all";
+
     $scope.graph = {
         phrasesOccurences: [],
         sumPartiesOccurences: null,
@@ -72,7 +75,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     };
 
     function formatSingleNgramResponse(data, singleNgram){
-        var ALL_PARTIES_KEY = "all";
         var dateFormat = d3.time.format('%Y-%m-%d');
 
         var partiesOccurences = [];
@@ -84,11 +86,11 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
             var partyName = data.partiesNgrams[i].name;
 
-            if (partyName == ALL_PARTIES_KEY){
+            if (partyName == $scope.ALL_PARTIES_KEY){
                 sumParties = chartData;
             }
 
-            if (partyName != "" && partyName != null && partyName != ALL_PARTIES_KEY){
+            if (partyName != "" && partyName != null && partyName != $scope.ALL_PARTIES_KEY){
                  partiesOccurences.push({
                         partyName: data.partiesNgrams[i].name,
                         occurences: chartData
@@ -96,7 +98,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
             }
         }
 
-        partiesOccurences.unshift({partyName: ALL_PARTIES_KEY, occurences: sumParties});
+        partiesOccurences.unshift({partyName: $scope.ALL_PARTIES_KEY, occurences: sumParties});
 
         var chartDataFormatted = {
             name: singleNgram,
