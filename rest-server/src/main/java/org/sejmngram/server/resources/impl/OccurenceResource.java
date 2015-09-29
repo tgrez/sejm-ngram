@@ -59,8 +59,6 @@ public class OccurenceResource {
 			e.printStackTrace();
 			return null;
 		}
-		
-//		return "dupa"+id;
 	}
 }
 
