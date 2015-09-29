@@ -1,4 +1,4 @@
-module.factory('ngramFormatterFactory', function($http) {
+module.factory('ngramFormatterFactory', function () {
   var graphDataFormatterFactory = {};
 
   graphDataFormatterFactory.formatNgram = function (data) {
@@ -32,7 +32,7 @@ module.factory('ngramFormatterFactory', function($http) {
     };
   };
 
-  graphDataFormatterFactory.formatPartiesName = function(partiesOccurence) {
+  graphDataFormatterFactory.formatPartiesName = function (partiesOccurence) {
     return {"partyName" : partiesOccurence.partyName, "isVisible" : false }
   };
 
