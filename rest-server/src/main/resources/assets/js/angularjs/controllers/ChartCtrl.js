@@ -45,10 +45,10 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     phrases.forEach(function (phrase, index) {
       $scope.search.callsInProgressCount++;
 
-      apiFactory.getGraphNgram(phrase.text).then(function (data) {
+      apiFactory.getGraphNgram(phrase.text).then(function (response) {
         $scope.search.callsInProgressCount--;
 
-        var chartDataFormatted = graphDataFormatterFactory.formatNgram(data);
+        var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
         var partiesNames = chartDataFormatted.partiesOccurences.map(graphDataFormatterFactory.formatPartiesName);
 
         $scope.graph.partiesNames = partiesNames;
@@ -57,7 +57,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         }
 
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
-        $scope.search.phrasesService.removePhrase(phraseName);
+        $scope.search.phrasesService.removePhrase(response.ngram);
         $scope.$apply();
       });
     });

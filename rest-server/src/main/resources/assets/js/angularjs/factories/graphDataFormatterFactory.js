@@ -1,7 +1,7 @@
 module.factory('graphDataFormatterFactory', function () {
   var graphDataFormatterFactory = {};
 
-  graphDataFormatterFactory.formatNgram = function (data) {
+  graphDataFormatterFactory.formatNgram = function (data, allPartiesKey) {
     var singleNgram = data.ngram;
     var dateFormat = d3.time.format('%Y-%m-%d');
 
@@ -14,7 +14,7 @@ module.factory('graphDataFormatterFactory', function () {
 
       var partyName = ngram.name;
 
-      if (partyName == $scope.ALL_PARTIES_KEY){
+      if (partyName == allPartiesKey){
         sumParties = chartData;
       } else {
         partiesOccurences.push({
@@ -24,7 +24,7 @@ module.factory('graphDataFormatterFactory', function () {
       }
     });
 
-    partiesOccurences.unshift({partyName: $scope.ALL_PARTIES_KEY, occurences: sumParties});
+    partiesOccurences.unshift({partyName: allPartiesKey, occurences: sumParties});
 
     return {
       name: singleNgram,

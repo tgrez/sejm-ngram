@@ -1,5 +1,5 @@
 module.factory('apiFactory', ['$http', function($http) {
-  var urlBase = '/service/api';
+  var urlBase = 'http://localhost:8080/service/api';
   var dataFactory = {};
 
   dataFactory.getPhrases = function () {
@@ -7,7 +7,7 @@ module.factory('apiFactory', ['$http', function($http) {
   };
 
   dataFactory.getGraphNgram = function (phrase) {
-    return $http.get(urlBase + '/ngram/' + phrase);
+    return $http.get(urlBase + '/ngramfts/' + phrase);
   };
 
   return dataFactory;
