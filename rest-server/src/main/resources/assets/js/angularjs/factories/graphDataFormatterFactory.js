@@ -1,4 +1,4 @@
-module.factory('ngramFormatterFactory', function () {
+module.factory('graphDataFormatterFactory', function () {
   var graphDataFormatterFactory = {};
 
   graphDataFormatterFactory.formatNgram = function (data) {
