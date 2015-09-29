@@ -53,7 +53,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
         $scope.graph.partiesNames = partiesNames;
         $scope.graph.partiesNames.getId = function (partyName) {
-          return _.findIndex($scope.graph.partiesNames, function (object) { return object.partyName == partyName} )
+          return _.findIndex($scope.graph.partiesNames, { partyName: partyName });
         }
 
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
