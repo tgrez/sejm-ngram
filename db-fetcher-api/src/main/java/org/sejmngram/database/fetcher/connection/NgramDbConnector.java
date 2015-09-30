@@ -2,7 +2,7 @@ package org.sejmngram.database.fetcher.connection;
 
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
-public interface DbConnector {
+public interface NgramDbConnector {
 
     void connect();
     void disconnect();

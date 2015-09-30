@@ -8,7 +8,7 @@ import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.resource.NgramFtsDao;
 import org.skife.jdbi.v2.DBI;
 
-public class MySqlFtsDbConnector implements DbConnector {
+public class MySqlFtsDbConnector implements NgramDbConnector {
 
     private NgramFtsConverter ngramFtsConverter = null;
 

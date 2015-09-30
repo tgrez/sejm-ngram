@@ -14,7 +14,7 @@ import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.sejmngram.database.fetcher.converter.NgramConverter;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 
-public class MySqlDbConnector implements DbConnector {
+public class MySqlDbConnector implements NgramDbConnector {
 
 	private static final String USERNAME = "db-fetcher";
 	private static final String PASSWORD = "sejmngram2";
