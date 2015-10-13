@@ -18,6 +18,7 @@ module.directive('onSizeChanged', ['$window', function ($window) {
                 scope.cachedElementWidth = element.offsetWidth;
                 scope.cachedElementHeight = element.offsetHeight;
             }
+            // test commit
 
             function onWindowResize() {
                 var isSizeChanged = scope.cachedElementWidth != element.offsetWidth || scope.cachedElementHeight != element.offsetHeight;
