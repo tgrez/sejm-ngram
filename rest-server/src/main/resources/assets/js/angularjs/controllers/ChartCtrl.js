@@ -57,7 +57,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         }
 
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
-        $scope.search.phrasesService.removePhrase(response.ngram);
+        $scope.search.phrasesService.removePhrase(response.data.ngram);
         $scope.$apply();
       });
     });
