@@ -13,7 +13,7 @@ module.directive('stTermOccurencesChart', function () {
             displayRange: '=',
         },
         link: function link(scope, iElement, iAttrs) {
-						var chartPane = {};
+            var chartPane = {};
 
             var LINE_PREFIX = 'termOccurencesLine'
 
@@ -23,70 +23,70 @@ module.directive('stTermOccurencesChart', function () {
 
             scope.isInitialized = false;
 
-						function initialize() {
-								var chartMargin = {
-										top: 10,
-										bottom: 10,
-										left: 10,
-										right: 10
-								};
-								var linesCanvasMargin = {
-										top: 40,
-										bottom: 40,
-										left: 40,
-										right: 40
-								};
-								var svg = d3.select('#term-occurences-chart');
-								var svgWidth = svg.node().offsetWidth;
-								var svgHeight = svg.node().offsetHeight;
-								var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
-								var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
-								var linesCanvasWidth = chartWidth - linesCanvasMargin.left - linesCanvasMargin.right;
-								var linesCanvasHeight = chartPane.linesCanvasHeight =
-										chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
+            function initialize() {
+                var chartMargin = {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                };
+                var linesCanvasMargin = {
+                    top: 40,
+                    bottom: 40,
+                    left: 40,
+                    right: 40
+                };
+                var svg = d3.select('#term-occurences-chart');
+                var svgWidth = svg.node().offsetWidth;
+                var svgHeight = svg.node().offsetHeight;
+                var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
+                var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
+                var linesCanvasWidth = chartWidth - linesCanvasMargin.left - linesCanvasMargin.right;
+                var linesCanvasHeight = chartPane.linesCanvasHeight =
+                    chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
 
-								var defs = svg.append('defs');
-								var clipPath = defs.append('clipPath')
-										.attr('id', 'termOccurencesLinesCanvasRegion');
-								var clipPathRegion = clipPath.append('rect');
-								clipPathRegion.attr({
-										width: linesCanvasWidth,
-										height: linesCanvasHeight
-								});
+                var defs = svg.append('defs');
+                var clipPath = defs.append('clipPath')
+                    .attr('id', 'termOccurencesLinesCanvasRegion');
+                var clipPathRegion = clipPath.append('rect');
+                clipPathRegion.attr({
+                    width: linesCanvasWidth,
+                    height: linesCanvasHeight
+                });
 
-								var chart = svg.append('g')
-										.attr({
-												'class': 'chart',
-												'width': chartWidth,
-												'height': chartHeight,
-												'transform': 'translate(' + chartMargin.left + ', ' + chartMargin.top + ')'
-										});
+                var chart = svg.append('g')
+                    .attr({
+                        'class': 'chart',
+                        'width': chartWidth,
+                        'height': chartHeight,
+                        'transform': 'translate(' + chartMargin.left + ', ' + chartMargin.top + ')'
+                    });
 
-								chartPane.linesCanvas = chart.append('g')
-										.attr({
-												'class': 'linesCanvas',
-												'width': linesCanvasWidth,
-												'height': linesCanvasHeight,
-												'transform': 'translate(' + linesCanvasMargin.left + ', ' + linesCanvasMargin.top + ')'
-										});
-								chartPane.axisX = chart.append('g')
-										.attr({
-												'class': 'axis axisX',
-												'transform': 'translate(' + linesCanvasMargin.left + ', ' + (linesCanvasHeight + linesCanvasMargin.top) + ')'
-										});
-								chartPane.axisY = chart.append('g')
-										.attr({
-												'class': 'axis axisY',
-												'transform': 'translate(' + linesCanvasMargin.left + ', ' + linesCanvasMargin.top + ')'
-										});
+                chartPane.linesCanvas = chart.append('g')
+                    .attr({
+                        'class': 'linesCanvas',
+                        'width': linesCanvasWidth,
+                        'height': linesCanvasHeight,
+                        'transform': 'translate(' + linesCanvasMargin.left + ', ' + linesCanvasMargin.top + ')'
+                    });
+                chartPane.axisX = chart.append('g')
+                    .attr({
+                        'class': 'axis axisX',
+                        'transform': 'translate(' + linesCanvasMargin.left + ', ' + (linesCanvasHeight + linesCanvasMargin.top) + ')'
+                    });
+                chartPane.axisY = chart.append('g')
+                    .attr({
+                        'class': 'axis axisY',
+                        'transform': 'translate(' + linesCanvasMargin.left + ', ' + linesCanvasMargin.top + ')'
+                    });
 
-								chartPane.scaleX = d3.time.scale()
-										.range([0, linesCanvasWidth]);
-								chartPane.scaleY = d3.scale.linear()
-										.range([linesCanvasHeight, 0]);
+                chartPane.scaleX = d3.time.scale()
+                    .range([0, linesCanvasWidth]);
+                chartPane.scaleY = d3.scale.linear()
+                    .range([linesCanvasHeight, 0]);
 
-								scope.isInitialized = true;
-						}
+                scope.isInitialized = true;
+            }
 
             function onPartiesVisibilityChange(){
                 scope.graphDrawHelper.setLineVisibility(LINE_PREFIX)
@@ -108,7 +108,7 @@ module.directive('stTermOccurencesChart', function () {
             function onDisplayRangeChange() {
                 if (scope.isInitialized) {
                     chartPane.scaleX.domain(scope.displayRange);
-										redrawLines(scope.multiLineData, false);
+                    redrawLines(scope.multiLineData, false);
                 }
             }
 
@@ -134,7 +134,7 @@ module.directive('stTermOccurencesChart', function () {
                     chartPane.scaleX.domain(xRange);
                 chartPane.scaleY.domain(yRange);
 
-								redrawLines(multiLineData, true);
+                redrawLines(multiLineData, true);
 
                 var axisXFunction = d3.svg.axis()
                     .scale(chartPane.scaleX)
@@ -148,7 +148,7 @@ module.directive('stTermOccurencesChart', function () {
                 chartPane.axisY.transition().duration(1000).call(axisYFunction);
             }
 
-						function redrawLines(multiLineData, shouldAnimate) {
+            function redrawLines(multiLineData, shouldAnimate) {
                 for (var i = 0; i < multiLineData.length; i++) {
                     var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
 
@@ -168,20 +168,20 @@ module.directive('stTermOccurencesChart', function () {
                             .attr('class', 'line')
                             .attr('clip-path', 'url(#termOccurencesLinesCanvasRegion)')
                             .attr('style', 'stroke: ' + scope.graphDrawHelper.generateLineColorForPartyName(multiLineData[i].lineName));
-												if (shouldAnimate) {
+                        if (shouldAnimate) {
                             line.attr('d', flatLineFunction(multiLineData[i].occurences))
-															.transition()
-															.duration(1000)
-												}
+                              .transition()
+                              .duration(1000)
+                        }
                         line.attr('d', lineFunction(multiLineData[i].occurences));
                     } else {
-												if (shouldAnimate) line.transition().duration(1000);
-												line.attr('d', lineFunction(multiLineData[i].occurences));
+                        if (shouldAnimate) line.transition().duration(1000);
+                        line.attr('d', lineFunction(multiLineData[i].occurences));
                     }
                 }
 
                 scope.graphDrawHelper.removeObsolateLines(chartPane.linesCanvas, multiLineData, LINE_PREFIX);
-						}
+            }
         },
         template:
             '<svg width="758" height="400">' +
