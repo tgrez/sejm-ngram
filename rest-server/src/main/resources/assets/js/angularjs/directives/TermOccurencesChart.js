@@ -12,7 +12,7 @@ module.directive('stTermOccurencesChart', function () {
             graphDrawHelper: '=',
             displayRange: '=',
         },
-        link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+        link: function link(scope, iElement, iAttrs) {
             var LINE_PREFIX = 'termOccurencesLine'
             var svg;
             var svgWidth;
@@ -30,8 +30,6 @@ module.directive('stTermOccurencesChart', function () {
             var axisY;
             var scaleX;
             var scaleY;
-            var axisXFunction;
-            var axisYFunction;
 
             scope.isInitialized = false;
 
@@ -123,16 +121,7 @@ module.directive('stTermOccurencesChart', function () {
             function onDisplayRangeChange() {
                 if (scope.isInitialized) {
                     scaleX.domain(scope.displayRange);
-                    axisX.call(axisXFunction);
-                    axisY.call(axisYFunction);
-
-                    for (var i = 0; i < scope.multiLineData.length; i++) {
-                        var lineFunction = d3.svg.line()
-                            .x(function(o, i) { return scaleX(o.date); })
-                            .y(function(o, i) { return scaleY(o.count); });
-                        linesCanvas.select('.line:nth-child(' + (i + 1) + ')')
-                            .attr('d', lineFunction(scope.multiLineData[i].occurences));
-                    }
+										redrawLines(scope.multiLineData);
                 }
             }
 
@@ -158,6 +147,21 @@ module.directive('stTermOccurencesChart', function () {
                     scaleX.domain(xRange);
                 scaleY.domain(yRange);
 
+								redrawLines(multiLineData);
+
+                var axisXFunction = d3.svg.axis()
+                    .scale(scaleX)
+                    .orient('bottom')
+                    .ticks(4);
+                var axisYFunction = d3.svg.axis()
+                    .scale(scaleY)
+                    .orient('left');
+
+                axisX.transition().duration(1000).call(axisXFunction);
+                axisY.transition().duration(1000).call(axisYFunction);
+            }
+
+						function redrawLines(multiLineData) {
                 for (var i = 0; i < multiLineData.length; i++) {
                     var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
 
@@ -190,17 +194,7 @@ module.directive('stTermOccurencesChart', function () {
 
                 scope.graphDrawHelper.removeObsolateLines(linesCanvas, multiLineData, LINE_PREFIX);
 
-                axisXFunction = d3.svg.axis()
-                    .scale(scaleX)
-                    .orient('bottom')
-                    .ticks(4);
-                axisYFunction = d3.svg.axis()
-                    .scale(scaleY)
-                    .orient('left');
-
-                axisX.transition().duration(1000).call(axisXFunction);
-                axisY.transition().duration(1000).call(axisYFunction);
-            }
+								}
         },
         template:
             '<svg width="758" height="400">' +

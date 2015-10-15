@@ -12,7 +12,7 @@ module.directive('stRangeFilterChart', function() {
             graphDrawHelper: '=',
             selectedRange: '='
         },
-        link: function link(scope, iElement, iAttrs, controller, transcludeFn) {
+        link: function link(scope, iElement, iAttrs) {
             var LINE_PREFIX = 'rangeFilterLine';
             var svg;
             var svgWidth;
