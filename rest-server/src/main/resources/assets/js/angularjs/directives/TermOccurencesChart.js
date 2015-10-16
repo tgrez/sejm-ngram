@@ -15,15 +15,18 @@ module.directive('stTermOccurencesChart', function () {
         link: function link(scope, iElement, iAttrs) {
             var chartPane = {};
 
-            var LINE_PREFIX = 'termOccurencesLine'
-
             scope.$watch('termsOccurences.length', onDataChange);
             scope.$watch('displayRange', onDisplayRangeChange);
             scope.$watch('partiesNames', onPartiesVisibilityChange, true)
 
             scope.isInitialized = false;
-
             function initialize() {
+                initializeChartPane(d3.select('#term-occurences-chart'), 'term-occurances-chart-');
+                scope.isInitialized = true;
+            }
+
+            function initializeChartPane(svg, idPrefix) {
+                chartPane.idPrefix = idPrefix;
                 var chartMargin = {
                     top: 10,
                     bottom: 10,
@@ -36,7 +39,6 @@ module.directive('stTermOccurencesChart', function () {
                     left: 40,
                     right: 40
                 };
-                var svg = d3.select('#term-occurences-chart');
                 var svgWidth = svg.node().offsetWidth;
                 var svgHeight = svg.node().offsetHeight;
                 var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
@@ -46,8 +48,9 @@ module.directive('stTermOccurencesChart', function () {
                     chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
 
                 var defs = svg.append('defs');
+                var linesCanvasRegionId = chartPane.linesCanvasRegionId = idPrefix + 'lines-canvas-region';
                 var clipPath = defs.append('clipPath')
-                    .attr('id', 'termOccurencesLinesCanvasRegion');
+                    .attr('id', linesCanvasRegionId);
                 var clipPathRegion = clipPath.append('rect');
                 clipPathRegion.attr({
                     width: linesCanvasWidth,
@@ -85,18 +88,17 @@ module.directive('stTermOccurencesChart', function () {
                 chartPane.scaleY = d3.scale.linear()
                     .range([linesCanvasHeight, 0]);
 
-                scope.isInitialized = true;
             }
 
             function onPartiesVisibilityChange(){
-                scope.graphDrawHelper.setLineVisibility(LINE_PREFIX)
+                scope.graphDrawHelper.setLineVisibility(chartPane.idPrefix)
             }
 
             function onDataChange() {
                 var isTermsOccurencesEmpty = typeof scope.termsOccurences === 'undefined' || scope.termsOccurences === null || scope.termsOccurences.length === 0;
                 scope.multiLineData = scope.graphDrawHelper.calculateMultiLineData(scope.termsOccurences)
                 if (!isTermsOccurencesEmpty && !scope.isInitialized) {
-                        initialize();
+                     initialize();
                         update();
                 }
                 if (scope.isInitialized) {
@@ -150,7 +152,7 @@ module.directive('stTermOccurencesChart', function () {
 
             function redrawLines(multiLineData, shouldAnimate) {
                 for (var i = 0; i < multiLineData.length; i++) {
-                    var lineId = scope.graphDrawHelper.generateLineId(LINE_PREFIX, multiLineData[i].lineName);
+                    var lineId = scope.graphDrawHelper.generateLineId(chartPane.idPrefix, multiLineData[i].lineName);
 
                     var lineFunction = d3.svg.line()
                         .x(function (o) { return chartPane.scaleX(o.date); })
@@ -166,7 +168,7 @@ module.directive('stTermOccurencesChart', function () {
                         line = chartPane.linesCanvas.append("path")
                             .attr('id', lineId)
                             .attr('class', 'line')
-                            .attr('clip-path', 'url(#termOccurencesLinesCanvasRegion)')
+                            .attr('clip-path', 'url(#' + chartPane.linesCanvasRegionId +')')
                             .attr('style', 'stroke: ' + scope.graphDrawHelper.generateLineColorForPartyName(multiLineData[i].lineName));
                         if (shouldAnimate) {
                             line.attr('d', flatLineFunction(multiLineData[i].occurences))
@@ -180,7 +182,7 @@ module.directive('stTermOccurencesChart', function () {
                     }
                 }
 
-                scope.graphDrawHelper.removeObsolateLines(chartPane.linesCanvas, multiLineData, LINE_PREFIX);
+                scope.graphDrawHelper.removeObsolateLines(chartPane.linesCanvas, multiLineData, chartPane.idPrefix);
             }
         },
         template:
