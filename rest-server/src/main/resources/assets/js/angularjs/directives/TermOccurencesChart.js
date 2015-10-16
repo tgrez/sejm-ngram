@@ -13,7 +13,7 @@ module.directive('stTermOccurencesChart', function () {
             displayRange: '=',
         },
         link: function link(scope, iElement, iAttrs) {
-            var chartPane = {};
+            var mainChart, rangeChart;
 
             scope.$watch('termsOccurences.length', onDataChange);
             scope.$watch('displayRange', onDisplayRangeChange);
@@ -21,12 +21,19 @@ module.directive('stTermOccurencesChart', function () {
 
             scope.isInitialized = false;
             function initialize() {
-                initializeChartPane(d3.select('#term-occurences-chart'), 'term-occurances-chart-');
+                mainChart = initializeChartPane({
+                    svg: d3.select('#term-occurences-chart'),
+                    idPrefix: 'term-occurances-chart-'});
+                rangeChart = initializeChartPane({
+                    svg: d3.select('#range-filter-chart'),
+                    idPrefix: 'range-filter-chart-',
+                    yAxisTicks: 2});
+                addBrushRangeSelector(rangeChart)
                 scope.isInitialized = true;
             }
 
-            function initializeChartPane(svg, idPrefix) {
-                chartPane.idPrefix = idPrefix;
+            function initializeChartPane(chartPane) {
+                var svg = chartPane.svg;
                 var chartMargin = {
                     top: 10,
                     bottom: 10,
@@ -48,7 +55,7 @@ module.directive('stTermOccurencesChart', function () {
                     chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
 
                 var defs = svg.append('defs');
-                var linesCanvasRegionId = chartPane.linesCanvasRegionId = idPrefix + 'lines-canvas-region';
+                var linesCanvasRegionId = chartPane.linesCanvasRegionId = chartPane.idPrefix + 'lines-canvas-region';
                 var clipPath = defs.append('clipPath')
                     .attr('id', linesCanvasRegionId);
                 var clipPathRegion = clipPath.append('rect');
@@ -87,11 +94,34 @@ module.directive('stTermOccurencesChart', function () {
                     .range([0, linesCanvasWidth]);
                 chartPane.scaleY = d3.scale.linear()
                     .range([linesCanvasHeight, 0]);
+                return chartPane;
+            }
+            
+            function addBrushRangeSelector(chartPane) {
+                var brush = chartPane.linesCanvas.append('g')
+                    .attr({
+                        'class': 'brush'
+                    });
 
+                var brushFunction = d3.svg.brush()
+                    .x(chartPane.scaleX);
+
+                brush.call(brushFunction)
+                    .selectAll("rect")
+                    .attr("height", chartPane.linesCanvasHeight);
+
+                brushFunction.on('brush', function () {
+                    scope.$apply(function () {
+                        scope.displayRange = brushFunction.extent();
+                    });
+                });
             }
 
-            function onPartiesVisibilityChange(){
-                scope.graphDrawHelper.setLineVisibility(chartPane.idPrefix)
+            function onPartiesVisibilityChange(chartPane){
+                if (scope.isInitialized) {
+                    scope.graphDrawHelper.setLineVisibility(mainChart.idPrefix)
+                    scope.graphDrawHelper.setLineVisibility(rangeChart.idPrefix)
+                }
             }
 
             function onDataChange() {
@@ -99,7 +129,7 @@ module.directive('stTermOccurencesChart', function () {
                 scope.multiLineData = scope.graphDrawHelper.calculateMultiLineData(scope.termsOccurences)
                 if (!isTermsOccurencesEmpty && !scope.isInitialized) {
                      initialize();
-                        update();
+                     update();
                 }
                 if (scope.isInitialized) {
                     update();
@@ -109,8 +139,8 @@ module.directive('stTermOccurencesChart', function () {
 
             function onDisplayRangeChange() {
                 if (scope.isInitialized) {
-                    chartPane.scaleX.domain(scope.displayRange);
-                    redrawLines(scope.multiLineData, false);
+                    mainChart.scaleX.domain(scope.displayRange);
+                    redrawLines(mainChart, scope.multiLineData, false);
                 }
             }
 
@@ -131,26 +161,32 @@ module.directive('stTermOccurencesChart', function () {
 
                 var isDisplayRangeValid = typeof scope.displayRange !== 'undefined' && scope.displayRange !== null && scope.displayRange.length > 0;
                 if (isDisplayRangeValid)
-                    chartPane.scaleX.domain(scope.displayRange);
+                    mainChart.scaleX.domain(scope.displayRange);
                 else 
-                    chartPane.scaleX.domain(xRange);
-                chartPane.scaleY.domain(yRange);
+                    mainChart.scaleX.domain(xRange);
+                rangeChart.scaleX.domain(xRange);
 
-                redrawLines(multiLineData, true);
+                [mainChart, rangeChart].forEach(function (chartPane) {
+                  chartPane.scaleY.domain(yRange);
 
-                var axisXFunction = d3.svg.axis()
-                    .scale(chartPane.scaleX)
-                    .orient('bottom')
-                    .ticks(4);
-                var axisYFunction = d3.svg.axis()
-                    .scale(chartPane.scaleY)
-                    .orient('left');
+                  redrawLines(chartPane, multiLineData, true);
 
-                chartPane.axisX.transition().duration(1000).call(axisXFunction);
-                chartPane.axisY.transition().duration(1000).call(axisYFunction);
+                  var axisXFunction = d3.svg.axis()
+                      .scale(chartPane.scaleX)
+                      .orient('bottom')
+                      .ticks(4);
+                  var axisYFunction = d3.svg.axis()
+                      .scale(chartPane.scaleY)
+                      .orient('left');
+                  if (chartPane.yAxisTicks !== undefined)
+                      axisYFunction.ticks(chartPane.yAxisTicks);
+
+                  chartPane.axisX.transition().duration(1000).call(axisXFunction);
+                  chartPane.axisY.transition().duration(1000).call(axisYFunction);
+                })
             }
 
-            function redrawLines(multiLineData, shouldAnimate) {
+            function redrawLines(chartPane, multiLineData, shouldAnimate) {
                 for (var i = 0; i < multiLineData.length; i++) {
                     var lineId = scope.graphDrawHelper.generateLineId(chartPane.idPrefix, multiLineData[i].lineName);
 
@@ -165,7 +201,7 @@ module.directive('stTermOccurencesChart', function () {
                     var line = d3.select('#' + lineId);
                     var isLineExist = line.empty();
                     if (isLineExist) {
-                        line = chartPane.linesCanvas.append("path")
+                        line = chartPane.linesCanvas.insert("path",".brush") // place before any brush element, so that brush is not overdrawn
                             .attr('id', lineId)
                             .attr('class', 'line')
                             .attr('clip-path', 'url(#' + chartPane.linesCanvasRegionId +')')
@@ -186,8 +222,8 @@ module.directive('stTermOccurencesChart', function () {
             }
         },
         template:
-            '<svg width="758" height="400">' +
-            '</svg>',
+            '<div><svg id="term-occurences-chart" width="758" height="400"></svg>'
+            +'<svg id="range-filter-chart" width="758" height="150"></svg></div>',
         replace: true
     };
 });
