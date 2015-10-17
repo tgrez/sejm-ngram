@@ -157,7 +157,6 @@ module.directive('stTermOccurencesChart', function () {
                 rangeChart.initBrushRangeSelector(function (newRange) {
                     scope.$apply(function () {
                       mainChart.scaleX.domain(newRange);
-                      console.log(newRange);
                       mainChart.redrawLines(scope.multiLineData, false, scope);
                     });
                   });
@@ -176,7 +175,6 @@ module.directive('stTermOccurencesChart', function () {
                 scope.multiLineData = scope.graphDrawHelper.calculateMultiLineData(scope.termsOccurences)
                 if (!isTermsOccurencesEmpty && !scope.isInitialized) {
                      initialize();
-                     update();
                 }
                 if (scope.isInitialized)
                     update();
