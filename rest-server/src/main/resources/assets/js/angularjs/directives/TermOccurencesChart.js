@@ -115,8 +115,16 @@ function initChartPane(chartPane) {
             .selectAll("rect")
             .attr("height", this.linesCanvasHeight);
 
+        this.currentRange = this.scaleX.domain();
+        var that = this;
         brushFunction.on('brush', function () {
-            onRangeChange(brushFunction.extent());
+            var newRange = brushFunction.extent();
+            if (newRange[0].valueOf() === newRange[1].valueOf())
+              newRange = that.scaleX.domain();
+            if (newRange !== that.currentRange) {
+              that.currentRange = newRange;
+              onRangeChange(newRange);
+            }
         });
     };
 
@@ -149,6 +157,7 @@ module.directive('stTermOccurencesChart', function () {
                 rangeChart.initBrushRangeSelector(function (newRange) {
                     scope.$apply(function () {
                       mainChart.scaleX.domain(newRange);
+                      console.log(newRange);
                       mainChart.redrawLines(scope.multiLineData, false, scope);
                     });
                   });
