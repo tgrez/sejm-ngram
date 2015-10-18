@@ -37,7 +37,14 @@
         </div>
     </div>
     <div class="chart-wrapper" ng-show="search.wasTriggered">
-        <st-graph-legend id="legend-box" ng-model="graph.partiesNames" checkbox-clicked="graph.checkboxClicked" graph-draw-helper="graph.graphDrawHelper"></st-graph-legend>
-        <st-term-occurences-chart ng-model="graph.phrasesOccurences" graph-draw-helper="graph.graphDrawHelper" parties-names= "graph.partiesNames" display-range="graph.selectedRange"></st-term-occurences-chart>
+        <st-graph-legend id="legend-box"
+                         ng-model="graph.partiesNames"
+                         checkbox-clicked="graph.checkboxClicked"
+                         graph-draw-helper="graph.graphDrawHelper"></st-graph-legend>
+        <st-term-occurences-chart ng-model="graph.phrasesOccurences"
+                                  graph-draw-helper="graph.graphDrawHelper"
+                                  graph="graph"
+                                  parties-names="graph.partiesNames"
+                                  display-range="graph.selectedRange"></st-term-occurences-chart>
     </div>
 </div>

@@ -24,7 +24,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     selectedRange: null,
     linesColors: colors,
     checkboxClicked: null,
-    plotLines : []
+    plotLines : [],
+    xRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)], // dummy initial, I don't want to deal with nulls
+    yRange: [0, 1] // dummy initial, I don't want to deal with nulls
   }
 
   $scope.mostPopularPhrases = {
@@ -40,17 +42,33 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   };
     
   function prepareForDisplay(phraseOccurances) {
+    var plotLines = [];
     if (phraseOccurances.length == 1) { //one ngram, many parties
-      $scope.graph.plotLines = phraseOccurances[0].partiesOccurences.map(function (party, i) {
+      plotLines = phraseOccurances[0].partiesOccurences.map(function (party, i) {
           return {
               label: party.partyName,
               color: colors[i % colors.length],
-              occurances: party.occurances
+              occurences: party.occurences
           }
       });
     } else {
       console.log("One search phrase supported only right now");
+      return;
     }
+
+    var minY = 0;
+    var maxY = 0;
+    for (var i = 0; i < plotLines.length; i++) {
+        var tempMaxY = d3.max(plotLines[i].occurences, function (o) { return o.count; });
+        if (tempMaxY > maxY)
+            maxY = tempMaxY;
+    }
+
+    // TODO can we realy on the fact that all parties have the same dates?
+    $scope.graph.xRange = [plotLines[0].occurences[0].date,
+                  plotLines[0].occurences[plotLines[0].occurences.length - 1].date];
+    $scope.graph.yRange = [minY, maxY];
+    $scope.graph.plotLines = plotLines;
   }
 
   $scope.search.run = function () {
@@ -113,14 +131,14 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
       var partyId = $scope.graph.partiesNames.getId(partyName);
       return linesColor[ partyId % linesColor.length]
     },
-    removeObsolateLines: function (linesCanvas, termsOccurences, line_prefix) {
+    removeObsolateLines: function (linesCanvas, plotLines, line_prefix) {
       var lines = linesCanvas.selectAll('.line');
 
       lines.each(function () {
         var line = this;
         var lineId = line.id;
-        var isTermExist = _.any(termsOccurences, function (o, i) {
-          var term = o.lineName;
+        var isTermExist = _.any(plotLines, function (o, i) {
+          var term = o.label;
           var termId = $scope.graph.graphDrawHelper.generateLineId(line_prefix, term);
           return termId === lineId;
         });

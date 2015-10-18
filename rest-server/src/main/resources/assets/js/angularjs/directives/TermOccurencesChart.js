@@ -66,14 +66,16 @@ function initChartPane(chartPane) {
     chartPane.scaleY = d3.scale.linear()
         .range([linesCanvasHeight, 0]);
     
-    chartPane.redrawLines = function(multiLineData, shouldAnimate, scope) {
+    chartPane.redrawLines = function(plotLines, shouldAnimate, scope) {
         var that = this;
-        for (var i = 0; i < multiLineData.length; i++) {
-            var lineId = scope.graphDrawHelper.generateLineId(this.idPrefix, multiLineData[i].lineName);
+        for (var i = 0; i < plotLines.length; i++) {
+            var lineId = scope.graphDrawHelper.generateLineId(this.idPrefix, plotLines[i].label);
 
             var lineFunction = d3.svg.line()
                 .x(function (o) { return that.scaleX(o.date); })
                 .y(function (o) { return that.scaleY(o.count); });
+
+            // TODO what is it doing?
             var flatLineFunction = d3.svg.line()
                 .x(function (o) { return that.scaleX(o.date); })
                 .y(function (o) { return that.linesCanvasHeight; });
@@ -86,20 +88,20 @@ function initChartPane(chartPane) {
                     .attr('id', lineId)
                     .attr('class', 'line')
                     .attr('clip-path', 'url(#' + this.linesCanvasRegionId +')')
-                    .attr('style', 'stroke: ' + scope.graphDrawHelper.generateLineColorForPartyName(multiLineData[i].lineName));
+                    .attr('style', 'stroke: ' + plotLines[i].color);
                 if (shouldAnimate) {
-                    line.attr('d', flatLineFunction(multiLineData[i].occurences))
+                    line.attr('d', flatLineFunction(plotLines[i].occurences))
                       .transition()
                       .duration(1000)
                 }
-                line.attr('d', lineFunction(multiLineData[i].occurences));
+                line.attr('d', lineFunction(plotLines[i].occurences));
             } else {
                 if (shouldAnimate) line.transition().duration(1000);
-                line.attr('d', lineFunction(multiLineData[i].occurences));
+                line.attr('d', lineFunction(plotLines[i].occurences));
             }
         }
 
-        scope.graphDrawHelper.removeObsolateLines(this.linesCanvas, multiLineData, this.idPrefix);
+        scope.graphDrawHelper.removeObsolateLines(this.linesCanvas, plotLines, this.idPrefix);
     };
 
     chartPane.initBrushRangeSelector = function(onRangeChange) {
@@ -130,7 +132,7 @@ function initChartPane(chartPane) {
             }
         });
     };
-    chartPane.update = function (multiLineData, xRange, yRange, scope) {
+    chartPane.update = function (plotLines, xRange, yRange, scope) {
         if (this.currentRange !== undefined) {
         // in case this is a new scaleX and this chart has a brush, we want to clear the brush
         // otherwise leave the brush selection as is
@@ -159,7 +161,7 @@ function initChartPane(chartPane) {
         this.axisX.transition().duration(1000).call(axisXFunction);
         this.axisY.transition().duration(1000).call(axisYFunction);
 
-        this.redrawLines(multiLineData, true, scope);
+        this.redrawLines(plotLines, true, scope);
     };
 
     return chartPane;
@@ -172,11 +174,12 @@ module.directive('stTermOccurencesChart', function () {
             termsOccurences: '=ngModel',
             partiesNames: '=',
             graphDrawHelper: '=',
+            graph: '='
         },
         link: function link(scope, iElement, iAttrs) {
             var mainChart, rangeChart;
 
-            scope.$watch('termsOccurences.length', onDataChange);
+            scope.$watch('graph.plotLines', onDataChange);
             scope.$watch('partiesNames', onPartiesVisibilityChange, true)
 
             scope.isInitialized = false;
@@ -191,7 +194,7 @@ module.directive('stTermOccurencesChart', function () {
                 rangeChart.initBrushRangeSelector(function (newRange) {
                     scope.$apply(function () {
                       mainChart.scaleX.domain(newRange);
-                      mainChart.redrawLines(scope.multiLineData, false, scope);
+                      mainChart.redrawLines(scope.graph.plotLines, false, scope);
                     });
                   });
                 scope.isInitialized = true;
@@ -205,9 +208,7 @@ module.directive('stTermOccurencesChart', function () {
             }
 
             function onDataChange() {
-                var isTermsOccurencesEmpty = typeof scope.termsOccurences === 'undefined' || scope.termsOccurences === null || scope.termsOccurences.length === 0;
-                scope.multiLineData = scope.graphDrawHelper.calculateMultiLineData(scope.termsOccurences)
-                if (!isTermsOccurencesEmpty && !scope.isInitialized) {
+                if (scope.graph.plotLines.length !== 0 && !scope.isInitialized) {
                      initialize();
                 }
                 if (scope.isInitialized)
@@ -215,21 +216,8 @@ module.directive('stTermOccurencesChart', function () {
             }
 
             function update() {
-                var multiLineData = scope.multiLineData;
-                var minY = 0;
-                var maxY = 0;
-                for (var i = 0; i < multiLineData.length; i++) {
-                    var tempMaxY = d3.max(multiLineData[i].occurences, function (o) { return o.count; });
-                    if (tempMaxY > maxY)
-                        maxY = tempMaxY;
-                }
-
-                var xRange = [multiLineData[0].occurences[0].date,
-                              multiLineData[0].occurences[multiLineData[0].occurences.length - 1].date];
-                var yRange = [minY, maxY];
-
                 [mainChart, rangeChart].forEach(function (chartPane) {
-                  chartPane.update(multiLineData, xRange, yRange, scope);
+                  chartPane.update(scope.graph.plotLines, scope.graph.xRange, scope.graph.yRange, scope);
                 })
             }
 
