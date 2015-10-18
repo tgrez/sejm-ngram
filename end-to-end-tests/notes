@@ -3,13 +3,13 @@ install dependencies
     brew install nodejs # will install npm too
     npm install -g protractor # installs under /usr/local/lib/node_modules
     webdriver-manager update # this downloads Selenium to aforementioned dir
-    webdriver-manager start
 
 This is not truly end to end yet. It does not use the backend. For now
 only start a server that serves the static files with mock data.
 
-./start-server.sh # in a separete terminal window
-protractor conf.js
+./start-server.sh # in a separete terminal
+webdriver-manager start # start selenium server in separate terminal
+protractor conf.js # runs the tests
 
 I followed instructions from protractor project web site. Did not mention
 chrome anywhere, but this is what gets used for running tests on my machine.
