@@ -82,8 +82,7 @@ function initChartPane(chartPane) {
 
 
             var line = d3.select('#' + lineId);
-            var isLineExist = line.empty();
-            if (isLineExist) {
+            if (line.empty()) {
                 line = this.linesCanvas.insert("path",".brush") // place before any brush element, so that brush is not overdrawn
                     .attr('id', lineId)
                     .attr('class', 'line')
@@ -99,6 +98,8 @@ function initChartPane(chartPane) {
                 if (shouldAnimate) line.transition().duration(1000);
                 line.attr('d', lineFunction(plotLines[i].occurences));
             }
+
+            line.style('visibility', plotLines[i].isVisible ? 'visible' : 'hidden');
         }
 
         scope.graphDrawHelper.removeObsolateLines(this.linesCanvas, plotLines, this.idPrefix);
@@ -179,7 +180,9 @@ module.directive('stTermOccurencesChart', function () {
         link: function link(scope, iElement, iAttrs) {
             var mainChart, rangeChart;
 
+            // apparently isVisible change inside plotLines does not trigger onDataChange
             scope.$watch('graph.plotLines', onDataChange);
+            // hence we need this watcher for now
             scope.$watch('partiesNames', onPartiesVisibilityChange, true)
 
             scope.isInitialized = false;
@@ -200,10 +203,10 @@ module.directive('stTermOccurencesChart', function () {
                 scope.isInitialized = true;
             }
 
-            function onPartiesVisibilityChange(chartPane){
+            function onPartiesVisibilityChange(){
                 if (scope.isInitialized) {
-                    scope.graphDrawHelper.setLineVisibility(mainChart.idPrefix)
-                    scope.graphDrawHelper.setLineVisibility(rangeChart.idPrefix)
+                    mainChart.redrawLines(scope.graph.plotLines, false, scope);
+                    rangeChart.redrawLines(scope.graph.plotLines, false, scope);
                 }
             }
 

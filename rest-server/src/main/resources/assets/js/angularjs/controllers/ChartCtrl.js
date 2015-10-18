@@ -22,7 +22,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     graphDrawHelper: null,
     getIdFromPartyName: null,
     selectedRange: null,
-    linesColors: colors,
     checkboxClicked: null,
     plotLines : [],
     xRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)], // dummy initial, I don't want to deal with nulls
@@ -48,7 +47,8 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
           return {
               label: party.partyName,
               color: colors[i % colors.length],
-              occurences: party.occurences
+              occurences: party.occurences,
+              isVisible: false
           }
       });
     } else {
@@ -64,7 +64,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
             maxY = tempMaxY;
     }
 
-    // TODO can we realy on the fact that all parties have the same dates?
+    // TODO can we rely on the fact that all parties have the same dates?
     $scope.graph.xRange = [plotLines[0].occurences[0].date,
                   plotLines[0].occurences[plotLines[0].occurences.length - 1].date];
     $scope.graph.yRange = [minY, maxY];
@@ -117,19 +117,12 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   };
 
   $scope.graph.graphDrawHelper = {
-    setLineVisibility: function(line_prefix){
-      _.each($scope.graph.partiesNames, function(object, key){
-        d3.select("#" + $scope.graph.graphDrawHelper.generateLineId(line_prefix, object.partyName) )
-        .style('visibility', object.isVisible ? 'visible' : 'hidden')
-      })
-    },
     generateLineId:     function(prefix, term) {
       return prefix + '-' + $scope.graph.partiesNames.getId(term);
     },
     generateLineColorForPartyName: function(partyName){
-      var linesColor = $scope.graph.linesColors;
       var partyId = $scope.graph.partiesNames.getId(partyName);
-      return linesColor[ partyId % linesColor.length]
+      return colors[ partyId % colors.length]
     },
     removeObsolateLines: function (linesCanvas, plotLines, line_prefix) {
       var lines = linesCanvas.selectAll('.line');
@@ -168,9 +161,15 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   }
 
   // TODO: replace with ng-repeat
-  $scope.graph.checkboxClicked = function(checked, partyName){
-    var partyIndex = $scope.graph.partiesNames.getId(partyName)
+  $scope.graph.checkboxClicked = function(checked, label){
+    var partyIndex = $scope.graph.partiesNames.getId(label)
+    // need it till ng-repeat because changing plotLines does not trigger update in chart
     $scope.graph.partiesNames[partyIndex].isVisible = checked;
+
+    $scope.graph.plotLines.forEach(function (line) {
+        if (line.label === label)
+            line.isVisible = checked;
+    });
   }
 
   $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {
