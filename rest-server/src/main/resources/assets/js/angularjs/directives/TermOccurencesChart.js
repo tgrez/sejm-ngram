@@ -103,29 +103,63 @@ function initChartPane(chartPane) {
     };
 
     chartPane.initBrushRangeSelector = function(onRangeChange) {
-        var brush = this.linesCanvas.append('g')
+        var g = this.linesCanvas.append('g')
             .attr({
                 'class': 'brush'
             });
 
-        var brushFunction = d3.svg.brush()
+        var brush = this.brush = d3.svg.brush()
             .x(this.scaleX);
 
-        brush.call(brushFunction)
+        g.call(brush)
             .selectAll("rect")
             .attr("height", this.linesCanvasHeight);
 
+        // to start off, range is equal to scaleX, and the brush is empty
         this.currentRange = this.scaleX.domain();
         var that = this;
-        brushFunction.on('brush', function () {
-            var newRange = brushFunction.extent();
-            if (newRange[0].valueOf() === newRange[1].valueOf())
+        brush.on('brush', function () {
+            var newRange = brush.extent();
+            if (newRange[0].valueOf() === newRange[1].valueOf()) {
               newRange = that.scaleX.domain();
+              brush.clear(); // TODO does not seem to work, there is a hair width brush still there
+            }
             if (newRange !== that.currentRange) {
               that.currentRange = newRange;
               onRangeChange(newRange);
             }
         });
+    };
+    chartPane.update = function (multiLineData, xRange, yRange, scope) {
+        if (this.currentRange !== undefined) {
+        // in case this is a new scaleX and this chart has a brush, we want to clear the brush
+        // otherwise leave the brush selection as is
+            if (!angular.equals(this.scaleX.domain(), xRange)) {
+              // not sure if we need to update scaleX domain before modifying the brush, but can't hurt
+              this.scaleX.domain(xRange);
+
+              this.currentRange = xRange;
+              this.brush.clear(); // TODO untested
+              this.brush.x(this.scaleX);
+            }
+        }
+        this.scaleX.domain(xRange);
+        this.scaleY.domain(yRange);
+
+        var axisXFunction = d3.svg.axis()
+            .scale(chartPane.scaleX)
+            .orient('bottom')
+            .ticks(4);
+        var axisYFunction = d3.svg.axis()
+            .scale(chartPane.scaleY)
+            .orient('left');
+        if (this.yAxisTicks !== undefined)
+            axisYFunction.ticks(this.yAxisTicks);
+
+        this.axisX.transition().duration(1000).call(axisXFunction);
+        this.axisY.transition().duration(1000).call(axisYFunction);
+
+        this.redrawLines(multiLineData, true, scope);
     };
 
     return chartPane;
@@ -180,9 +214,8 @@ module.directive('stTermOccurencesChart', function () {
                     update();
             }
 
-
             function update() {
-                var multiLineData = scope.multiLineData
+                var multiLineData = scope.multiLineData;
                 var minY = 0;
                 var maxY = 0;
                 for (var i = 0; i < multiLineData.length; i++) {
@@ -191,33 +224,12 @@ module.directive('stTermOccurencesChart', function () {
                         maxY = tempMaxY;
                 }
 
-                var xRange = [multiLineData[0].occurences[0].date, multiLineData[0].occurences[multiLineData[0].occurences.length - 1].date];
+                var xRange = [multiLineData[0].occurences[0].date,
+                              multiLineData[0].occurences[multiLineData[0].occurences.length - 1].date];
                 var yRange = [minY, maxY];
 
-                var isDisplayRangeValid = typeof scope.displayRange !== 'undefined' && scope.displayRange !== null && scope.displayRange.length > 0;
-                if (isDisplayRangeValid)
-                    mainChart.scaleX.domain(scope.displayRange);
-                else 
-                    mainChart.scaleX.domain(xRange);
-                rangeChart.scaleX.domain(xRange);
-
                 [mainChart, rangeChart].forEach(function (chartPane) {
-                  chartPane.scaleY.domain(yRange);
-
-                  chartPane.redrawLines(multiLineData, true, scope);
-
-                  var axisXFunction = d3.svg.axis()
-                      .scale(chartPane.scaleX)
-                      .orient('bottom')
-                      .ticks(4);
-                  var axisYFunction = d3.svg.axis()
-                      .scale(chartPane.scaleY)
-                      .orient('left');
-                  if (chartPane.yAxisTicks !== undefined)
-                      axisYFunction.ticks(chartPane.yAxisTicks);
-
-                  chartPane.axisX.transition().duration(1000).call(axisXFunction);
-                  chartPane.axisY.transition().duration(1000).call(axisYFunction);
+                  chartPane.update(multiLineData, xRange, yRange, scope);
                 })
             }
 
