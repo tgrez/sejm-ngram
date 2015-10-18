@@ -4,6 +4,7 @@
 'use strict';
 
 module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService, apiFactory, graphDataFormatterFactory) {
+  var colors = ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'];
   $scope.search = {
     phrasesService: phrasesService,
     wasTriggered: false,
@@ -21,8 +22,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     graphDrawHelper: null,
     getIdFromPartyName: null,
     selectedRange: null,
-    linesColors: ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'],
-    checkboxClicked: null
+    linesColors: colors,
+    checkboxClicked: null,
+    plotLines : []
   }
 
   $scope.mostPopularPhrases = {
@@ -36,6 +38,20 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
       'posel'
     ]
   };
+    
+  function prepareForDisplay(phraseOccurances) {
+    if (phraseOccurances.length == 1) { //one ngram, many parties
+      $scope.graph.plotLines = phraseOccurances[0].partiesOccurences.map(function (party, i) {
+          return {
+              label: party.partyName,
+              color: colors[i % colors.length],
+              occurances: party.occurances
+          }
+      });
+    } else {
+      console.log("One search phrase supported only right now");
+    }
+  }
 
   $scope.search.run = function () {
     $scope.search.wasTriggered = true;
@@ -48,16 +64,30 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
       apiFactory.getGraphNgram(phrase.text).then(function (response) {
         $scope.search.callsInProgressCount--;
 
+        /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
         var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
+
+        // this returns [{partyName:String, isVisible:Bool}]
         var partiesNames = chartDataFormatted.partiesOccurences.map(graphDataFormatterFactory.formatPartiesName);
 
+        // TODO this overwrites whatever parties we had for other phrases
         $scope.graph.partiesNames = partiesNames;
+
+        // TODO this will be made redundant by using ng-repeat
         $scope.graph.partiesNames.getId = function (partyName) {
           return _.findIndex($scope.graph.partiesNames, { partyName: partyName });
         }
 
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
+
+        // TODO: I don't understand phrasesService
         $scope.search.phrasesService.removePhrase(response.data.ngram);
+          
+        if ($scope.search.callsInProgressCount === 0) {
+            prepareForDisplay($scope.graph.phrasesOccurences);
+        }
+
+        // TODO: is this necessary?
         $scope.$apply();
       });
     });
@@ -119,6 +149,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     }
   }
 
+  // TODO: replace with ng-repeat
   $scope.graph.checkboxClicked = function(checked, partyName){
     var partyIndex = $scope.graph.partiesNames.getId(partyName)
     $scope.graph.partiesNames[partyIndex].isVisible = checked;
@@ -130,6 +161,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
       $scope.search.isInProgress = newValue > 0;
   });
 
+  // TODO: what is this doing? supporting linking to phrase searches?
   var phrasesString = $location.hash();
   var isPhrasesStringEmpty = !phrasesString;
   if (!isPhrasesStringEmpty) {
