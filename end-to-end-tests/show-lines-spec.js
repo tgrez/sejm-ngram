@@ -32,6 +32,7 @@ describe('should display graph on pressing Szukaj, and allow to select range', f
                 // scaleX
                 expect(newD).not.toEqual(d);
                 expect(newD.length).toBeGreaterThan(50);
+                browser.sleep(500);
             });
         });
     });

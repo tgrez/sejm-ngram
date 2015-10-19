@@ -41,10 +41,11 @@
                          ng-model="graph.partiesNames"
                          checkbox-clicked="graph.checkboxClicked"
                          graph-draw-helper="graph.graphDrawHelper"></st-graph-legend>
-        <st-term-occurences-chart ng-model="graph.phrasesOccurences"
-                                  graph-draw-helper="graph.graphDrawHelper"
-                                  graph="graph"
-                                  parties-names="graph.partiesNames"
-                                  display-range="graph.selectedRange"></st-term-occurences-chart>
+        <chart-pane id="term-occurences-chart"
+                    current-range="selectedRange" graph="graph" width="758" height="400">
+        </chart-pane>
+        <chart-pane id="range-filter-chart" current-range="graph.xRange" graph="graph" width="758" height="158">
+          <range-selector graph="graph" current-range="selectedRange"></range-selector>
+        </chart-pane>
     </div>
 </div>
