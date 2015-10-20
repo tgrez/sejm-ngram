@@ -95,12 +95,12 @@ module.directive('chartPane', function () {
     };
 });
 
+/* Directive that decorates the parent chart pane with a brush range selector */
 module.directive('rangeSelector', function () {
     return {
         restrict: 'E',
         require: '^chartPane',
         scope: {
-            graph: '=',
             currentRange: '='
         },
         link: function (scope, iElement, iAttrs, chartPane) {
@@ -120,16 +120,16 @@ module.directive('rangeSelector', function () {
                   .selectAll("rect")
                   .attr("height", chartPane.linesCanvasHeight);
 
-              // to start off, range is equal to scaleX, and the brush is empty
+              // to start off, range is equal to scaleX of the parent chart pane, and the brush is empty
               scope.currentRange = scaleX.domain();
               brush.on('brush', function () {
                   var newRange = brush.extent();
                   if (newRange[0].valueOf() === newRange[1].valueOf()) {
-                    newRange = scaleX.domain();
+                    newRange = chartPane.scope.scaleX.domain();
                     brush.clear(); // TODO does not seem to work, there is a hair width brush still there
                   }
                   if (newRange !== scope.currentRange) {
-                    scope.graph.selectedRange = newRange;
+                    scope.currentRange = newRange;
                     scope.$apply();
                   }
               });
