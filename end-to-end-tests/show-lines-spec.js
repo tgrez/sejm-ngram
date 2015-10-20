@@ -45,7 +45,8 @@ describe('should display graph on pressing Szukaj, and allow to select range', f
 // Put the functions in scope for eval, to parse the color
 // objects. The problem is that stroke returns a color without alpha,
 // while background-color returns a color with the alpha component, so
-// need to normalize to compare.
+// need to normalize to compare. (hmm that will probably break in IE,
+// since I think iit returns hash colors)
 function rgb(r,g,b) {return {red:r,green:g,blue:b,alpha:1}}
 function rgba(r,g,b,a) {return {red:r,green:g,blue:b,alpha:a}}
 function normalizeColor(colorStr) {return eval(colorStr);}
