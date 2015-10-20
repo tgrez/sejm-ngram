@@ -38,6 +38,7 @@ scripts/sejmometr/wystapienia_all
 scripts/sejmometr/sejmometr_to_common_script/output_files
 scripts/sejmometr/processed_data_all
 scripts/sejmometr/raw_data
+files/
 
 
 # other downloaded data
