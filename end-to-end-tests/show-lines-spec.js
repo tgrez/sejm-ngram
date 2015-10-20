@@ -6,8 +6,8 @@ describe('should display graph on pressing Szukaj, and allow to select range', f
         // though.
         $('input[ng-model="newTag.text"]').sendKeys("opozycja\n");
         $('div.button[ng-click="search.run()"]').click();
-        // click the first party
-        element.all(by.repeater('partyObject in partiesNames')).first()
+        // click the first plot line
+        element(by.id('legend-box')).all(by.repeater('plotLine in plotLines')).first()
           .element(by.css('input')).click();
         var paths = element(by.css('svg#term-occurences-chart'))
           .all(by.css('path.line[style*=visible]'));
