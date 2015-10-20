@@ -107,8 +107,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
             prepareForDisplay($scope.graph.phrasesOccurences);
         }
 
-        // TODO: is this necessary?
-        //$scope.$apply();
       });
     });
   };
@@ -119,41 +117,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   };
 
   $scope.graph.graphDrawHelper = {
-    generateLineId:     function(prefix, term) {
-      return prefix + '-' + $scope.graph.partiesNames.getId(term);
-    },
     generateLineColorForPartyName: function(partyName){
       var partyId = $scope.graph.partiesNames.getId(partyName);
       return colors[ partyId % colors.length]
-    },
-    removeObsolateLines: function (linesCanvas, plotLines, line_prefix) {
-      var lines = linesCanvas.selectAll('.line');
-
-      lines.each(function () {
-        var line = this;
-        var lineId = line.id;
-        var isTermExist = _.any(plotLines, function (o, i) {
-          var term = o.label;
-          var termId = $scope.graph.graphDrawHelper.generateLineId(line_prefix, term);
-          return termId === lineId;
-        });
-
-        if (!isTermExist) {
-          line.remove();
-        }
-      });
-    },
-    calculateMultiLineData: function(scopeTermOccurences){
-      var multiLineData = []
-      if (scopeTermOccurences.length == 1){ //one ngram, many parties
-        for (var i = 0; i < scopeTermOccurences[0].partiesOccurences.length; i++) {
-          multiLineData.push({
-            lineName: scopeTermOccurences[0].partiesOccurences[i].partyName,
-            occurences: scopeTermOccurences[0].partiesOccurences[i].occurences
-          })
-        }
-      }
-      return multiLineData
     },
     getPartyColorStyle: function(partyName){
       var color = this.generateLineColorForPartyName(partyName);
