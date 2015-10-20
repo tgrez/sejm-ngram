@@ -7,10 +7,10 @@ module.directive('chartPane', function () {
             currentRange: '='
         },
         controller: function ($scope) {
-            this.scope = $scope;
+            this.scope = $scope; // for rangeSelector, which watches scaleX
         },
         link: function link(scope, iElement, iAttrs, controller) {
-          // this function gets executed even before the graph shows
+          // this function gets executed long before the graph shows
           var id = iElement.attr('id');
           scope.idPrefix = id + '-';
           var svg = d3.select('#' + id);
@@ -31,7 +31,7 @@ module.directive('chartPane', function () {
           var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
           var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
           var linesCanvasWidth = chartWidth - linesCanvasMargin.left - linesCanvasMargin.right;
-          var linesCanvasHeight = controller.linesCanvasHeight = scope.linesCanvasHeight =
+          var linesCanvasHeight = controller.linesCanvasHeight = 
               chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
           svg.select('clipPath rect').attr({
               width: linesCanvasWidth,
@@ -66,10 +66,10 @@ module.directive('chartPane', function () {
               .range([0, linesCanvasWidth]);
           scope.scaleY = d3.scale.linear()
               .range([linesCanvasHeight, 0]);
-          controller.scaleX = scope.scaleX; // TODO can this be shared as scope with range selector?
+          controller.scaleX = scope.scaleX;
 
           function update() {
-              scope.scaleX.domain(scope.currentRange ? scope.currentRange : scope.graph.xRange);
+              scope.scaleX.domain(scope.currentRange);
               scope.scaleY.domain(scope.graph.yRange);
 
               var axisXFunction = d3.svg.axis()
@@ -79,15 +79,11 @@ module.directive('chartPane', function () {
               var axisYFunction = d3.svg.axis()
                   .scale(scope.scaleY)
                   .orient('left').ticks(linesCanvasHeight/28);
-              if (scope.yAxisTicks !== undefined)
-                  axisYFunction.ticks(scope.yAxisTicks);
 
-              scope.axisX.transition().duration(1000).call(axisXFunction);
-              scope.axisY.transition().duration(1000).call(axisYFunction);
+              scope.axisX.call(axisXFunction);
+              scope.axisY.call(axisYFunction);
           }
-            //TODO watch xRange and yRange to update scales
-          scope.$watch('currentRange', update, true);
-          scope.$watch('graph.xRange', update, true);
+          scope.$watchGroup(['currentRange', 'graph.xRange'], update, true);
         },
         templateUrl: '/templates/chartPane.html',
         replace: true,
@@ -101,7 +97,7 @@ module.directive('rangeSelector', function () {
         restrict: 'E',
         require: '^chartPane',
         scope: {
-            currentRange: '='
+            currentRange: '=' // two-way binding
         },
         link: function (scope, iElement, iAttrs, chartPane) {
           var initialized = false;
@@ -136,7 +132,6 @@ module.directive('rangeSelector', function () {
           }
           function update() {
               var scaleX = chartPane.scope.scaleX;
-              console.log("update scaleX", scaleX, scaleX.range());
               if (scaleX) {
                 if (!initialized)
                     initBrushRangeSelector(scaleX);
