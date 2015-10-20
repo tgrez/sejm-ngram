@@ -147,6 +147,7 @@
         border-radius: 4px;
 
         #term-occurences-chart {
+            float:left;
             .chart {
                 .line {
                     stroke: @primary-red;
@@ -163,12 +164,38 @@
                 }
             }
         }
+        #legend-box{
+            overflow: scroll;
+            width:200px;
+            height:400px;
+            color: @primary-black;
+            .party-wrapper{
+                height: 60px;
+                display: table-cell;
+                vertical-align: middle;
+            }
+            .party-checkbox{
+                float: left;
+                margin-left:10px;
+                margin-top:10px;
+            }
+            .partyname{
+                float: left;
+                margin-left:10px;
+                width: 85%;
+            }
+            .party-indicator{
+                 width: 10px;
+                 height: 60px;
+            }
+        }
+
         #range-filter-chart {
              .chart {
                 .line {
                     stroke: @primary-red;
                     stroke-width: 2px;
-                    fill: #FDD6D1;
+                    fill: none;
                 }
                 .axis path {
                     stroke: @chart-grey;

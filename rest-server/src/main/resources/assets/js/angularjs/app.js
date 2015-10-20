@@ -9,9 +9,11 @@ var module = angular.module('sejmotrendyApp', ['ngTagsInput', 'ngRoute', 'ngAnim
                 reloadOnSearch: false,
                 resolve: {
                     frequentPhrases: ['$http', function($http) {
-                        return $http.get("/service/api/hitcount/top").then(function(response){
-                           return response.data;
-                        });
+											return ["aborcja", "opozycja"];
+											// TODO
+                        //return $http.get("/service/api/hitcount/top").then(function(response){
+                        //   return response.data;
+                        //});
                     }]
                 }
             })

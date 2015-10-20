@@ -37,7 +37,12 @@
         </div>
     </div>
     <div class="chart-wrapper" ng-show="search.wasTriggered">
-        <st-term-occurences-chart id="term-occurences-chart" ng-model="graph.phrasesOccurences" display-range="graph.selectedRange" lines-colors="graph.linesColors"></st-term-occurences-chart>
-        <st-range-filter-chart id="range-filter-chart" ng-model="graph.phrasesOccurences" selected-range="graph.selectedRange" lines-colors="graph.linesColors"></st-range-filter-chart>
+        <chart-pane id="term-occurences-chart"
+                    current-range="graph.selectedRange" graph="graph" width="758" height="400">
+        </chart-pane>
+        <st-graph-legend id="legend-box" plot-lines="graph.plotLines"></st-graph-legend>
+        <chart-pane id="range-filter-chart" current-range="graph.xRange" graph="graph" width="758" height="158">
+          <range-selector current-range="graph.selectedRange"></range-selector>
+        </chart-pane>
     </div>
 </div>

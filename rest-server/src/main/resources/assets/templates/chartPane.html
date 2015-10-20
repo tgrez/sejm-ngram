@@ -1,0 +1,15 @@
+<svg>
+  <defs>
+    <clippath id="{{idPrefix + 'clip-path'}}">
+      <rect></rect>
+    </clippath>
+  </defs>
+  <g class="chart" >
+    <g class="linesCanvas" >
+      <path ng-repeat="line in graph.plotLines" class="line" clip-path="url(#{{idPrefix + 'clip-path'}})"
+            ng-attr-style="stroke: {{line.color}}; visibility: {{line.isVisible ? 'visible' : 'hidden'}};"
+            ng-attr-d="{{line.occurences | encodeSvgPath:scaleX:scaleY}}"></path>
+      <g ng-transclude></g>
+    </g>
+  </g>
+</svg>

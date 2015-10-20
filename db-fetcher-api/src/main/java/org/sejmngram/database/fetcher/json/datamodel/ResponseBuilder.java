@@ -53,6 +53,7 @@ public class ResponseBuilder {
             }
             partiesNgrams.add(new PartiesNgrams(partyName, listDates));
         }
+
         return new NgramResponse(ngramName, partiesNgrams);
     }
 
