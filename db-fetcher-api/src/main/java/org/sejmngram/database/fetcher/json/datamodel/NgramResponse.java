@@ -23,11 +23,6 @@ public class NgramResponse {
         this.partiesNgrams = partiesNgrams;
     }
 
-    public NgramResponse(String ngram) {
-        this.ngram = ngram;
-    }
-
-
     public List<PartiesNgrams> getPartiesNgrams() {
         return partiesNgrams;
     }
