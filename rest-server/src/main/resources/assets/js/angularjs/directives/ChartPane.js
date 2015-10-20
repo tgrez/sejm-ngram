@@ -20,6 +20,7 @@ module.directive('chartPane', function () {
               left: 10,
               right: 10
           };
+          // chart includes the axes, linesCanvas does not, and it is the area lines are plotted
           var linesCanvasMargin = {
               top: 40,
               bottom: 40,
@@ -68,7 +69,8 @@ module.directive('chartPane', function () {
               .range([linesCanvasHeight, 0]);
           controller.scaleX = scope.scaleX;
 
-          function update() {
+          function updateAxes() {
+              // it also updates scales, rangeSelector is watchint scaleX
               scope.scaleX.domain(scope.currentRange);
               scope.scaleY.domain(scope.graph.yRange);
 
@@ -83,7 +85,7 @@ module.directive('chartPane', function () {
               scope.axisX.call(axisXFunction);
               scope.axisY.call(axisYFunction);
           }
-          scope.$watchGroup(['currentRange', 'graph.xRange'], update, true);
+          scope.$watchGroup(['currentRange', 'graph.yRange'], updateAxes, true);
         },
         templateUrl: '/templates/chartPane.html',
         replace: true,
