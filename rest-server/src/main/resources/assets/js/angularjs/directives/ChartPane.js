@@ -78,7 +78,7 @@ module.directive('chartPane', function () {
                   .ticks(4);
               var axisYFunction = d3.svg.axis()
                   .scale(scope.scaleY)
-                  .orient('left');
+                  .orient('left').ticks(linesCanvasHeight/28);
               if (scope.yAxisTicks !== undefined)
                   axisYFunction.ticks(scope.yAxisTicks);
 
