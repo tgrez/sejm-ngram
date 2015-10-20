@@ -13,6 +13,7 @@ restService/logs
 
 # personal directories (too lazy to create branch right now)
 michal/
+files/
 
 # unpacked data
 data/html_wystapienia.csv

@@ -15,6 +15,5 @@ public interface NgramFtsDao {
             + "FROM wystapienia WHERE MATCH (textNormalized) AGAINST "
             + "( concat('\"', :ngram, '\"') IN BOOLEAN MODE) GROUP BY date, partyId")
     List<Record> searchFts(@Bind("ngram") String ngram);
-
     void close();
 }
