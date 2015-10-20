@@ -1,8 +1,8 @@
 module.factory('apiMockFactory', function( $http ) {
   var apiMockFactory = {};
 
-  apiMockFactory.getMockData = function () {
-        return    {"ngram":"aborcja",
+  apiMockFactory.getMockData = function (phrase) {
+        return    {"ngram":phrase,
     "partiesNgrams":[
       {"name":"all","listDates":[
         {"date":"1991-11-25","count":10},

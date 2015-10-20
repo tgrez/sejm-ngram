@@ -11,11 +11,12 @@ module.factory('apiFactory', function( $http, apiMockFactory ) {
   	if (USE_REAL){
   		    return $http.get(urlBase + '/ngramfts/' + phrase);
 	} else {
-		return {"then": function(f){ f( {"data": getMockData()} ) }}	}
+  	    return { "then": function (f) { f({ "data": getMockData(phrase) }) } }
+  	}
   };
 
-  function getMockData(){
-  	return  apiMockFactory.getMockData()
+  function getMockData(phrase) {
+  	return  apiMockFactory.getMockData(phrase)
   }
 
   return dataFactory;
