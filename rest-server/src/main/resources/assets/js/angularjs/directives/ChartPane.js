@@ -108,7 +108,7 @@ module.directive('rangeSelector', function () {
           var brush;
           function initBrushRangeSelector (scaleX) {
               initialized = true;
-              brush = scope.brush = d3.svg.brush().x(scaleX);
+              brush = d3.svg.brush().x(scaleX);
 
               // NOTE: if we don't create the brush under the parent, the range is not selectable
               // (The rect object for the brush has no size), I'd like to know the cause.
@@ -134,24 +134,19 @@ module.directive('rangeSelector', function () {
                   }
               });
           }
-          var prevXRange = null;
           function update() {
               var scaleX = chartPane.scope.scaleX;
+              console.log("update scaleX", scaleX, scaleX.range());
               if (scaleX) {
                 if (!initialized)
                     initBrushRangeSelector(scaleX);
-                var xRange = scope.graph.xRange;
-                if (!angular.equals(xRange, prevXRange)) {
-                  prevXRange = xRange;
-                  // not sure if we need to update scaleX domain before modifying the brush, but can't hurt
-                  scope.currentRange = xRange;
-                  brush.clear(); // TODO untested
-                  brush.x(scaleX);
-                }
+                // that means a new search was executed
+                scope.currentRange = scaleX.range();
+                brush.clear(); // TODO untested
+                brush.x(scaleX);
               }
           }
           chartPane.scope.$watch('scaleX', update, true);
-          scope.$watch('graph.xRange', update, true);
         },
         replace: true,
         template: "<g></g>" // g is not used, see the NOTE in initBrushRangeSelector
