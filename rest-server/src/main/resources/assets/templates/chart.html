@@ -42,10 +42,10 @@
                          checkbox-clicked="graph.checkboxClicked"
                          graph-draw-helper="graph.graphDrawHelper"></st-graph-legend>
         <chart-pane id="term-occurences-chart"
-                    current-range="selectedRange" graph="graph" width="758" height="400">
+                    current-range="graph.selectedRange" graph="graph" width="758" height="400">
         </chart-pane>
         <chart-pane id="range-filter-chart" current-range="graph.xRange" graph="graph" width="758" height="158">
-          <range-selector graph="graph" current-range="selectedRange"></range-selector>
+          <range-selector graph="graph" current-range="graph.selectedRange"></range-selector>
         </chart-pane>
     </div>
 </div>

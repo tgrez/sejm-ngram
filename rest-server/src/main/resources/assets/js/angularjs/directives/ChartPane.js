@@ -129,13 +129,8 @@ module.directive('rangeSelector', function () {
                     brush.clear(); // TODO does not seem to work, there is a hair width brush still there
                   }
                   if (newRange !== scope.currentRange) {
-                    scope.currentRange = newRange;
-                    scope.$digest();
-
-                    // the above does not probagate the value up the scope treeo
-                    // TODO I think we can use controllerAs to avoid it
-                    scope.$parent.$parent.$parent.selectedRange = newRange;
-                    scope.$parent.$parent.$parent.$digest();
+                    scope.graph.selectedRange = newRange;
+                    scope.$apply();
                   }
               });
           }

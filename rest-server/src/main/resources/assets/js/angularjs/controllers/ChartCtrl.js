@@ -25,10 +25,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     checkboxClicked: null,
     plotLines : [],
     xRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)], // dummy initial, I don't want to deal with nulls
-    yRange: [0, 1] // dummy initial, I don't want to deal with nulls
+    yRange: [0, 1], // dummy initial, I don't want to deal with nulls
+    selectedRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)]
   }
-
-  $scope.selectedRange = $scope.graph.xRange;
 
   $scope.mostPopularPhrases = {
     phrases: [
@@ -69,7 +68,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     // TODO can we rely on the fact that all parties have the same dates?
     $scope.graph.xRange = [plotLines[0].occurences[0].date,
                   plotLines[0].occurences[plotLines[0].occurences.length - 1].date];
-    $scope.selectedRange = $scope.graph.xRange;
+    $scope.graph.selectedRange = $scope.graph.xRange;
     $scope.graph.yRange = [minY, maxY];
     $scope.graph.plotLines = plotLines;
   }
