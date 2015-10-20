@@ -8,16 +8,11 @@ module
     return {
        restrict: 'E',
        scope: {
-                   partiesNames: '=ngModel',
-                   checkboxClicked: '=',
-                   graphDrawHelper: '='
+           plotLines: '=',
        },
        link : function (scope, element, attrs) {
-                   scope.$watch('partiesNames.length', onDataChange);
-
-            function onDataChange(){
-                console.log(scope.partiesNames[0])
-            }
+           // nothing to do here, do we need this directive? We should probably just inline the template
+           return;
        },
        templateUrl: 'templates/legend.html',
     };

@@ -1,23 +1,21 @@
 <div>
-    <ul>
-        <li ng-repeat="partyObject in partiesNames">
-            <div class="party-wrapper">
-                <table>
-                    <tr>
-                        <td>
-                            <div class="party-indicator" ng-style="{{graphDrawHelper.getPartyColorStyle(partyObject.partyName)}}"></div>
-                        </td>
-                        <td>
-                            <input class="party-checkbox" type="checkbox"  ng-model="isChecked" ng-change="checkboxClicked(isChecked, partyObject.partyName)"/>
-                        </td>
-                        <td>
-                            <div class="partyname">{{partyObject.partyName}}</div>
-                        </td>
-
-                    </tr>
-                </table>
-            </div>
-
-        </li>
-    </ul>
+  <ul>
+    <li ng-repeat="plotLine in plotLines">
+      <div class="party-wrapper">
+        <table>
+           <tr>
+            <td>
+              <div class="party-indicator" ng-style="{'background-color': plotLine.color}"></div>
+            </td>
+            <td>
+              <input class="party-checkbox" type="checkbox" ng-model="plotLine.isVisible"></input>
+            </td>
+            <td>
+              <div class="partyname">{{plotLine.label}}</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </li>
+  </ul>
 </div>

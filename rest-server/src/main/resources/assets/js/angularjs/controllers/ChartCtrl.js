@@ -87,17 +87,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
         var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
 
-        // this returns [{partyName:String, isVisible:Bool}]
-        var partiesNames = chartDataFormatted.partiesOccurences.map(graphDataFormatterFactory.formatPartiesName);
-
-        // TODO this overwrites whatever parties we had for other phrases
-        $scope.graph.partiesNames = partiesNames;
-
-        // TODO this will be made redundant by using ng-repeat
-        $scope.graph.partiesNames.getId = function (partyName) {
-          return _.findIndex($scope.graph.partiesNames, { partyName: partyName });
-        }
-
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
 
         // TODO: I don't understand phrasesService
@@ -115,30 +104,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     var remainingOccurences = _.filter($scope.graph.phrasesOccurences, function(d, i) { return name !== d.name; });
     $scope.graph.phrasesOccurences = remainingOccurences;
   };
-
-  $scope.graph.graphDrawHelper = {
-    generateLineColorForPartyName: function(partyName){
-      var partyId = $scope.graph.partiesNames.getId(partyName);
-      return colors[ partyId % colors.length]
-    },
-    getPartyColorStyle: function(partyName){
-      var color = this.generateLineColorForPartyName(partyName);
-      var returnS = '{"background-color":' + '"' + color +'"}';
-      return returnS;
-    }
-  }
-
-  // TODO: replace with ng-repeat
-  $scope.graph.checkboxClicked = function(checked, label){
-    var partyIndex = $scope.graph.partiesNames.getId(label)
-    // need it till ng-repeat because changing plotLines does not trigger update in chart
-    $scope.graph.partiesNames[partyIndex].isVisible = checked;
-
-    $scope.graph.plotLines.forEach(function (line) {
-        if (line.label === label)
-            line.isVisible = checked;
-    });
-  }
 
   $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {
     var isNewValueEmpty = typeof newValue === 'undefined' || newValue === null;
