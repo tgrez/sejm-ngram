@@ -8,23 +8,22 @@ module.factory('graphDataFormatterFactory', function () {
     var partiesOccurences = [];
     var sumParties = null;
 
-    data.partiesNgrams.forEach(function (ngram, index){
-      var chartData = ngram.listDates;
-      chartData.forEach(function(data) { data.date = dateFormat.parse(data.date); });
+    data.partiesNgrams.forEach(function (party){
+      var chartData = party.listDates;
+      chartData.forEach(function(datapoint) { datapoint.date = dateFormat.parse(datapoint.date); });
 
-      var partyName = ngram.name;
-
-      if (partyName == allPartiesKey){
+      if (party.name == allPartiesKey){
         sumParties = chartData;
       } else {
         partiesOccurences.push({
-          partyName: partyName,
+          partyName: party.name,
           occurences: chartData
         });
       }
     });
 
-    partiesOccurences.unshift({partyName: allPartiesKey, occurences: sumParties});
+    if (sumParties)
+      partiesOccurences.unshift({partyName: allPartiesKey, occurences: sumParties});
 
     return {
       name: singleNgram,

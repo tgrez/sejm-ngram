@@ -4,14 +4,14 @@ install dependencies
     npm install -g protractor # installs under /usr/local/lib/node_modules
     webdriver-manager update # this downloads Selenium to aforementioned dir
 
-This is not truly end to end yet. It does not use the backend. For now
-only start a server that serves the static files with mock data.
+start the servers:
+  elasticsearch
+  the app (cd ../rest-server && ./run.sh)
+  webdriver-manager start # start selenium server in separate terminal
 
-./start-server.sh # in a separete terminal
-webdriver-manager start # start selenium server in separate terminal
 protractor conf.js # runs the tests
 
-I followed instructions from protractor project web site. Did not mention
+I followed instructions from protractor project web site. It did not mention
 chrome anywhere, but this is what gets used for running tests on my machine.
 Not sure if that is because chrome is my default browser or this is the
 default for protractor/selenim/webdriver or whatnot.

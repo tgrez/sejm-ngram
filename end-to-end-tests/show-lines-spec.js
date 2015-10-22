@@ -1,6 +1,6 @@
 describe('should display graph on pressing Szukaj, and allow to select range', function() {
     it('should just work TM', function () {
-        browser.get('http://localhost:8000');
+        browser.get('http://localhost:8080');
         // Need to send \n because otherwise pressing the button
         // works as if there was nothing entered. Manually it works ok
         // though.

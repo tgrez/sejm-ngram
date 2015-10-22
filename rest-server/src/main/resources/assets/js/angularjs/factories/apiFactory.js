@@ -1,6 +1,6 @@
 module.factory('apiFactory', function( $http, apiMockFactory ) {
   var urlBase = 'http://localhost:8080/service/api';
-  var USE_REAL = false
+  var USE_REAL = true
   var dataFactory = {};
 
   dataFactory.getPhrases = function () {
@@ -9,7 +9,7 @@ module.factory('apiFactory', function( $http, apiMockFactory ) {
 
   dataFactory.getGraphNgram = function (phrase) {
   	if (USE_REAL){
-  		    return $http.get(urlBase + '/ngramfts/' + phrase);
+  		    return $http.get(urlBase + '/ngram/' + phrase);
 	} else {
   	    return { "then": function (f) { f({ "data": getMockData(phrase) }) } }
   	}
