@@ -19,7 +19,12 @@ Aplikacja webowa pozwalająca na wizualizację trendów używania słów i zwrot
   zainstalowanego Mavena weryfikujemy tak:
     ```mvn --version```
   3. Elasticsearch (lub MySQL w przypadku brancha MySQLowego - domyślny jest już teraz Elasticsearch)<br>
-  Elasticsearcha trzeba ściągnąć ([download link][1]), rozpakować i uruchomić (```bin/elasticsearch```)
+  Elasticsearcha trzeba ściągnąć ([download link][1]), skonfigurowac i uruchomić (```bin/elasticsearch```)
+	W pliku konfiguracyjnym, ```elasticserach.yaml```, ustawiamy:
+	```
+	cluster.name: sejmngram-elasticsearch
+	script.disable_dynamic: false
+	```
 
 3. Budujemy aplikację
 
