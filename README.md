@@ -22,9 +22,8 @@ Aplikacja webowa pozwalająca na wizualizację trendów używania słów i zwrot
   Elasticsearcha trzeba ściągnąć ([download link][1]), skonfigurowac i uruchomić (```bin/elasticsearch```).
 	W pliku konfiguracyjnym, ```elasticserach.yaml```, ustawiamy:
 
-    cluster.name: sejmngram-elasticsearch
-
-    script.disable_dynamic: false
+		cluster.name: sejmngram-elasticsearch
+		script.disable_dynamic: false
 
 3. Budujemy aplikację
 
