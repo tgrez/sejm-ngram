@@ -53,7 +53,8 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
               if (foundParty)
                 plotLine.occurences = foundParty.occurences;
               else
-                plotLine.isVisible = false;
+                plotLine.occurences = [];
+
           });
       }
   });
