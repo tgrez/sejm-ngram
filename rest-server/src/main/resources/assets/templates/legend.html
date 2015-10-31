@@ -16,7 +16,7 @@
               <input class="party-checkbox" type="checkbox" ng-model="plotLine.isVisible"></input>
             </td>
             <td>
-              <div class="partyname" ng-class="plotLine.occurences.length == 0 ? ['no-data']:[]">{{plotLine.label}}</div>
+              <div class="partyname" ng-class="{'no-data': plotLine.occurences.length == 0}">{{plotLine.label}}</div>
             </td>
           </tr>
         </table>
