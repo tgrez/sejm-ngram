@@ -1,3 +1,8 @@
+<div ng-show="graph.isMultiPhrase">
+  <select name="repeatSelect" id="repeatSelect" ng-model="graph.selectedParty">
+    <option ng-repeat="partyName in graph.partiesNames" value="{{partyName}}">{{partyName}}</option>
+  </select>
+</div>
 <div>
   <ul>
     <li ng-repeat="plotLine in plotLines">

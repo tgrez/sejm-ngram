@@ -19,6 +19,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     phrasesOccurences: [],
     sumPartiesOccurences: null,
     partiesNames: [],
+    selectedParty: $scope.ALL_PARTIES_KEY,
     graphDrawHelper: null,
     getIdFromPartyName: null,
     selectedRange: null,
@@ -26,7 +27,8 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     plotLines : [],
     xRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)], // dummy initial, I don't want to deal with nulls
     yRange: [0, 1], // dummy initial, I don't want to deal with nulls
-    selectedRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)]
+    selectedRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)],
+    isMultiPhrase: false
   }
 
 	$scope.mostPopularPhrases = frequentPhrases;
@@ -43,8 +45,19 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     ]
   }; */
     
+  // TODO: reset selectedParty on new search
+  $scope.$watch('graph.selectedParty', function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+          $scope.graph.plotLines.forEach(function (plotLine) {
+              plotLine.occurences = _.find(plotLine.parties,
+                    function (party) {return party.partyName == $scope.graph.selectedParty}).occurences;
+          });
+      }
+  });
   function prepareForDisplay(phraseOccurances) {
     var plotLines = [];
+    $scope.graph.partiesNames = [];
+    $scope.graph.isMultiPhrase = phraseOccurances.length > 1;
     if (phraseOccurances.length == 1) { //one ngram, many parties
       plotLines = phraseOccurances[0].partiesOccurences.map(function (party, i) {
           return {
@@ -59,10 +72,23 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
             return {
                 label: phraseObj.name,
                 color: colors[i % colors.length],
-                occurences: phraseObj.partiesOccurences[0].occurences, // 'all' hack
-                isVisible: false
+                occurences: _.find(
+                    phraseObj.partiesOccurences,
+                    function (party) {return party.partyName == $scope.graph.selectedParty}).occurences,
+                isVisible: false,
+                parties: phraseObj.partiesOccurences
             };
-        })
+        });
+        function recalcPartiesNames() {
+          var parties = {};
+          phraseOccurances.forEach(function (phrase) {
+              phrase.partiesOccurences.forEach(function (party) {
+                  parties[party.partyName] = true;
+              })
+          });
+          return _.keys(parties);
+        }
+        $scope.graph.partiesNames = recalcPartiesNames();
     }
 
     var minY = 0;

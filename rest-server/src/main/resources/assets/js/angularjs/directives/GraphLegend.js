@@ -9,6 +9,7 @@ module
        restrict: 'E',
        scope: {
            plotLines: '=',
+           graph: '=',
        },
        link : function (scope, element, attrs) {
            // nothing to do here, do we need this directive? We should probably just inline the template
