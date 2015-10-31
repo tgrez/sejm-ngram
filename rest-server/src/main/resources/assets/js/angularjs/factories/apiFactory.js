@@ -1,5 +1,5 @@
 module.factory('apiFactory', function( $http, apiMockFactory ) {
-  var urlBase = 'http://localhost:8080/service/api';
+  var urlBase = '/service/api';
   var USE_REAL = true
   var dataFactory = {};
 
