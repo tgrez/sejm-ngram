@@ -57,7 +57,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     } else if (phraseOccurances.length > 1){
         plotLines = phraseOccurances.map(function(phraseObj, i) {
             return {
-                label: phraseObj.ngram,
+                label: phraseObj.name,
                 color: colors[i % colors.length],
                 occurences: phraseObj.partiesOccurences[0].occurences, // 'all' hack
                 isVisible: false
