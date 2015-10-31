@@ -49,8 +49,11 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   $scope.$watch('graph.selectedParty', function (newValue, oldValue) {
       if (newValue !== oldValue) {
           $scope.graph.plotLines.forEach(function (plotLine) {
-              plotLine.occurences = _.find(plotLine.parties,
-                    function (party) {return party.partyName == $scope.graph.selectedParty}).occurences;
+              var foundParty = _.find(plotLine.parties, function (party) {return party.partyName == $scope.graph.selectedParty});
+              if (foundParty)
+                plotLine.occurences = foundParty.occurences;
+              else
+                plotLine.isVisible = false;
           });
       }
   });
