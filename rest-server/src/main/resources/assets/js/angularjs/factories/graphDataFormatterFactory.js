@@ -10,6 +10,7 @@ module.factory('graphDataFormatterFactory', function () {
 
     data.partiesNgrams.forEach(function (party){
       var chartData = party.listDates;
+      chartData = _.filter(chartData, function (dp) { return dp.count > 0 });
       chartData.forEach(function(datapoint) {
           datapoint.date = dateFormat.parse(datapoint.date);
           sumParties[datapoint.date] = sumParties[datapoint.date] || 0 + datapoint.count;
@@ -30,6 +31,7 @@ module.factory('graphDataFormatterFactory', function () {
       _.mapObject(sumParties, function (count, date) {
           arrayOccurences.push({ 'date':  new Date(date), 'count': sumParties[date] });
       });
+      arrayOccurences = _.sortBy(arrayOccurences, 'date');
       partiesOccurences.unshift({partyName: allPartiesKey, occurences: arrayOccurences});
     }
 

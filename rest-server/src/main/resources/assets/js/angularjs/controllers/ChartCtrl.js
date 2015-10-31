@@ -50,13 +50,19 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
           return {
               label: party.partyName,
               color: colors[i % colors.length],
-              occurences: _.filter(party.occurences, function (o) {return o.count > 0}),
+              occurences: party.occurences,
               isVisible: false
           }
       });
-    } else {
-      console.log("One search phrase supported only right now");
-      return;
+    } else if (phraseOccurances.length > 1){
+        plotLines = phraseOccurances.map(function(phraseObj, i) {
+            return {
+                label: phraseObj.ngram,
+                color: colors[i % colors.length],
+                occurences: phraseObj.partiesOccurences[0].occurences, // 'all' hack
+                isVisible: false
+            };
+        })
     }
 
     var minY = 0;
@@ -79,15 +85,15 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     $scope.search.wasTriggered = true;
 
     var phrases = phrasesService.phrases;
+    $scope.search.callsInProgressCount += phrases.length;
 
     phrases.forEach(function (phrase, index) {
-      $scope.search.callsInProgressCount++;
-
       apiFactory.getGraphNgram(phrase.text).then(function (response) {
         $scope.search.callsInProgressCount--;
 
         /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
         var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
+
 
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
 
