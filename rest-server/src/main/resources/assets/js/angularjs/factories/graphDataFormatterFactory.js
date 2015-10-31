@@ -6,11 +6,14 @@ module.factory('graphDataFormatterFactory', function () {
     var dateFormat = d3.time.format('%Y-%m-%d');
 
     var partiesOccurences = [];
-    var sumParties = null;
+    var sumParties = {}
 
     data.partiesNgrams.forEach(function (party){
       var chartData = party.listDates;
-      chartData.forEach(function(datapoint) { datapoint.date = dateFormat.parse(datapoint.date); });
+      chartData.forEach(function(datapoint) {
+          datapoint.date = dateFormat.parse(datapoint.date);
+          sumParties[datapoint.date] = sumParties[datapoint.date] || 0 + datapoint.count;
+      });
 
       if (party.name == allPartiesKey){
         sumParties = chartData;
@@ -22,9 +25,15 @@ module.factory('graphDataFormatterFactory', function () {
       }
     });
 
-    if (sumParties)
-      partiesOccurences.unshift({partyName: allPartiesKey, occurences: sumParties});
+    if (sumParties) {
+      var arrayOccurences = [];
+      _.mapObject(sumParties, function (count, date) {
+          arrayOccurences.push({ 'date':  new Date(date), 'count': sumParties[date] });
+      });
+      partiesOccurences.unshift({partyName: allPartiesKey, occurences: arrayOccurences});
+    }
 
+      
     return {
       name: singleNgram,
       partiesOccurences: partiesOccurences
