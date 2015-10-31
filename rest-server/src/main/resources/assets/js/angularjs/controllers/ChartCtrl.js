@@ -50,7 +50,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
           return {
               label: party.partyName,
               color: colors[i % colors.length],
-              occurences: party.occurences,
+              occurences: _.filter(party.occurences, function (o) {return o.count > 0}),
               isVisible: false
           }
       });
