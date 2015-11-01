@@ -11,7 +11,7 @@ describe('should display graph on pressing Szukaj, and allow to select range', f
         var colorInMenu = menuItem.element(by.css('.party-indicator')).getCssValue('background-color');
         menuItem.element(by.css('input')).click();
         var paths = element(by.css('svg#term-occurences-chart'))
-          .all(by.css('path.line[style*=visible]'));
+          .all(by.css('g[style*=visible]')).all(by.css('path.line'));
         // exactly one path should be visible
         expect(paths.count()).toEqual(1);
         // It is hard to test the line looks sane, let's
