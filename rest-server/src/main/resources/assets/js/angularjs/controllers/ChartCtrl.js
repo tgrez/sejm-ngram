@@ -102,10 +102,15 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         if (tempMaxY > maxY)
             maxY = tempMaxY;
     }
+    function calcXRange(plotLines) {
+      var minX = d3.min(plotLines, function (plotLine) {
+          var frst = plotLine.occurences[0]; return frst ? frst.date : undefined });
+      var maxX = d3.max(plotLines, function (plotLine) {
+          var last = plotLine.occurences[plotLine.occurences.length-1]; return last ? last.date : undefined });
+      return minX ? [minX, maxX] : [new Date(1991,1,1), new Date(2015, 11, 7)];
+    }
 
-    // TODO can we rely on the fact that all parties have the same dates?
-    $scope.graph.xRange = [plotLines[0].occurences[0].date,
-                  plotLines[0].occurences[plotLines[0].occurences.length - 1].date];
+    $scope.graph.xRange = calcXRange(plotLines);
     $scope.graph.selectedRange = $scope.graph.xRange;
     $scope.graph.yRange = [minY, maxY];
     $scope.graph.plotLines = plotLines;
