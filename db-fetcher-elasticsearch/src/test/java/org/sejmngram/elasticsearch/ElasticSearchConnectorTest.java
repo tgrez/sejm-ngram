@@ -9,10 +9,7 @@ import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -124,7 +121,7 @@ public class ElasticSearchConnectorTest {
     public void shouldReturnResponseWithAllDatesProvided() {
         Set<String> providedDates = new HashSet<String>(
                 Arrays.asList(DATE1, DATE2, "1995-03-14", "1997-08-11", "2001-03-04"));
-        connector = new ElasticSearchConnector(client, INDEX, providedDates);
+        connector = new ElasticSearchConnector(client, INDEX, providedDates, new HashMap<String,String>());
         NgramResponse ngramResponse = connector.retrieve(SEARCHED_NGRAM);
 
         Set<String> receivedDates = new HashSet<String>();

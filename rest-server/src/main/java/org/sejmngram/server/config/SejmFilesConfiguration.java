@@ -2,9 +2,11 @@ package org.sejmngram.server.config;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.sejmngram.common.json.JsonProcessor;
+import org.sejmngram.database.fetcher.converter.IdConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +18,15 @@ public class SejmFilesConfiguration {
     private final String poselFilename;
     private final String datesFilename;
 
+    private final IdConverter idConverter;
+
     public SejmFilesConfiguration(String partyFilename,
             String poselFilename, String datesFilename) {
         this.partyFilename = partyFilename;
         this.poselFilename = poselFilename;
         this.datesFilename = datesFilename;
+        this.idConverter = new IdConverter(partyFilename);
+
     }
 
     public String getPartyFilename() {
@@ -50,5 +56,9 @@ public class SejmFilesConfiguration {
         }
         LOG.info("Successfully loaded dates file from " + datesFilename);
         return dates;
+    }
+
+    public Map<String, String> returnPartiesIdMapFromFile() {
+        return idConverter.returnMap();
     }
 }

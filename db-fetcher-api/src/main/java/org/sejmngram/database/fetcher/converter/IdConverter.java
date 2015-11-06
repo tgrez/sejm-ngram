@@ -13,7 +13,7 @@ public class IdConverter {
     private static final Logger LOG = LoggerFactory
             .getLogger(IdConverter.class);
 
-    private Map<Integer, String> idToNameMap = new HashMap<Integer, String>();
+    private Map<String, String> idToNameMap = new HashMap<String, String>();
 
     public IdConverter(String filename) {
         HashMap<String, String> tmpMap = null;
@@ -26,13 +26,16 @@ public class IdConverter {
             LOG.error("Could not read file: '" + filename + "'");
         }
         for (String idString : tmpMap.keySet()) {
-            Integer id = Integer.valueOf(idString);
-            if (idToNameMap.containsKey(id)) {
-                LOG.error("Id: " + id + " appears more than once in file: '"
+            if (idToNameMap.containsKey(idString)) {
+                LOG.error("Id: " + idString + " appears more than once in file: '"
                         + filename + "'");
             }
-            idToNameMap.put(id, tmpMap.get(idString));
+            idToNameMap.put(idString, tmpMap.get(idString));
         }
+    }
+
+    public Map<String, String> returnMap(){
+        return idToNameMap;
     }
 
     public String resolve(Integer id) {

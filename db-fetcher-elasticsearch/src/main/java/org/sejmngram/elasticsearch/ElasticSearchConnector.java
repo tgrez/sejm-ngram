@@ -2,9 +2,7 @@ package org.sejmngram.elasticsearch;
 
 import static org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder.emptyResponse;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -26,16 +24,19 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
     private static final int RESULT_SIZE_LIMIT = 1000 * 1000;
 
     private final String index;
+    private Map<String, String> partiesIdMap;
     private Set<String> dates = new HashSet<String>();
 
     public ElasticSearchConnector(Client client, String index) {
     	super(client);
         this.index = index;
+        this.partiesIdMap = new HashMap<String, String>();
     }
 
     public ElasticSearchConnector(Client client, String index,
-            Set<String> providedDates) {
+            Set<String> providedDates, Map<String, String> partiesIdMap) {
         this(client, index);
+        this.partiesIdMap = partiesIdMap;
         this.dates = Collections.unmodifiableSet(providedDates);
     }
 
@@ -69,11 +70,19 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         }
         for (SearchHit searchHit : esSearchResponse.getHits()) {
             int termCount = searchHit.field(TERM_COUNT).getValue();
-            String partyName = searchHit.field(PARTY_FIELD).getValue();
+            String partyName = lookupPartyName(searchHit);
             String date = searchHit.field(DATE_FIELD).getValue();
             responseBuilder.addOccurances(partyName, date, termCount);
         }
         return responseBuilder.generateResponse();
+    }
+
+    private String lookupPartyName(SearchHit searchHit) {
+        String partyIdString = searchHit.field(PARTY_FIELD).getValue();
+        String partyName = partiesIdMap.get(partyIdString);
+        if (partyName == null)
+            return partyIdString;
+        else return partyName;
     }
 
     private String normalizeNgram(String ngram) {
