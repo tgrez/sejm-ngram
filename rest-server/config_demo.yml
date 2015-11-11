@@ -75,6 +75,7 @@ logging:
 
 elasticsearch:
   clusterName: sejmngram-elasticsearch
+  servers: ['127.0.0.1:9300']
+  nodeClient: false
   settings:
-    node.name: sejmngram-elasticsearch-webclient
     index: sejmngram

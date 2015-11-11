@@ -24,6 +24,9 @@ Aplikacja webowa pozwalająca na wizualizację trendów używania słów i zwrot
 
 		cluster.name: sejmngram-elasticsearch
 		script.disable_dynamic: false
+        network.host: 127.0.0.1
+        transport.tcp.port:9300
+        http.port: 9200
 
 3. Budujemy aplikację
 
