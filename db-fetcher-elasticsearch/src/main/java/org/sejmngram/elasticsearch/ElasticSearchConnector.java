@@ -8,8 +8,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.sejmngram.database.fetcher.connection.NgramDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
@@ -97,6 +95,7 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
     }
 
     private String createCountScript(String ngram) {
+//        return "(doc['" + TEXT_FIELD + "'].value =~ /" + ngram + "/).count";
         return "_index['" + TEXT_FIELD + "']['" + ngram + "'].tf()";
     }
 
