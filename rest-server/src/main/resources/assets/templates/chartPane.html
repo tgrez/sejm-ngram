@@ -6,7 +6,7 @@
   </defs>
   <g class="chart" >
     <g class="linesCanvas" >
-      <g ng-repeat="line in graph.plotLines"
+      <g ng-repeat="line in graph.plotLines | filter: {isVisible: true}"
          ng-attr-style="visibility: {{line.isVisible ? 'visible' : 'hidden'}};">
         <path class="line" clip-path="url(#{{idPrefix + 'clip-path'}})"
               ng-attr-style="stroke: {{line.color}}"
