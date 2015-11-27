@@ -1,11 +1,6 @@
 package org.sejmngram.database.fetcher.json.datamodel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 public class ResponseBuilder {
 
@@ -33,7 +28,7 @@ public class ResponseBuilder {
     public void addOccurances(String partyName, String date, int occurances) {
         if (!partiesMap.containsKey(partyName)) {
             partiesMap.put(partyName,
-                    new TreeMap<String, Integer>(initialDates));
+                    new TreeMap(initialDates));
         }
         Integer count = partiesMap.get(partyName).get(date);
         if (count == null) {

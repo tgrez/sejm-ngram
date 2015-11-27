@@ -1,9 +1,5 @@
 package org.sejmngram.elasticsearch;
 
-import static org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder.emptyResponse;
-
-import java.util.*;
-
 import org.apache.commons.lang.NotImplementedException;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -16,6 +12,12 @@ import org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder.emptyResponse;
+
 public class ElasticSearchConnector extends AbstractElasticSearchConnector implements NgramDbConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchConnector.class);
@@ -27,13 +29,13 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
     private Set<String> dates = new HashSet<String>();
 
     public ElasticSearchConnector(Client client, String index) {
-    	super(client);
+        super(client);
         this.index = index;
         this.partiesIdMap = new HashMap<String, String>();
     }
 
     public ElasticSearchConnector(Client client, String index,
-            Set<String> providedDates, Map<String, String> partiesIdMap) {
+                                  Set<String> providedDates, Map<String, String> partiesIdMap) {
         this(client, index);
         this.partiesIdMap = partiesIdMap;
         this.dates = Collections.unmodifiableSet(providedDates);
@@ -53,11 +55,7 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         if (isContainingAnyResults(esSearchResponse)) {
             logResponse(esSearchResponse);
 
-            if(ngram.split(" ").length == 1){
-                ngramResponse = createResponseFor1Word(ngram, esSearchResponse);
-            } else {
-                ngramResponse = createResponseForMoreWords(ngram, esSearchResponse);
-            }
+            ngramResponse = createResponseFor1Word(ngram, esSearchResponse, ngram.split(" ").length > 1);
         } else {
             LOG.trace("Does not contain any results, returning empty response");
             ngramResponse = emptyResponse(ngram, dates);
@@ -66,33 +64,28 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         return ngramResponse;
     }
 
-    private NgramResponse createResponseForMoreWords(String ngram, SearchResponse esSearchResponse) {
-        return emptyResponse(ngram, dates);
-    }
-
     private void logResponse(SearchResponse esSearchResponse) {
         LOG.trace("There are " + esSearchResponse.getHits().getTotalHits() + " search hits");
         LOG.trace("Here is first 5:");
 
-
         //logging out first 5 SearchHits
         long showNrHits = 5;
         long totalHits = esSearchResponse.getHits().getTotalHits();
-        if (totalHits < showNrHits){
+        if (totalHits < showNrHits) {
             showNrHits = totalHits;
         }
 
-        for (int i = 0; i < showNrHits; i++){
+        for (int i = 0; i < showNrHits; i++) {
             SearchHit sH = esSearchResponse.getHits().getAt(i);
             String fieldString = "";
-            for (String field : sH.fields().keySet()){
-                fieldString += field + " : " + sH.fields().get(field).getValues() +"\n";
+            for (String field : sH.fields().keySet()) {
+                fieldString += field + " : " + sH.fields().get(field).getValue() + "\n";
             }
             LOG.trace(fieldString);
         }
     }
 
-    private NgramResponse createResponseFor1Word(String ngram, SearchResponse esSearchResponse) {
+    private NgramResponse createResponseFor1Word(String ngram, SearchResponse esSearchResponse, boolean isMoreThan1Word) {
         ResponseBuilder responseBuilder = new ResponseBuilder(ngram, dates);
         // TODO histogram result size? https://dropwizard.github.io/metrics/3.1.0/manual/core/#histograms
         if (esSearchResponse.getHits().getTotalHits() >= RESULT_SIZE_LIMIT) {
@@ -100,7 +93,7 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
                     + ". Possibly not receiving all available results from elasticsearch.");
         }
         for (SearchHit searchHit : esSearchResponse.getHits()) {
-            int termCount = searchHit.field(TERM_COUNT).getValue();
+            int termCount = isMoreThan1Word ? calculatePhraseCount(ngram, (String) searchHit.field(TEXT_FIELD).getValue()) : (int) searchHit.field(TERM_COUNT).getValue();
             String partyName = lookupPartyName(searchHit);
             String date = searchHit.field(DATE_FIELD).getValue();
             responseBuilder.addOccurances(partyName, date, termCount);
@@ -108,12 +101,23 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         return responseBuilder.generateResponse();
     }
 
+    private int calculatePhraseCount(String ngram, String source) {
+        int i = 0;
+        Pattern p = Pattern.compile(ngram, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(source);
+        while (m.find()) {
+            i++;
+        }
+
+        return i;
+    }
+
     private String lookupPartyName(SearchHit searchHit) {
         SearchHitField field = searchHit.field(PARTY_FIELD);
-        if (field == null){
+        if (field == null) {
             return "no party";
         }
-        
+
         String partyIdString = field.getValue();
         String partyName = partiesIdMap.get(partyIdString);
         if (partyName == null)
@@ -156,8 +160,8 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         client.close();
     }
 
-	@Override
-	protected SearchRequestBuilder buildQuery(SearchRequestBuilder searchRequestBuilder, String phrase) {
+    @Override
+    protected SearchRequestBuilder buildQuery(SearchRequestBuilder searchRequestBuilder, String phrase) {
         SearchRequestBuilder updatedSearchRequestBuilder = searchRequestBuilder
                 .setSize(RESULT_SIZE_LIMIT)
                 .addField(DATE_FIELD)
@@ -165,16 +169,16 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
                 .addField(TEXT_FIELD)
                 .addField(ID_FIELD);
 
-        if (phrase.split(" ").length ==1){
+        if (phrase.split(" ").length == 1) {
             updatedSearchRequestBuilder.addScriptField(TERM_COUNT, createCountScript(phrase));
         }
 
         return updatedSearchRequestBuilder;
-	}
+    }
 
-	@Override
-	protected String getIndex() {
-		return index;
-	}
+    @Override
+    protected String getIndex() {
+        return index;
+    }
 
 }
