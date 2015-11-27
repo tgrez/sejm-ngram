@@ -28,9 +28,9 @@ public abstract class AbstractElasticSearchConnector {
         QueryBuilder query = QueryBuilders.matchPhraseQuery(TEXT_FIELD, phrase);
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(getIndex())
                 .setQuery(query);
-        LOG.trace("ElasticSearch Query using Java Client API:\n" + searchRequestBuilder.internalBuilder());
-
         SearchRequestBuilder searchRequestBuilder2 = buildQuery(searchRequestBuilder, phrase);
+        LOG.trace("ElasticSearch Query using Java Client API: with updated fields\n" + searchRequestBuilder2.internalBuilder());
+
         return searchRequestBuilder2.get();
     }
     protected abstract SearchRequestBuilder buildQuery(SearchRequestBuilder searchRequestBuilder, String phrase);
