@@ -43,16 +43,16 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
 
     @Override
     public NgramResponse retrieve(String ngram) {
+
         // TODO sanitize input
         ngram = normalizeNgram(ngram);
         LOG.trace("Received ngram request: " + ngram);
         LOG.trace("Querying ElasticSearch...");
         SearchResponse esSearchResponse = queryElasticSearch(ngram);
-        LOG.trace("ElasticSearch response received");
 
         NgramResponse ngramResponse;
         if (isContainingAnyResults(esSearchResponse)) {
-            LOG.trace("There are " + esSearchResponse.getHits().getTotalHits() + " search hits");
+            logResponse(esSearchResponse);
             ngramResponse = createResponse(ngram, esSearchResponse);
         } else {
             LOG.trace("Does not contain any results, returning empty response");
@@ -60,6 +60,28 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         }
         LOG.trace("Finished processing.");
         return ngramResponse;
+    }
+
+    private void logResponse(SearchResponse esSearchResponse) {
+        LOG.trace("There are " + esSearchResponse.getHits().getTotalHits() + " search hits");
+        LOG.trace("Here is first 5:");
+
+
+        //logging out first 5 SearchHits
+        long showNrHits = 5;
+        long totalHits = esSearchResponse.getHits().getTotalHits();
+        if (totalHits < showNrHits){
+            showNrHits = totalHits;
+        }
+
+        for (int i = 0; i < showNrHits; i++){
+            SearchHit sH = esSearchResponse.getHits().getAt(i);
+            String fieldString = "";
+            for (String field : sH.fields().keySet()){
+                fieldString += field + " : " + sH.fields().get(field).getValues() +"\n";
+            }
+            LOG.trace(fieldString);
+        }
     }
 
     private NgramResponse createResponse(String ngram, SearchResponse esSearchResponse) {
