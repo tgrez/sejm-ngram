@@ -8,8 +8,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.sejmngram.database.fetcher.connection.NgramDbConnector;
@@ -48,18 +46,28 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         ngram = normalizeNgram(ngram);
         LOG.trace("Received ngram request: " + ngram);
         LOG.trace("Querying ElasticSearch...");
+
         SearchResponse esSearchResponse = queryElasticSearch(ngram);
 
         NgramResponse ngramResponse;
         if (isContainingAnyResults(esSearchResponse)) {
             logResponse(esSearchResponse);
-            ngramResponse = createResponse(ngram, esSearchResponse);
+
+            if(ngram.split(" ").length == 1){
+                ngramResponse = createResponseFor1Word(ngram, esSearchResponse);
+            } else {
+                ngramResponse = createResponseForMoreWords(ngram, esSearchResponse);
+            }
         } else {
             LOG.trace("Does not contain any results, returning empty response");
             ngramResponse = emptyResponse(ngram, dates);
         }
         LOG.trace("Finished processing.");
         return ngramResponse;
+    }
+
+    private NgramResponse createResponseForMoreWords(String ngram, SearchResponse esSearchResponse) {
+        return emptyResponse(ngram, dates);
     }
 
     private void logResponse(SearchResponse esSearchResponse) {
@@ -84,7 +92,7 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
         }
     }
 
-    private NgramResponse createResponse(String ngram, SearchResponse esSearchResponse) {
+    private NgramResponse createResponseFor1Word(String ngram, SearchResponse esSearchResponse) {
         ResponseBuilder responseBuilder = new ResponseBuilder(ngram, dates);
         // TODO histogram result size? https://dropwizard.github.io/metrics/3.1.0/manual/core/#histograms
         if (esSearchResponse.getHits().getTotalHits() >= RESULT_SIZE_LIMIT) {
@@ -150,13 +158,18 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
 
 	@Override
 	protected SearchRequestBuilder buildQuery(SearchRequestBuilder searchRequestBuilder, String phrase) {
-		return searchRequestBuilder
-		      .setSize(RESULT_SIZE_LIMIT)
-		      .addScriptField(TERM_COUNT, createCountScript(phrase))
-		      .addField(DATE_FIELD)
-		      .addField(PARTY_FIELD)
-		      .addField(TEXT_FIELD)
-		      .addField(ID_FIELD);
+        SearchRequestBuilder updatedSearchRequestBuilder = searchRequestBuilder
+                .setSize(RESULT_SIZE_LIMIT)
+                .addField(DATE_FIELD)
+                .addField(PARTY_FIELD)
+                .addField(TEXT_FIELD)
+                .addField(ID_FIELD);
+
+        if (phrase.split(" ").length ==1){
+            updatedSearchRequestBuilder.addScriptField(TERM_COUNT, createCountScript(phrase));
+        }
+
+        return updatedSearchRequestBuilder;
 	}
 
 	@Override
