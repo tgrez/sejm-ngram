@@ -11,6 +11,7 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHitField;
 import org.sejmngram.database.fetcher.connection.NgramDbConnector;
 import org.sejmngram.database.fetcher.json.datamodel.NgramResponse;
 import org.sejmngram.database.fetcher.json.datamodel.ResponseBuilder;
@@ -78,7 +79,12 @@ public class ElasticSearchConnector extends AbstractElasticSearchConnector imple
     }
 
     private String lookupPartyName(SearchHit searchHit) {
-        String partyIdString = searchHit.field(PARTY_FIELD).getValue();
+        SearchHitField field = searchHit.field(PARTY_FIELD);
+        if (field == null){
+            return "no party";
+        }
+        
+        String partyIdString = field.getValue();
         String partyName = partiesIdMap.get(partyIdString);
         if (partyName == null)
             return partyIdString;
