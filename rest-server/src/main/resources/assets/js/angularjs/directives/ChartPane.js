@@ -151,10 +151,22 @@ module.directive('rangeSelector', function () {
 });
 
 module.filter('encodeSvgPath', function () {
-    return function(occurences, scaleX, scaleY) {
-        var lineFunction = d3.svg.line()
-            .x(function (o) { return scaleX(o.date); })
-            .y(function (o) { return scaleY(o.count); });
-        return lineFunction(occurences);
+    return function(occurences, scaleX, scaleY, cacheId) {
+			  var cacheKey = "" + scaleX + "-" + scaleY;
+			  var cached = null;
+			  if (cacheId in occurences) {
+					var cache = occurences[cacheId];
+					if (cache.key == cacheKey) {
+						cached = cache.val;
+					}
+				}
+			  if (cached == null) {
+					var lineFunction = d3.svg.line()
+							.x(function (o) { return scaleX(o.date); })
+							.y(function (o) { return scaleY(o.count); });
+					cached = lineFunction(occurences);
+					occurences[cacheId] = {key: cacheKey, val: cached};
+				}
+        return cached;
     };
 })
