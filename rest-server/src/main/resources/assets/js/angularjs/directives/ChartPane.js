@@ -152,7 +152,7 @@ module.directive('rangeSelector', function () {
 
 module.filter('encodeSvgPath', function () {
     return function(occurences, scaleX, scaleY, cacheId) {
-			  var cacheKey = "" + scaleX + "-" + scaleY;
+			  var cacheKey = "" + scaleX.domain() + "-" + scaleY.domain();
 			  var cached = null;
 			  if (cacheId in occurences) {
 					var cache = occurences[cacheId];
