@@ -43,7 +43,6 @@ files/
 
 # other downloaded data
 jsonPrinterDir/
-data/
 sejmometrDownloaded/
 
 # intellij files
