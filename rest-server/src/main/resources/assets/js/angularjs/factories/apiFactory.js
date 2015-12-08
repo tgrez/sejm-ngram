@@ -7,6 +7,10 @@ module.factory('apiFactory', function( $http, apiMockFactory ) {
     return $http.get(urlBase + '/hitcount/top');
   };
 
+  dataFactory.getAllWordsPerDate = function() {
+    return $http.get('/data/wordcount_per_date.json');
+  }
+
   dataFactory.getGraphNgram = function (phrase) {
   	if (USE_REAL){
   		    return $http.get(urlBase + '/ngram/' + phrase);
