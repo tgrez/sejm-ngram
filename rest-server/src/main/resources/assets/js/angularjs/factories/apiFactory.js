@@ -9,6 +9,7 @@ module.factory('apiFactory', function( $http, apiMockFactory ) {
 
   dataFactory.getAllWordsPerDate = function() {
     return $http.get('/data/wordcount_per_date.json');
+    return  $http.get('/data/wordcount_per_date.json');
   }
 
   dataFactory.getGraphNgram = function (phrase) {
