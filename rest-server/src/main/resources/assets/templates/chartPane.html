@@ -9,7 +9,7 @@
       <g ng-repeat="line in toDisplay">
         <path class="line" clip-path="url(#{{idPrefix + 'clip-path'}})"
               ng-attr-style="stroke: {{line.color}}"
-              ng-attr-d="{{line.occurences | encodeSvgPath:scaleX:scaleY:idPrefix}}"></path>
+              ng-attr-d="{{line.svgData}}"></path>
         <circle ng-repeat="occur in line.occurences" ng-attr-cx="{{scaleX(occur.date)}}" ng-attr-cy="{{scaleY(occur.count)}}"
                 r="3px" ng-attr-fill="{{line.color}}"></circle>
       </g>
