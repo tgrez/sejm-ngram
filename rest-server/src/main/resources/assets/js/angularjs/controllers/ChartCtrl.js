@@ -31,6 +31,13 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   }
 
 	$scope.mostPopularPhrases = frequentPhrases;
+    //calling
+  apiFactory.getAllWordsPerDate().then(function(response) {
+    $scope.nrAllWordsPerDates = response.data
+  })
+
+
+  
 	/*
   $scope.mostPopularPhrases = {
     phrases: [
