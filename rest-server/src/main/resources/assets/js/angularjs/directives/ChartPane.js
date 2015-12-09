@@ -32,7 +32,7 @@ module.directive('chartPane', function () {
           var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
           var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
           var linesCanvasWidth = chartWidth - linesCanvasMargin.left - linesCanvasMargin.right;
-          var linesCanvasHeight = controller.linesCanvasHeight = 
+          var linesCanvasHeight = controller.linesCanvasHeight =
               chartHeight - linesCanvasMargin.top - linesCanvasMargin.bottom;
           svg.select('clipPath rect').attr({
               width: linesCanvasWidth,
@@ -68,8 +68,18 @@ module.directive('chartPane', function () {
           scope.scaleY = d3.scale.linear()
               .range([linesCanvasHeight, 0]);
           controller.scaleX = scope.scaleX;
+					
+					function visiblePlots() {
+						return scope.graph.plotLines
+							           .filter(function (l) {return l.isVisible})
+							           .map(function (l) {return l.label});
+					}
 
+					scope.toDisplay = [];
+					var updateQueued = true;
           function updateAxes() {
+						  updateQueued = false;
+						  console.log("update axes");
               // it also updates scales, rangeSelector is watchint scaleX
               scope.scaleX.domain(scope.currentRange);
               scope.scaleY.domain(scope.graph.yRange);
@@ -84,8 +94,34 @@ module.directive('chartPane', function () {
 
               scope.axisX.call(axisXFunction);
               scope.axisY.call(axisYFunction);
+
+						  scope.toDisplay = scope.graph.plotLines
+									.filter(function (l) {return l.isVisible})
+									.map(function (plotLine) {
+
+										var lineFunction = d3.svg.line()
+												.x(function (o) { return scope.scaleX(o.date); })
+												.y(function (o) { return scope.scaleY(o.count); });
+										var minDate = scope.scaleX.domain()[0];
+										var maxDate = scope.scaleX.domain()[1];
+										occurences = plotLine.occurences.filter(function(o){ 
+											return o.date >= minDate && o.date <= maxDate
+										})
+										return { "occurences": occurences, "label": plotLine.label,
+														 "color": plotLine.color,
+													   "svgData": lineFunction(occurences)};
+							});
           }
-          scope.$watchGroup(['currentRange', 'graph.yRange'], updateAxes, true);
+					function queueUpdate() {
+						updateQueued = true;
+						scope.$evalAsync(updateAxes);
+					}
+					// need to inline watchGroup because it does not accept the third argument
+          // that tells it to compare by equality rather than reference
+          //scope.$watchGroup(['currentRange', 'graph.yRange', visiblePlots], updateAxes);
+					scope.$watch('currentRange', queueUpdate, true);
+					scope.$watch('graph.yRange', queueUpdate, true);
+					scope.$watch(visiblePlots, queueUpdate, true);
         },
         templateUrl: '/templates/chartPane.html',
         replace: true,
@@ -149,24 +185,3 @@ module.directive('rangeSelector', function () {
         template: "<g></g>" // g is not used, see the NOTE in initBrushRangeSelector
     }
 });
-
-module.filter('encodeSvgPath', function () {
-    return function(occurences, scaleX, scaleY, cacheId) {
-			  var cacheKey = "" + scaleX.domain() + "-" + scaleY.domain();
-			  var cached = null;
-			  if (cacheId in occurences) {
-					var cache = occurences[cacheId];
-					if (cache.key == cacheKey) {
-						cached = cache.val;
-					}
-				}
-			  if (cached == null) {
-					var lineFunction = d3.svg.line()
-							.x(function (o) { return scaleX(o.date); })
-							.y(function (o) { return scaleY(o.count); });
-					cached = lineFunction(occurences);
-					occurences[cacheId] = {key: cacheKey, val: cached};
-				}
-        return cached;
-    };
-})
