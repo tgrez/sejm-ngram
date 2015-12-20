@@ -68,7 +68,7 @@ module.directive('chartPane', function () {
           scope.scaleY = d3.scale.linear()
               .range([linesCanvasHeight, 0]);
           controller.scaleX = scope.scaleX;
-					
+
 					function visiblePlots() {
 						return scope.graph.plotLines
 							           .filter(function (l) {return l.isVisible})
@@ -79,7 +79,6 @@ module.directive('chartPane', function () {
 					var updateQueued = true;
           function updateAxes() {
 						  updateQueued = false;
-						  console.log("update axes");
               // it also updates scales, rangeSelector is watchint scaleX
               scope.scaleX.domain(scope.currentRange);
               scope.scaleY.domain(scope.graph.yRange);
@@ -93,9 +92,10 @@ module.directive('chartPane', function () {
                   .orient('left').ticks(linesCanvasHeight/28);
 
               scope.axisX.call(axisXFunction);
-              scope.axisY.call(axisYFunction);
 
-						  scope.toDisplay = scope.graph.plotLines
+              scope.axisY.call(axisYFunction);
+						  scope.toDisplay =
+                  scope.graph.plotLines
 									.filter(function (l) {return l.isVisible})
 									.map(function (plotLine) {
 
@@ -104,9 +104,7 @@ module.directive('chartPane', function () {
 												.y(function (o) { return scope.scaleY(o.count); });
 										var minDate = scope.scaleX.domain()[0];
 										var maxDate = scope.scaleX.domain()[1];
-										occurences = plotLine.occurences.filter(function(o){ 
-											return o.date >= minDate && o.date <= maxDate
-										})
+										occurences = aggregateAndFilter(plotLine.occurences, minDate, maxDate);
 										return { "occurences": occurences, "label": plotLine.label,
 														 "color": plotLine.color,
 													   "svgData": lineFunction(occurences)};
@@ -128,6 +126,47 @@ module.directive('chartPane', function () {
         transclude: true
     };
 });
+
+// < 50 days : kazdy punkt
+// > 50 dni AND < 350 dnii (rok) : grupujemy po tygodniach
+// > rok AND < 4 lata : gupoujemy po miesiacach
+// > 4 lata : grupujemy po kwartalach
+// > 12 lat : grupujemy po latach
+
+function aggregateAndFilter(occurences, minDate, maxDate) {
+    var dayDelta = moment(maxDate).diff(moment(minDate), 'days');
+    var aggFun = function (o) { return moment(o.date).month(5).date(0).toDate(); }
+    if (dayDelta < 50)
+        aggFun = function (o) { return o.date; }
+    else if (dayDelta < 350)
+        aggFun = function (o) {
+            // get the wednesday of the week
+            return moment(o.date).day(3).toDate();
+        }
+    else if (dayDelta < 350 * 4)
+        aggfun = function (o) {
+            // middle of the month
+            return moment(o.date).date(15).toDate();
+        }
+    else if (dayDelta < 350 * 4 * 3)
+        aggFun = function (o) {
+            var m = moment(o.date);
+            var month = m.quarter()*3 - 1; // middle month of the qtr
+            return m.month(month-1).date(15).toDate();
+        }
+    var os = occurences.filter(function(o){
+        return o.date >= minDate  && o.date <= maxDate
+    })
+    var grouped = _.groupBy(os, aggFun);
+    var result = []
+    _.each(grouped, function (os, d) {
+        var count = os.length;
+        var sum = _.reduce(os, function (acc, o) {return acc + o.count;}, 0);
+        result.push({date: new Date(d), count: sum/count});
+    })
+    return result;
+}
+
 
 /* Directive that decorates the parent chart pane with a brush range selector */
 module.directive('rangeSelector', function () {

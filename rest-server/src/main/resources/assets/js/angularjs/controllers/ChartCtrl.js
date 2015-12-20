@@ -37,7 +37,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   })
 
 
-  
+
 	/*
   $scope.mostPopularPhrases = {
     phrases: [
@@ -50,7 +50,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
       'posel'
     ]
   }; */
-    
+
   // TODO: reset selectedParty on new search
   $scope.$watch('graph.selectedParty', function (newValue, oldValue) {
       if (newValue !== oldValue) {
@@ -140,7 +140,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
         // TODO: I don't understand phrasesService
         $scope.search.phrasesService.removePhrase(response.data.ngram);
-          
+
         if ($scope.search.callsInProgressCount === 0) {
             prepareForDisplay($scope.graph.phrasesOccurences);
         }
@@ -168,4 +168,3 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     $scope.search.run();
   }
 });
-
