@@ -133,10 +133,10 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
             // middle of the month
             return moment(o.date).date(15).toDate();
         }
-    var window = 365;
+    var window = 200;
     if (dayDelta < window)
         aggFun = function (o) { return o.date; }
-    else if (dayDelta < window * 7)
+    else if (dayDelta < window * 13)
         aggFun = function (o) {
             // get the wednesday of the week
             return moment(o.date).day(3).toDate();
