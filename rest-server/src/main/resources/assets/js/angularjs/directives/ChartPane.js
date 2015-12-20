@@ -127,35 +127,24 @@ module.directive('chartPane', function () {
     };
 });
 
-// < 50 days : kazdy punkt
-// > 50 dni AND < 350 dnii (rok) : grupujemy po tygodniach
-// > rok AND < 4 lata : gupoujemy po miesiacach
-// > 4 lata : grupujemy po kwartalach
-// > 12 lat : grupujemy po latach
-
 function aggregateAndFilter(occurences, minDate, maxDate) {
     var dayDelta = moment(maxDate).diff(moment(minDate), 'days');
-    var aggFun = function (o) { return moment(o.date).month(5).date(0).toDate(); }
-    if (dayDelta < 50)
+    var aggFun = function (o) {
+            // middle of the month
+            return moment(o.date).date(15).toDate();
+        }
+    var window = 365;
+    if (dayDelta < window)
         aggFun = function (o) { return o.date; }
-    else if (dayDelta < 350)
+    else if (dayDelta < window * 7)
         aggFun = function (o) {
             // get the wednesday of the week
             return moment(o.date).day(3).toDate();
         }
-    else if (dayDelta < 350 * 4)
-        aggfun = function (o) {
-            // middle of the month
-            return moment(o.date).date(15).toDate();
-        }
-    else if (dayDelta < 350 * 4 * 3)
-        aggFun = function (o) {
-            var m = moment(o.date);
-            var month = m.quarter()*3 - 1; // middle month of the qtr
-            return m.month(month-1).date(15).toDate();
-        }
+    var min = moment(minDate).subtract(dayDelta*0.2, "days");
+    var max = moment(maxDate).add(dayDelta*0.2, "days");
     var os = occurences.filter(function(o){
-        return o.date >= minDate  && o.date <= maxDate
+        return o.date >= min  && o.date <= max
     })
     var grouped = _.groupBy(os, aggFun);
     var result = []
