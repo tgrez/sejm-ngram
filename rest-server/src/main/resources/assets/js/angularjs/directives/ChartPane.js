@@ -141,8 +141,17 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
             // get the wednesday of the week
             return moment(o.date).day(3).toDate();
         }
-    var min = moment(minDate).subtract(dayDelta*0.2, "days");
-    var max = moment(maxDate).add(dayDelta*0.2, "days");
+
+    var firstInRangeIx = _.findIndex(occurences, function (o) {return o.date >= minDate; });
+    if (firstInRangeIx > 0) {
+      minDate = occurences[firstInRangeIx-1].date
+    }
+    var lastInRangeIx = _.findLastIndex(occurences, function (o) {return o.date <= maxDate; });
+    if (lastInRangeIx > -1 && lastInRangeIx < occurences.length - 1) {
+      maxDate = occurences[lastInRangeIx + 1].date;
+    }
+    var min = moment(minDate).subtract(dayDelta*0.1, "days");
+    var max = moment(maxDate).add(dayDelta*0.1, "days");
     var os = occurences.filter(function(o){
         return o.date >= min  && o.date <= max
     })
