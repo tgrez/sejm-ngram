@@ -9,7 +9,7 @@ var module = angular.module('sejmotrendyApp', ['ngTagsInput', 'ngRoute', 'ngAnim
                 reloadOnSearch: false,
                 resolve: {
                     frequentPhrases: ['$http', function($http) {
-											return ["aborcja", "opozycja"];
+											return ["aborcja", "opozycja", 'recesja', 'sejm', 'deficyt', 'rosja', 'putin', 'posel'];
 											// TODO
                         //return $http.get("/service/api/hitcount/top").then(function(response){
                         //   return response.data;

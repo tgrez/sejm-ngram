@@ -5,6 +5,7 @@
 module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $location, phrasesService, apiFactory, graphDataFormatterFactory, frequentPhrases) {
   var colors = ['#f06292', '#4dd0e1', '#f5b916', '#9575cd', '#5479c5', '#64b5f6', '#4db690', '#9ec176', '#607d8b', '#ff8a65', '#ff8a65'];
   $scope.search = {
+    // phrasesService holds the search phrases before the user pushes the search button
     phrasesService: phrasesService,
     wasTriggered: false,
     isInProgress: false,
@@ -30,21 +31,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   apiFactory.getAllWordsPerDate().then(function(response) {
     $scope.nrAllWordsPerDates = response.data
   })
-
-
-
-	/*
-  $scope.mostPopularPhrases = {
-    phrases: [
-      'aborcja',
-      'recesja',
-      'sejm',
-      'deficyt',
-      'rosja',
-      'putin',
-      'posel'
-    ]
-  }; */
 
   // TODO: reset selectedParty on new search
   $scope.$watch('graph.selectedParty', function (newValue, oldValue) {
@@ -122,6 +108,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
     var phrases = phrasesService.phrases;
     $scope.search.callsInProgressCount += phrases.length;
+    console.log("phrases", phrases);
 
     phrases.forEach(function (phrase, index) {
       apiFactory.getGraphNgram(phrase.text).then(function (response) {
