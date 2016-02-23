@@ -10,6 +10,28 @@ module.directive('chartPane', function () {
             this.scope = $scope; // for rangeSelector, which watches scaleX
         },
         link: function link(scope, iElement, iAttrs, controller) {
+
+          //function for updating tooltip
+          scope.onCircleOver = function(event, line, occur){
+              d3.select("#tooltip")
+                  .style("visibility", "visible")
+                  .style("left", (event.layerX + 5) + "px")
+                  .style("top", (event.layerY + 5 ) + "px");
+                
+              d3.select("#party")
+                  .text(line.label);
+
+              d3.select("#dateOccurence")
+                  .text("data: " + occur.date.toLocaleDateString());
+                
+              d3.select("#value")
+                  .text("ilość wystąpień ngramu: " +   occur.count);
+          }
+
+          scope.onCircleLeave = function(){
+              d3.select("#tooltip").style("visibility", "hidden")
+          }
+
           // this function gets executed long before the graph shows
           var id = iElement.attr('id');
           scope.idPrefix = id + '-';
