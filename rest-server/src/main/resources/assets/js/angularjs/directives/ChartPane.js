@@ -12,12 +12,24 @@ module.directive('chartPane', function () {
         link: function link(scope, iElement, iAttrs, controller) {
 
           //function for updating tooltip
-          scope.updateTooltip = function(x, y, event){
-            console.log("update tooltip")
-            console.log(event)
+          scope.onCircleOver = function(event, line, occur){
               d3.select("#tooltip")
-            .style("left", (event.layerX) + "px")
-            .style("top", (event.layerY) + "px")
+                  .style("visibility", "visible")
+                  .style("left", (event.layerX + 5) + "px")
+                  .style("top", (event.layerY + 5 ) + "px");
+                
+              d3.select("#party")
+                  .text(line.label);
+
+              d3.select("#dateOccurence")
+                  .text("data: " + occur.date.toLocaleDateString());
+                
+              d3.select("#value")
+                  .text("ilość wystąpień ngramu: " +   occur.count);
+          }
+
+          scope.onCircleLeave = function(){
+              d3.select("#tooltip").style("visibility", "hidden")
           }
 
           // this function gets executed long before the graph shows
