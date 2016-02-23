@@ -40,6 +40,20 @@
         <chart-pane id="term-occurences-chart"
                     current-range="graph.selectedRange" graph="graph" width="758" height="400">
         </chart-pane>
+
+      <div id="tooltip" class="" style="left: 0px; top: 0px;">
+          <div id="rapperhead">
+            <p><span id="rapper">Puff-Daddy:</strong></p>
+          </div>
+          <div id="valuehead">
+            <div id="valueamount">
+              <p><span id="value">4,429</span></p>
+            </div>
+            <div id="valuelabel">
+              <p>unique words used</p>
+            </div>
+          </div>
+      </div>
         <st-graph-legend id="legend-box" plot-lines="graph.plotLines" graph="graph"></st-graph-legend>
         <chart-pane id="range-filter-chart" current-range="graph.xRange" graph="graph" width="758" height="158">
           <range-selector current-range="graph.selectedRange"></range-selector>

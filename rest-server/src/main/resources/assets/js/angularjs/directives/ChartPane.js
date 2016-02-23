@@ -10,6 +10,16 @@ module.directive('chartPane', function () {
             this.scope = $scope; // for rangeSelector, which watches scaleX
         },
         link: function link(scope, iElement, iAttrs, controller) {
+
+          //function for updating tooltip
+          scope.updateTooltip = function(x, y, event){
+            console.log("update tooltip")
+            console.log(event)
+              d3.select("#tooltip")
+            .style("left", (event.layerX) + "px")
+            .style("top", (event.layerY) + "px")
+          }
+
           // this function gets executed long before the graph shows
           var id = iElement.attr('id');
           scope.idPrefix = id + '-';
