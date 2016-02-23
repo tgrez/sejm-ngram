@@ -7,7 +7,7 @@ module.service('phrasesService', function () {
   this.phrases = [];
 
   this.addPhrase = function(name) {
-    var formatedPhrase = this.preparePhrase.call(this, name);
+    var formatedPhrase = this.preparePhrase(name);
 
     if (!this.hasPhrase.call(this, name))
       this.phrases.push(formatedPhrase);

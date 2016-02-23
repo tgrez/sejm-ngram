@@ -142,6 +142,7 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
             return moment(o.date).day(3).toDate();
         }
 
+    // We want to include at least one point on each side of the selected range
     var firstInRangeIx = _.findIndex(occurences, function (o) {return o.date >= minDate; });
     if (firstInRangeIx > 0) {
       minDate = occurences[firstInRangeIx-1].date

@@ -16,13 +16,8 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
   $scope.graph = {
     phrasesOccurences: [],
-    sumPartiesOccurences: null,
     partiesNames: [],
     selectedParty: $scope.ALL_PARTIES_KEY,
-    graphDrawHelper: null,
-    getIdFromPartyName: null,
-    selectedRange: null,
-    checkboxClicked: null,
     plotLines : [],
     xRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)], // dummy initial, I don't want to deal with nulls
     yRange: [0, 1], // dummy initial, I don't want to deal with nulls
