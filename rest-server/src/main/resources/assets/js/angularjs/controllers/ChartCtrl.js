@@ -70,16 +70,16 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
                 parties: phraseObj.partiesOccurences
             };
         });
-        function recalcPartiesNames() {
+        function collectPartiesNames() {
           var parties = {};
           phraseOccurances.forEach(function (phrase) {
               phrase.partiesOccurences.forEach(function (party) {
-                  parties[party.partyName] = true;
+                  parties[party.partyName] = true; // simulating adding a value to a Set
               })
           });
           return _.keys(parties);
         }
-        $scope.graph.partiesNames = recalcPartiesNames();
+        $scope.graph.partiesNames = collectPartiesNames();
     }
 
     var minY = 0;
@@ -119,8 +119,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
 
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
-
-        // TODO: I don't understand phrasesService
         $scope.search.phrasesService.removePhrase(response.data.ngram);
 
         if ($scope.search.callsInProgressCount === 0) {
@@ -134,6 +132,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
   $scope.graph.removePhraseOccurences = function(name) {
     var remainingOccurences = _.filter($scope.graph.phrasesOccurences, function(d, i) { return name !== d.name; });
     $scope.graph.phrasesOccurences = remainingOccurences;
+    prepareForDisplay($scope.graph.phrasesOccurences);
   };
 
   $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {
