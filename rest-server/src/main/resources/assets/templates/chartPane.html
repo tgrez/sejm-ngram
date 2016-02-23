@@ -1,19 +1,24 @@
 <svg>
-  <defs>
-    <clippath id="{{idPrefix + 'clip-path'}}">
-      <rect></rect>
-    </clippath>
-  </defs>
-  <g class="chart" >
-    <g class="linesCanvas" >
-      <g ng-repeat="line in toDisplay">
-        <path class="line" clip-path="url(#{{idPrefix + 'clip-path'}})"
-              ng-attr-style="stroke: {{line.color}}"
-              ng-attr-d="{{line.svgData}}"></path>
-        <circle ng-repeat="occur in line.occurences" ng-attr-cx="{{scaleX(occur.date)}}" ng-attr-cy="{{scaleY(occur.count)}}"
-                r="3px" ng-attr-fill="{{line.color}}" clip-path="url(#{{idPrefix + 'clip-path'}})"></circle>
+    <defs>
+      <clippath id="{{idPrefix + 'clip-path'}}">
+        <rect></rect>
+      </clippath>
+    </defs>
+    <g class="chart" >
+      <g class="linesCanvas" >
+        <g ng-repeat="line in toDisplay">
+          <path class="line" clip-path="url(#{{idPrefix + 'clip-path'}})"
+                ng-attr-style="stroke: {{line.color}}"
+                ng-attr-d="{{line.svgData}}"></path>
+          <circle ng-repeat="occur in line.occurences" ng-attr-cx="{{scaleX(occur.date)}}" 
+            ng-attr-cy="{{scaleY(occur.count)}}"
+                  r="3px" ng-attr-fill="{{line.color}}" clip-path="url(#{{idPrefix + 'clip-path'}})"
+                  ng-mouseover="onCircleOver( $event, line, occur )"
+                  ng-mouseleave="onCircleLeave()"
+                  >
+          </circle>
+        </g>
+        <g ng-transclude></g>
       </g>
-      <g ng-transclude></g>
     </g>
-  </g>
-</svg>
+  </svg>
