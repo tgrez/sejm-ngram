@@ -108,7 +108,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
     var phrases = phrasesService.phrases;
     $scope.search.callsInProgressCount += phrases.length;
-    console.log("phrases", phrases);
 
     phrases.forEach(function (phrase, index) {
       apiFactory.getGraphNgram(phrase.text).then(function (response) {
