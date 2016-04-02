@@ -82,7 +82,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         $scope.graph.partiesNames = collectPartiesNames();
     }
 
-    var minY = 0;
     var maxY = 0;
     for (var i = 0; i < plotLines.length; i++) {
         var tempMaxY = d3.max(plotLines[i].occurences, function (o) { return o.count; });
@@ -99,7 +98,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
     $scope.graph.xRange = calcXRange(plotLines);
     $scope.graph.selectedRange = $scope.graph.xRange;
-    $scope.graph.yRange = [minY, maxY];
+    $scope.graph.yRange = [0, maxY];
     $scope.graph.plotLines = plotLines;
   }
 
@@ -116,14 +115,12 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
         /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
         var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
 
-
         $scope.graph.phrasesOccurences.push(chartDataFormatted);
         $scope.search.phrasesService.removePhrase(response.data.ngram);
 
         if ($scope.search.callsInProgressCount === 0) {
             prepareForDisplay($scope.graph.phrasesOccurences);
         }
-
       });
     });
   };

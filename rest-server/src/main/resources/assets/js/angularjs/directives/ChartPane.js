@@ -116,22 +116,14 @@ module.directive('chartPane', function () {
               scope.axisX.call(axisXFunction);
 
               scope.axisY.call(axisYFunction);
-						  scope.toDisplay =
-                  scope.graph.plotLines
-									.filter(function (l) {return l.isVisible})
-									.map(function (plotLine) {
-
-										var lineFunction = d3.svg.line()
-												.x(function (o) { return scope.scaleX(o.date); })
-												.y(function (o) { return scope.scaleY(o.count); });
-										var minDate = scope.scaleX.domain()[0];
-										var maxDate = scope.scaleX.domain()[1];
-										occurences = aggregateAndFilter(plotLine.occurences, minDate, maxDate);
-										return { "occurences": occurences, "label": plotLine.label,
-														 "color": plotLine.color,
-													   "svgData": lineFunction(occurences)};
-							});
+              scope.toDisplay = calculateLinesToDisplay(scope)
           }
+
+          function updateOnlyYRange(){
+            scope.toDisplay = calculateLinesToDisplay(scope)
+            scope.graph.yRange  = [0, calculateMaxY(scope.toDisplay) + 1]
+          }
+
 					function queueUpdate() {
 						updateQueued = true;
 						scope.$evalAsync(updateAxes);
@@ -141,13 +133,42 @@ module.directive('chartPane', function () {
           //scope.$watchGroup(['currentRange', 'graph.yRange', visiblePlots], updateAxes);
 					scope.$watch('currentRange', queueUpdate, true);
 					scope.$watch('graph.yRange', queueUpdate, true);
-					scope.$watch(visiblePlots, queueUpdate, true);
+					scope.$watch(visiblePlots, updateOnlyYRange, true);
+
         },
         templateUrl: '/templates/chartPane.html',
         replace: true,
         transclude: true
     };
 });
+
+function calculateLinesToDisplay(scope){
+  return scope.graph.plotLines
+                  .filter(function (l) {return l.isVisible})
+                  .map(function (plotLine) {
+
+                    var lineFunction = d3.svg.line()
+                        .x(function (o) { return scope.scaleX(o.date); })
+                        .y(function (o) { return scope.scaleY(o.count); });
+                    var minDate = scope.scaleX.domain()[0];
+                    var maxDate = scope.scaleX.domain()[1];
+                    occurences = aggregateAndFilter(plotLine.occurences, minDate, maxDate);
+                    return { "occurences": occurences, "label": plotLine.label,
+                             "color": plotLine.color,
+                             "svgData": lineFunction(occurences)};
+              });
+}
+
+function calculateMaxY(toDisplay){
+   var maxY = 0;
+    _.each(toDisplay, function(line){
+        var lineMaxY = _.max(line.occurences, function(occurence){
+            return occurence.count;
+        }).count
+        if (lineMaxY > maxY) maxY = lineMaxY
+    })
+    return maxY
+}
 
 function aggregateAndFilter(occurences, minDate, maxDate) {
     var dayDelta = moment(maxDate).diff(moment(minDate), 'days');
