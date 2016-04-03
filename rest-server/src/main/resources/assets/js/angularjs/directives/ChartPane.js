@@ -173,17 +173,21 @@ function calculateMaxY(toDisplay){
 function aggregateAndFilter(occurences, minDate, maxDate) {
     var dayDelta = moment(maxDate).diff(moment(minDate), 'days');
     var aggFun = function (o) {
-            // middle of the month
-            return moment(o.date).date(15).toDate();
+            return moment(o.date).date(15).toDate();// middle of the month
         }
+    aggFun.datemode = "middle_month"
     var window = 200;
-    if (dayDelta < window)
-        aggFun = function (o) { return o.date; }
-    else if (dayDelta < window * 13)
+    if (dayDelta < window){
+      aggFun = function (o) { return o.date; }
+      aggFun.datemode = "exact_day"
+    }
+
+    else if (dayDelta < window * 13){
         aggFun = function (o) {
-            // get the wednesday of the week
-            return moment(o.date).day(3).toDate();
+            return moment(o.date).day(3).toDate(); // get the wednesday of the week
         }
+        aggFun.datemode = "wednesday_of_week"
+    }
 
     // We want to include at least one point on each side of the selected range
     var firstInRangeIx = _.findIndex(occurences, function (o) {return o.date >= minDate; });
@@ -199,16 +203,34 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
     var os = occurences.filter(function(o){
         return o.date >= min  && o.date <= max
     })
+
     var grouped = _.groupBy(os, aggFun);
     var result = []
     _.each(grouped, function (os, d) {
         var count = os.length;
         var sum = _.reduce(os, function (acc, o) {return acc + o.count;}, 0);
-        result.push({date: new Date(d), count: sum/count});
+        result.push({ 
+                  date: new Date(d), 
+                  count: sum/count, 
+                  singleDate: (aggFun.datemode == "exact_day"),
+                  grouppedDateFrom : calculateDateFrom(new Date(d), aggFun.datemode),
+                  grouppedDateTo : calculateDateTo(new Date(d), aggFun.datemode)
+                });
     })
     return result;
 }
 
+function calculateDateFrom(date, datemode){
+  if (datemode == "exact_day") return null
+  else if (datemode == "middle_month") return moment(date).startOf("month").toDate();
+  else if (datemode == "wednesday_of_week") return moment(date).startOf("week").toDate();
+}
+
+function calculateDateTo(date, datemode){
+  if (datemode == "exact_day") return null
+  else if (datemode == "middle_month") return moment(date).endOf("month").toDate();
+  else if (datemode == "wednesday_of_week") return moment(date).endOf("week").toDate();
+}
 
 /* Directive that decorates the parent chart pane with a brush range selector */
 module.directive('rangeSelector', function () {
