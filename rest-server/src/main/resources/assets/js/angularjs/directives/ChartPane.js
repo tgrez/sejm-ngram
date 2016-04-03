@@ -22,7 +22,7 @@ module.directive('chartPane', function () {
                   .text(line.label);
 
               d3.select("#dateOccurence")
-                  .text("data: " + occur.date.toLocaleDateString());
+                  .text("data: " + formatToolTipDate(occur));
                 
               d3.select("#value")
                   .text("ilość wystąpień ngramu: " +   occur.count);
@@ -30,6 +30,13 @@ module.directive('chartPane', function () {
 
           scope.onCircleLeave = function(){
               d3.select("#tooltip").style("visibility", "hidden")
+          }
+
+          var formatToolTipDate = function(occurence){
+            if (occurence.singleDate) return occurence.date.toLocaleDateString()
+            else {
+              return occurence.grouppedDateFrom.toLocaleDateString() + " -  " + occurence.grouppedDateTo.toLocaleDateString()
+            }
           }
 
           // this function gets executed long before the graph shows
