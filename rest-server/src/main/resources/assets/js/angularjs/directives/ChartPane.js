@@ -33,9 +33,11 @@ module.directive('chartPane', function () {
           }
 
           var formatToolTipDate = function(occurence){
-            if (occurence.singleDate) return occurence.date.toLocaleDateString()
+            var datemode = occurence.datemode
+            if (datemode == "exact_day") return occurence.date.toLocaleDateString('pl-PL')
+            else if (datemode == "middle_month")  { return moment( occurence.date ).locale("pl").format("MMMM")  + " " + moment(occurence.date).year()}
             else {
-              return occurence.grouppedDateFrom.toLocaleDateString() + " -  " + occurence.grouppedDateTo.toLocaleDateString()
+              return occurence.grouppedDateFrom.toLocaleDateString('pl-PL') + " -  " + occurence.grouppedDateTo.toLocaleDateString('pl-PL')
             }
           }
 
@@ -218,7 +220,8 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
         var sum = _.reduce(os, function (acc, o) {return acc + o.count;}, 0);
         result.push({ 
                   date: new Date(d), 
-                  count: sum/count, 
+                  count: sum/count,
+                  datemode: aggFun.datemode,
                   singleDate: (aggFun.datemode == "exact_day"),
                   grouppedDateFrom : calculateDateFrom(new Date(d), aggFun.datemode),
                   grouppedDateTo : calculateDateTo(new Date(d), aggFun.datemode)
