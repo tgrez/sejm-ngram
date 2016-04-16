@@ -86,11 +86,9 @@
             line-height: @search-bar-height - 2*@search-bar-border-width;
             font-size: 22px;
             text-align: center;
-            color: @primary-white;
             border: @search-bar-border-width solid @primary-white;
             border-left-width: 0;
             .border-radiuses(4px, 4px, 0, 0);
-            background-color: transparent;
             cursor: pointer;
 
             transition: all .2s ease;
@@ -101,6 +99,12 @@
                 background-color: @primary-white;
             }
         }
+
+        > .button-search-in-progress {
+            color: @primary-red;
+            background-color: @primary-white;
+        }
+
     }
 
     .most-popular {
@@ -239,7 +243,7 @@
         height: 100%;
         width: 6px;
         display: inline-block;
-  
+
         -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
         animation: stretchdelay 1.2s infinite ease-in-out;
     }
@@ -266,15 +270,15 @@
 }
 
 @-webkit-keyframes stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
   20% { -webkit-transform: scaleY(1.0) }
 }
 
 @keyframes stretchdelay {
-  0%, 40%, 100% { 
+  0%, 40%, 100% {
     transform: scaleY(0.4);
     -webkit-transform: scaleY(0.4);
-  }  20% { 
+  }  20% {
     transform: scaleY(1.0);
     -webkit-transform: scaleY(1.0);
   }
@@ -296,4 +300,3 @@
     width:250px;
     visibility: hidden;
 }
-

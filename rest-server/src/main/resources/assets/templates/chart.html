@@ -15,15 +15,19 @@
     </div>
     <div class="search-bar">
         <tags-input ng-model="search.phrasesService.phrases" replace-spaces-with-dashes="false"></tags-input>
-        <div class="button" ng-click="search.run()">
-            <span ng-show="!search.isInProgress">SZUKAJ</span>
-            <div class="button spinner" ng-show="search.isInProgress">
-                <div class="rect1"></div>
-                <div class="rect2"></div>
-                <div class="rect3"></div>
-                <div class="rect4"></div>
-                <div class="rect5"></div>
+        <div class="button"
+             ng-class="search.isInProgress?'button-search-in-progress':''"
+             ng-click="search.run()">
+          <div ng-switch="search.isInProgress">
+            <div class="button spinner" ng-switch-when="true">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+              <div class="rect5"></div>
             </div>
+            <span ng-switch-default>SZUKAJ</span>
+          </div>
         </div>
     </div>
     <div class="most-popular">
@@ -46,7 +50,7 @@
             <p><span id="party">Party Name</strong></p>
           </div>
           <div id="valuehead">
-            <div 
+            <div
               <p><span id="dateOccurence">4,429</span></p>
             </div>
 
