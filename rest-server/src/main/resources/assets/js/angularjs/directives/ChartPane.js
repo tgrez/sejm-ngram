@@ -17,13 +17,13 @@ module.directive('chartPane', function () {
                   .style("visibility", "visible")
                   .style("left", (event.layerX + 5) + "px")
                   .style("top", (event.layerY + 5 ) + "px");
-                
+
               d3.select("#party")
                   .text(line.label);
 
               d3.select("#dateOccurence")
                   .text("data: " + formatToolTipDate(occur));
-                
+
               d3.select("#value")
                   .text("ilość wystąpień ngramu: " +   occur.count);
           }
@@ -142,6 +142,7 @@ module.directive('chartPane', function () {
           //scope.$watchGroup(['currentRange', 'graph.yRange', visiblePlots], updateAxes);
 					scope.$watch('currentRange', queueUpdate, true);
 					scope.$watch('graph.yRange', queueUpdate, true);
+					scope.$watch('graph.selectedParty', queueUpdate, true);
 					scope.$watch(visiblePlots, updateOnlyYRange, true);
 
         },
@@ -218,8 +219,8 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
     _.each(grouped, function (os, d) {
         var count = os.length;
         var sum = _.reduce(os, function (acc, o) {return acc + o.count;}, 0);
-        result.push({ 
-                  date: new Date(d), 
+        result.push({
+                  date: new Date(d),
                   count: sum/count,
                   datemode: aggFun.datemode,
                   singleDate: (aggFun.datemode == "exact_day"),
