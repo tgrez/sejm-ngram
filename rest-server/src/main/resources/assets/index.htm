@@ -27,7 +27,7 @@
 
     <div class="container-wrapper" id="header-container">
         <header class="container-sub-wrapper">
-            <a href="#/chart"><img class="logo" src="/img/sejmotrendy-logo.png" alt="Logo Sejmotrendy" /> </a>
+            <img class="logo" ng-click="$location.url('/chart')" src="/img/sejmotrendy-logo.png" alt="Logo Sejmotrendy" />
             <nav class="clearfix">
                 <ul>
                     <li>
@@ -54,6 +54,8 @@
         <footer class="container-sub-wrapper">
         </footer>
     </div>
+
+
 
     <script src="/js/vendor/underscore-min.js"></script>
     <script src="/js/vendor/angular.min.js"></script>
