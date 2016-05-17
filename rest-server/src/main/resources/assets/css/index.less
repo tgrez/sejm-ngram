@@ -196,6 +196,12 @@ tags-input {
 
 
 #how-it-works-view {
+    
+    a {
+        text-decoration: none;
+        color: @primary-white;
+        font-weight: bold;
+    }
 
     display: inline-block;
     width: 100%;
@@ -208,8 +214,6 @@ tags-input {
         width: 200px;
         height: 200px;
     }
-
-
 
     .single-item {
         margin-top: 20px;
@@ -225,12 +229,7 @@ tags-input {
         span {
             margin-top: 20px;
         }
-
-
-
     }
-
-
 
     .single-item-about-us {
         margin-top: 20px;
@@ -243,11 +242,28 @@ tags-input {
         .social-icon {
             width: 30px;
             height: 30px;
-    }
- 
-
+        }
         span {
             margin-top: 20px;
         }
     }
+
+
+
+    .white-bordered-button {
+        border-style: solid;
+        font-weight: bold;
+        border-color: @primary-white;
+        border-width: 2px;
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+         .border-radiuses(4px, 4px, 4px, 4px);
+         height: 39px;
+         font-size: 16px;
+         font-family: 'Ubuntu', sans-serif;
+         padding-left: 5px;
+         padding-right:5px;
+    }
 }
+
