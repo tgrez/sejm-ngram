@@ -23,13 +23,17 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     xRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)], // dummy initial, I don't want to deal with nulls
     yRange: [0, 1], // dummy initial, I don't want to deal with nulls
     selectedRange: [new Date(1999, 1, 1), new Date(2015, 1, 1)],
-    isMultiPhrase: false
+    isMultiPhrase: false,
+    nrAllWordsPerDates: []
+
   }
 
 	$scope.mostPopularPhrases = frequentPhrases;
     //calling
   apiFactory.getAllWordsPerDate().then(function(response) {
-    $scope.nrAllWordsPerDates = response.data
+    $scope.graph.nrAllWordsPerDates = response.data
+    console.log('set nrAllWordsPerDates:')
+    console.log($scope.graph.nrAllWordsPerDates)
   })
 
   // TODO: reset selectedParty on new search
@@ -137,9 +141,6 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
   $scope.graph.doesPhraseExist = function(phrase) {
       var result = _.findWhere($scope.graph.phrasesOccurences, {name:phrase});
-      console.log (phrase);
-      console.log ($scope.graph.phrasesOccurences);
-      console.log (result);
       return result !== undefined;
   };
 

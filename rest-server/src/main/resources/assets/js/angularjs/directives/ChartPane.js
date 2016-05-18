@@ -1,5 +1,5 @@
 
-module.directive('chartPane', function () {
+module.directive('chartPane', function (dataPointCalcFactory) {
     return {
         restrict: 'E',
         scope: {
@@ -10,6 +10,8 @@ module.directive('chartPane', function () {
             this.scope = $scope; // for rangeSelector, which watches scaleX
         },
         link: function link(scope, iElement, iAttrs, controller) {
+
+          scope.dataPointCalcFactory = dataPointCalcFactory
 
           //function for updating tooltip
           scope.onCircleOver = function(event, line, occur){
@@ -162,7 +164,7 @@ function calculateLinesToDisplay(scope){
                         .y(function (o) { return scope.scaleY(o.count); });
                     var minDate = scope.scaleX.domain()[0];
                     var maxDate = scope.scaleX.domain()[1];
-                    occurences = aggregateAndFilter(plotLine.occurences, minDate, maxDate);
+                    occurences = aggregateAndFilter(scope, plotLine.occurences, minDate, maxDate);
                     return { "occurences": occurences, "label": plotLine.label,
                              "color": plotLine.color,
                              "svgData": lineFunction(occurences)};
@@ -180,24 +182,10 @@ function calculateMaxY(toDisplay){
     return maxY
 }
 
-function aggregateAndFilter(occurences, minDate, maxDate) {
+function aggregateAndFilter(scope, occurences, minDate, maxDate) {
     var dayDelta = moment(maxDate).diff(moment(minDate), 'days');
-    var aggFun = function (o) {
-            return moment(o.date).date(15).toDate();// middle of the month
-        }
-    aggFun.datemode = "middle_month"
-    var window = 200;
-    if (dayDelta < window){
-      aggFun = function (o) { return o.date; }
-      aggFun.datemode = "exact_day"
-    }
 
-    else if (dayDelta < window * 13){
-        aggFun = function (o) {
-            return moment(o.date).day(3).toDate(); // get the wednesday of the week
-        }
-        aggFun.datemode = "wednesday_of_week"
-    }
+    var aggFun = scope.dataPointCalcFactory.getAggFun(minDate, maxDate, dayDelta)
 
     // We want to include at least one point on each side of the selected range
     var firstInRangeIx = _.findIndex(occurences, function (o) {return o.date >= minDate; });
@@ -216,12 +204,16 @@ function aggregateAndFilter(occurences, minDate, maxDate) {
 
     var grouped = _.groupBy(os, aggFun);
     var result = []
+    console.log('calculating the results;')
+    console.log(scope.graph.nrAllWordsPerDates)
+    console.log(scope.dataPointCalcFactory.testFactory())
     _.each(grouped, function (os, d) {
         var count = os.length;
         var sum = _.reduce(os, function (acc, o) {return acc + o.count;}, 0);
         result.push({
                   date: new Date(d),
                   count: sum/count,
+
                   datemode: aggFun.datemode,
                   singleDate: (aggFun.datemode == "exact_day"),
                   grouppedDateFrom : calculateDateFrom(new Date(d), aggFun.datemode),
