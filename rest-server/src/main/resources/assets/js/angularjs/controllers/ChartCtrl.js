@@ -109,19 +109,22 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     $scope.search.callsInProgressCount += phrases.length;
 
     phrases.forEach(function (phrase, index) {
-      apiFactory.getGraphNgram(phrase.text).then(function (response) {
-        $scope.search.callsInProgressCount--;
+      $scope.search.callsInProgressCount--;
+      if ($scope.graph.doesPhraseExist(phrase.text)) {
+        $scope.search.phrasesService.removePhrase(phrase.text);
+      } else {
+        apiFactory.getGraphNgram(phrase.text).then(function (response) {
+            /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
+            var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
 
-        /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
-        var chartDataFormatted = graphDataFormatterFactory.formatNgram(response.data, $scope.ALL_PARTIES_KEY);
+            $scope.graph.phrasesOccurences.push(chartDataFormatted);
+            $scope.search.phrasesService.removePhrase(response.data.ngram);
 
-        $scope.graph.phrasesOccurences.push(chartDataFormatted);
-        $scope.search.phrasesService.removePhrase(response.data.ngram);
-
-        if ($scope.search.callsInProgressCount === 0) {
-            prepareForDisplay($scope.graph.phrasesOccurences);
-        }
-      });
+            if ($scope.search.callsInProgressCount === 0) {
+                prepareForDisplay($scope.graph.phrasesOccurences);
+            }
+        });
+      }
     });
   };
 
@@ -129,6 +132,14 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     var remainingOccurences = _.filter($scope.graph.phrasesOccurences, function(d, i) { return name !== d.name; });
     $scope.graph.phrasesOccurences = remainingOccurences;
     prepareForDisplay($scope.graph.phrasesOccurences);
+  };
+
+  $scope.graph.doesPhraseExist = function(phrase) {
+      var result = _.findWhere($scope.graph.phrasesOccurences, {name:phrase});
+      console.log (phrase);
+      console.log ($scope.graph.phrasesOccurences);
+      console.log (result);
+      return result !== undefined;
   };
 
   $scope.$watch('search.callsInProgressCount', function (newValue, oldValue) {
