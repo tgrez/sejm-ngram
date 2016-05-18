@@ -109,9 +109,9 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
     $scope.search.callsInProgressCount += phrases.length;
 
     phrases.forEach(function (phrase, index) {
-      $scope.search.callsInProgressCount--;
       if ($scope.graph.doesPhraseExist(phrase.text)) {
         $scope.search.phrasesService.removePhrase(phrase.text);
+        $scope.search.callsInProgressCount--;
       } else {
         apiFactory.getGraphNgram(phrase.text).then(function (response) {
             /* This returns {name:String, partiesOccurences: [{partyName:String, occurances:[{date:String,count:Number}]}]} */
@@ -119,6 +119,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
             $scope.graph.phrasesOccurences.push(chartDataFormatted);
             $scope.search.phrasesService.removePhrase(response.data.ngram);
+            $scope.search.callsInProgressCount--;
 
             if ($scope.search.callsInProgressCount === 0) {
                 prepareForDisplay($scope.graph.phrasesOccurences);
