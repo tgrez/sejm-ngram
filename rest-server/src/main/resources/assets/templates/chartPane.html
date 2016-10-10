@@ -11,7 +11,7 @@
                 ng-attr-style="stroke: {{line.color}}"
                 ng-attr-d="{{line.svgData}}"></path>
           <circle ng-repeat="occur in line.occurences" ng-attr-cx="{{scaleX(occur.date)}}" 
-            ng-attr-cy="{{scaleY(occur.count)}}"
+            ng-attr-cy="{{scaleY(occur.percent)}}"
                   r="3px" ng-attr-fill="{{line.color}}" clip-path="url(#{{idPrefix + 'clip-path'}})"
                   ng-mouseover="onCircleOver( $event, line, occur )"
                   ng-mouseleave="onCircleLeave()"

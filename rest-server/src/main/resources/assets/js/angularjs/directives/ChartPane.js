@@ -15,6 +15,13 @@ module.directive('chartPane', function (dataPointCalcFactory) {
 
           //function for updating tooltip
           scope.onCircleOver = function(event, line, occur){
+
+              console.log("info o punkcie wykresu:")
+              console.log("data :" + formatToolTipDate(occur))
+              console.log("ilość wystąpień ngramu: " +   occur.count)
+              console.log("procent wystąpień ngramu: " + (occur.percent))
+              console.log("ilość wszystkich ngramów tej długości w tym okresie: " + occur.allNgramsCount ) 
+
               d3.select("#tooltip")
                   .style("visibility", "visible")
                   .style("left", (event.layerX + 5) + "px")
@@ -26,7 +33,10 @@ module.directive('chartPane', function (dataPointCalcFactory) {
               d3.select("#dateOccurence")
                   .text("data: " + formatToolTipDate(occur));
 
-              d3.select("#value")
+              d3.select("#value_percent")
+                  .text("procent wystąpień ngramu: " + (occur.percent).toFixed(5) + "%");
+
+              d3.select("#value_amount")
                   .text("ilość wystąpień ngramu: " +   occur.count);
           }
 
@@ -132,7 +142,8 @@ module.directive('chartPane', function (dataPointCalcFactory) {
 
           function updateOnlyYRange(){
             scope.toDisplay = calculateLinesToDisplay(scope)
-            scope.graph.yRange  = [0, calculateMaxY(scope.toDisplay) + 1]
+            var maxY = calculateMaxY(scope.toDisplay)
+            scope.graph.yRange  = [0,  maxY + 0.1 * maxY]
           }
 
 					function queueUpdate() {
@@ -161,7 +172,7 @@ function calculateLinesToDisplay(scope){
 
                     var lineFunction = d3.svg.line()
                         .x(function (o) { return scope.scaleX(o.date); })
-                        .y(function (o) { return scope.scaleY(o.count); });
+                        .y(function (o) { return scope.scaleY(o.percent); });
                     var minDate = scope.scaleX.domain()[0];
                     var maxDate = scope.scaleX.domain()[1];
                     occurences = aggregateAndFilter(scope, plotLine.occurences, minDate, maxDate);
@@ -175,8 +186,8 @@ function calculateMaxY(toDisplay){
    var maxY = 0;
     _.each(toDisplay, function(line){
         var lineMaxY = _.max(line.occurences, function(occurence){
-            return occurence.count;
-        }).count
+            return occurence.percent;
+        }).percent
         if (lineMaxY > maxY) maxY = lineMaxY
     })
     return maxY
@@ -184,7 +195,6 @@ function calculateMaxY(toDisplay){
 
 function aggregateAndFilter(scope, occurences, minDate, maxDate) {
     var dayDelta = moment(maxDate).diff(moment(minDate), 'days');
-
     var aggFun = scope.dataPointCalcFactory.getAggFun(minDate, maxDate, dayDelta)
 
     // We want to include at least one point on each side of the selected range
@@ -204,20 +214,23 @@ function aggregateAndFilter(scope, occurences, minDate, maxDate) {
 
     var grouped = _.groupBy(os, aggFun);
     var result = []
-    console.log('calculating the results;')
-    console.log(scope.graph.nrAllWordsPerDates)
-    console.log(scope.dataPointCalcFactory.testFactory())
     _.each(grouped, function (os, d) {
-        var count = os.length;
+        var nrDays = os.length;
         var sum = _.reduce(os, function (acc, o) {return acc + o.count;}, 0);
+        var count = sum/nrDays
+        var grouppedDateFrom = calculateDateFrom(new Date(d), aggFun.datemode)
+        var grouppedDateTo = calculateDateTo(new Date(d), aggFun.datemode)
+        var summaryOfAllOccurencesForThisDate = scope.dataPointCalcFactory.getSummaryOfOccurencesForAll(grouppedDateFrom, grouppedDateTo, scope.graph.nrAllWordsPerDates )
+
         result.push({
                   date: new Date(d),
-                  count: sum/count,
-
+                  count: count,
+                  allNgramsCount: summaryOfAllOccurencesForThisDate,
+                  percent : count / summaryOfAllOccurencesForThisDate * 100 ,
                   datemode: aggFun.datemode,
                   singleDate: (aggFun.datemode == "exact_day"),
-                  grouppedDateFrom : calculateDateFrom(new Date(d), aggFun.datemode),
-                  grouppedDateTo : calculateDateTo(new Date(d), aggFun.datemode)
+                  grouppedDateFrom : grouppedDateFrom,
+                  grouppedDateTo : grouppedDateTo
                 });
     })
     return result;

@@ -88,7 +88,7 @@ module.controller('ChartCtrl', function ($scope, $http, $window, $routeParams, $
 
     var maxY = 0;
     for (var i = 0; i < plotLines.length; i++) {
-        var tempMaxY = d3.max(plotLines[i].occurences, function (o) { return o.count; });
+        var tempMaxY = d3.max(plotLines[i].occurences, function (o) { return o.percent; });
         if (tempMaxY > maxY)
             maxY = tempMaxY;
     }
